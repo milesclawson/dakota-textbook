@@ -1,0 +1,18 @@
+:root {
+  --dakota-red: #8B1A1A;
+  --dakota-gold: #C8860A;
+  --dakota-cream: #F5F0E8;
+}
+
+.chapter-hero {
+  background: linear-gradient(135deg, #8B1A1A 0%, #B52020 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+.chapter-hero h1 { color: white; margin: 0; }
+.chapter-hero .subtitle { color: #F5C070; font-size: 1.1rem; margin-top: 0.5rem; }
+
+.morpheme-table { width: 100%; border-collapse: collapse; font-family: 'Roboto Mono', monospace; }
+.morpheme-table td:first-child { color: var(--dakota-gold); font-weight: bold; width: 20%; }
