@@ -1,0 +1,201 @@
+ConceptID,ConceptLabel,Dependencies,TaxonomyID
+1,Dakota Language Overview,,FOUND
+2,Standard Dakota Orthography,1,FOUND
+3,Accent Marks in Dakota,2,FOUND
+4,Special Characters in Dakota,2,FOUND
+5,Aspirated Consonants,2,FOUND
+6,Gender-Specific Greetings,1|2,GREET
+7,Háu (Male Greeting),6,GREET
+8,Haŋ (Female Greeting),6,GREET
+9,Háŋ (Yes),6,GREET
+10,Hiyá (No),6,GREET
+11,Pidámayaye (Thank You),6,GREET
+12,Tokhéya (Goodbye),6,GREET
+13,Léčhaŋna (See You Soon),6|12,GREET
+14,Tókheča Šni (You're Welcome),6|11,GREET
+15,Passive Name Construction,1|6,GRAM
+16,Emáčiyapi (My Name Is),15,GREET
+17,Eníčiyapi (Your Name Is),15,GREET
+18,Personal Pronouns Dakota,1,GRAM
+19,Míye (I / Me),18,GRAM
+20,Níye (You),18,GRAM
+21,Iye (He / She / It),18,GRAM
+22,Uŋkíyepi (We Inclusive),18,GRAM
+23,Niyépi (You All),18,GRAM
+24,Iyépi (They),18,GRAM
+25,Tiyóšpaye (Family Band),1,CULT
+26,Očhéthi Šakówiŋ Overview,1|25,HIST
+27,Seven Council Fires Names,26,HIST
+28,Dakota Dialect Group,26|1,FOUND
+29,Nakota Dialect Group,26|1,FOUND
+30,Lakota Dialect Group,26|1,FOUND
+31,Bdewákhaŋthuŋwaŋ (Mdewakanton),27|28,HIST
+32,Waȟpékhute (Wahpekute),27|28,HIST
+33,Sisíthuŋwaŋ (Sisseton),27|28,HIST
+34,Waȟpéthuŋwaŋ (Wahpeton),27|28,HIST
+35,Iháŋkthuŋwaŋ (Yankton),27|29,HIST
+36,Iháŋkthuŋwaŋna (Yanktonai),27|29,HIST
+37,Thítȟuŋwaŋ (Teton/Lakota),27|30,HIST
+38,Pre-Contact Dakota Society,26|25,HIST
+39,Band-Level Governance,38|25,HIST
+40,Earned Leadership Model,39,HIST
+41,Numbers 1–10 in Dakota,1|2,NUM
+42,Waŋží (One),41,NUM
+43,Núŋpa (Two),41,NUM
+44,Yámni (Three),41,NUM
+45,Tópa (Four),41,NUM
+46,Záptaŋ (Five),41,NUM
+47,Šákpe (Six),41,NUM
+48,Šakówiŋ (Seven),41,NUM
+49,Šaglóğaŋ (Eight),41,NUM
+50,Napčíyuŋka (Nine),41,NUM
+51,Wikčémna (Ten),41,NUM
+52,Numbers 11–19 Dakota,41|51,NUM
+53,Multiples of Ten Dakota,52|51,NUM
+54,Numbers 100–1000 Dakota,53,NUM
+55,Stative Verbs Overview,1|18,GRAM
+56,Stative Verbs as Descriptors,55,GRAM
+57,Šá (It Is Red),56,VOCAB
+58,Tó (It Is Blue/Green),56,VOCAB
+59,Sápa (It Is Black),56,VOCAB
+60,Sáŋ (It Is White),56,VOCAB
+61,Žiží (It Is Yellow/Orange),56,VOCAB
+62,Ğí (It Is Brown),56,VOCAB
+63,Šúŋka (Dog),1,VOCAB
+64,Definite Article Kiŋ,1|18,GRAM
+65,Indefinite Article Waŋ,1|18,GRAM
+66,Trade Network Vocabulary,38,HIST
+67,Wampum Cultural Context,66,HIST
+68,Dakota Counting Systems,41|38,NUM
+69,Animate vs. Inanimate Nouns,1|55,GRAM
+70,Possessive Prefixes,18|69,GRAM
+71,Dakota Word Order SOV,1|18,GRAM
+72,Subject-Object-Verb Structure,71,GRAM
+73,Action Verbs Dakota,1|55,GRAM
+74,Yúta (To Eat),73,VOCAB
+75,Máni (To Walk),73,VOCAB
+76,Yá (To Go),73,VOCAB
+77,Eyá (To Say / Speak),73,VOCAB
+78,Bímaza (To Read / Write),73,VOCAB
+79,Wóuŋsipi (Daily Life / Work),73,VOCAB
+80,Future Tense Suffix -kte,73|72,GRAM
+81,Negation Suffix -šni,73|72,GRAM
+82,Future Negative -kte-šni,80|81,GRAM
+83,Verb Suffix Order,80|81|82,GRAM
+84,SOV vs. SVO Comparison,72|71,GRAM
+85,Kičhí Wóuŋsipi (Work Together),79|73,VOCAB
+86,Seasonal Calendar Overview,38,CULT
+87,Wétȟo (Spring),86,VOCAB
+88,Blokétu (Summer),86,VOCAB
+89,Ptaŋyétu (Fall/Autumn),86,VOCAB
+90,Waníyetu (Winter),86,VOCAB
+91,Bison Economy Overview,38|86,HIST
+92,Seasonal Lifeways,86|91,HIST
+93,Moon Names Dakota,86|2,VOCAB
+94,Wóčhekiye (Prayer/To Pray),1|73,VOCAB
+95,Oral Instruction Tradition,38|1,CULT
+96,Body Parts Vocabulary,1|69,VOCAB
+97,Čhaŋté (Heart),96,VOCAB
+98,Mičháŋte (My Heart),97|70,VOCAB
+99,Possessive Prefix Mi-,70,GRAM
+100,Health Expressions Dakota,96|73,VOCAB
+101,Mayázaŋ (It Hurts / I Am Sick),100,VOCAB
+102,Family Relationship Terms,25|70,VOCAB
+103,Gender Speech in Kinship,6|102,GRAM
+104,Čhankší (Sister Male Speaker),103|102,VOCAB
+105,Čhuwítkala (Sister Female Speaker),103|102,VOCAB
+106,Kinship System Overview,25|102,CULT
+107,Medicine Traditions Dakota,38|106,CULT
+108,Wóuŋšila (Compassion/Humility),25,CULT
+109,Dakota Healing Practices,107|108,CULT
+110,Language and Wellness,1|109,CULT
+111,Mitákuye Oyásʼiŋ (All My Relations),1|106,CULT
+112,Relational Worldview Dakota,111|25,CULT
+113,Wakȟáŋ Tȟáŋka (Great Mystery),1|112,CULT
+114,Dakota Sacred Traditions,113|112,CULT
+115,Wačháŋtognaka (Generosity),112,CULT
+116,Ohítika (Bravery),112,CULT
+117,Ksapá (Wisdom),112,CULT
+118,Seven Dakota Values,115|116|117|108,CULT
+119,Wóčhekiye as Verb,94|73,GRAM
+120,Prayer Language Dakota,119|114,VOCAB
+121,Sacred vs. Public Knowledge,114|95,CULT
+122,Spiritual Traditions Overview,114|112,CULT
+123,Čhaŋtéčhila (I Love You),97|70,VOCAB
+124,Čhaŋtéčhilapi (Closing Blessing),123|16,VOCAB
+125,Protocol for Sacred Content,121|114,CULT
+126,Makóčhe (Land/Homeland),1|112,VOCAB
+127,Land as Relational Concept,126|112,CULT
+128,Cardinal Directions Dakota,1|2,VOCAB
+129,Wiyóhiŋyaŋpa (East),128,VOCAB
+130,Wiyóhpeyata (West),128,VOCAB
+131,Wazíyata (North),128,VOCAB
+132,Itókaga (South),128,VOCAB
+133,Direction Origin Meanings,129|130|131|132,CULT
+134,Bdóte (Confluence/Sacred Center),126|38,HIST
+135,Mnísota Makóčhe (Minnesota),126|134,HIST
+136,Seasonal Vocabulary Extended,87|88|89|90,VOCAB
+137,Moon Names Extended,93|86,VOCAB
+138,Čhaŋwápe-kasná-wi (Leaf-Falling Moon),137,VOCAB
+139,Celestial Knowledge Dakota,93|86|38,CULT
+140,Land and Language Connection,126|1|127,CULT
+141,Áŋpetu (Day),1,VOCAB
+142,Háŋhépi (Night),1,VOCAB
+143,Locative Suffixes Dakota,72|126,GRAM
+144,Seasonal Lifeways Extended,92|136,HIST
+145,Treaty Land Cession Geography,126|135,HIST
+146,Wóoyake (Story/Oral Narrative),1|95,VOCAB
+147,Aadizookaanan Concept,146|95,CULT
+148,Iktómi (Spider/Trickster),146|147,CULT
+149,Trickster Story Functions,148|147,CULT
+150,Eháŋni (Long Ago/Once),146|1,VOCAB
+151,Eyápi (They Say/Evidential),73|1,GRAM
+152,Héčhel (And So/Thus),146|1,VOCAB
+153,Narrative Connectors Dakota,150|151|152,GRAM
+154,Oral Tradition Pedagogy,95|146|147,CULT
+155,Ceremony Overview,114|122,CULT
+156,Suppression of Ceremony,155,HIST
+157,Code of Indian Offenses 1883,156,HIST
+158,Story as Moral Instruction,149|154,CULT
+159,Community Storytelling Roles,154|25,CULT
+160,Wókiksuye (Remembrance),1|146,VOCAB
+161,Oyáte (Nation/People),1|26,VOCAB
+162,Dakota Sovereignty Concept,161|39,HIST
+163,1851 Treaty Traverse des Sioux,145|162,HIST
+164,1851 Treaty of Mendota,145|162,HIST
+165,1858 Minnesota Treaties,163|164,HIST
+166,Treaty Language and Deception,163|164|165,HIST
+167,U.S.-Dakota War of 1862,166|91|165,HIST
+168,Causes of 1862 War,167|166,HIST
+169,Fort Snelling Imprisonment,167,HIST
+170,Mankato Executions 1862,167|169,HIST
+171,Dakota Exile from Minnesota,170|169,HIST
+172,Crow Creek Relocation,171,HIST
+173,Wokiksuye Memorial Ride,160|171,HIST
+174,Contemporary Dakota Communities,171|175,HIST
+175,Language Revitalization Overview,1|187,REV
+176,Master-Apprentice Programs,175,REV
+177,Language Immersion Programs,175,REV
+178,Dakhóta Iápi Okhódakičhiye,175,REV
+179,ACTFL Proficiency Scale,1,LANG
+180,Novice Low Proficiency,179,LANG
+181,Novice Mid Proficiency,180,LANG
+182,Novice High Proficiency,181,LANG
+183,Intermediate Low Proficiency,182,LANG
+184,Language and Worldview,1|112,FOUND
+185,Language Endangerment,1|187,REV
+186,Language Sovereignty,162|185|175,REV
+187,Boarding School Era,38|167,HIST
+188,Indian Boarding Schools MN,187|135,HIST
+189,Cultural Suppression Policies,157|188,HIST
+190,Treaty Rights Overview,163|164|165,HIST
+191,Mille Lacs Band v. Minnesota,190|31,HIST
+192,Indigenous Water Rights,126|162,CULT
+193,Environmental Justice Dakota,192|127,CULT
+194,Land Acknowledgment Practice,127|140,CULT
+195,Learner Responsibilities,184|125,CULT
+196,Non-Native Learner Ethics,195|186,CULT
+197,Cultural Humility,196|108,CULT
+198,Dabaadendiziwin (Humility),108|197,VOCAB
+199,Community-Based Language Learning,175|176|177,REV
+200,AI and Indigenous Language Ethics,196|193,CULT

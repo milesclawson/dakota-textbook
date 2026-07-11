@@ -1,0 +1,10 @@
+{
+  "title": "Dakhotiyapi — Beginning Dakota Language",
+  "description": "A high school introductory course pairing Dakota language acquisition with AIS 112 American Indian Studies content across 8 chapters and 160 instructional days.",
+  "creator": "Miles Lawson / ISD 197",
+  "date": "2026-07-10",
+  "version": "1.0",
+  "format": "Learning Graph JSON v1.0",
+  "schema": "https://raw.githubusercontent.com/dmccreary/learning-graphs/refs/heads/main/src/schema/learning-graph-schema.json",
+  "license": "CC BY-NC-SA 4.0 DEED"
+}

@@ -1,0 +1,2414 @@
+{
+  "metadata": {
+    "title": "Dakhotiyapi \u2014 Beginning Dakota Language",
+    "description": "A high school introductory course pairing Dakota language acquisition with AIS 112 American Indian Studies content across 8 chapters and 160 instructional days.",
+    "creator": "Miles Lawson / ISD 197",
+    "date": "2026-07-10",
+    "version": "1.0",
+    "format": "Learning Graph JSON v1.0",
+    "schema": "https://raw.githubusercontent.com/dmccreary/learning-graphs/refs/heads/main/src/schema/learning-graph-schema.json",
+    "license": "CC BY-NC-SA 4.0 DEED"
+  },
+  "groups": {
+    "FOUND": {
+      "classifierName": "Foundation Concepts",
+      "color": "SteelBlue",
+      "font": {
+        "color": "white"
+      }
+    },
+    "GREET": {
+      "classifierName": "Greetings and Identity",
+      "color": "LimeGreen",
+      "font": {
+        "color": "black"
+      }
+    },
+    "GRAM": {
+      "classifierName": "Grammar and Structure",
+      "color": "DodgerBlue",
+      "font": {
+        "color": "white"
+      }
+    },
+    "VOCAB": {
+      "classifierName": "Vocabulary",
+      "color": "Gold",
+      "font": {
+        "color": "black"
+      }
+    },
+    "NUM": {
+      "classifierName": "Numbers and Counting",
+      "color": "Teal",
+      "font": {
+        "color": "white"
+      }
+    },
+    "CULT": {
+      "classifierName": "Culture and Values",
+      "color": "DarkOrchid",
+      "font": {
+        "color": "white"
+      }
+    },
+    "HIST": {
+      "classifierName": "History and Sovereignty",
+      "color": "Crimson",
+      "font": {
+        "color": "white"
+      }
+    },
+    "REV": {
+      "classifierName": "Language Revitalization",
+      "color": "DarkGreen",
+      "font": {
+        "color": "white"
+      }
+    },
+    "LANG": {
+      "classifierName": "ACTFL Proficiency",
+      "color": "MediumPurple",
+      "font": {
+        "color": "white"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": 1,
+      "label": "Dakota Language Overview",
+      "group": "FOUND",
+      "shape": "box"
+    },
+    {
+      "id": 2,
+      "label": "Standard Dakota Orthography",
+      "group": "FOUND"
+    },
+    {
+      "id": 3,
+      "label": "Accent Marks in Dakota",
+      "group": "FOUND"
+    },
+    {
+      "id": 4,
+      "label": "Special Characters in Dakota",
+      "group": "FOUND"
+    },
+    {
+      "id": 5,
+      "label": "Aspirated Consonants",
+      "group": "FOUND"
+    },
+    {
+      "id": 6,
+      "label": "Gender-Specific Greetings",
+      "group": "GREET"
+    },
+    {
+      "id": 7,
+      "label": "H\u00e1u (Male Greeting)",
+      "group": "GREET"
+    },
+    {
+      "id": 8,
+      "label": "Ha\u014b (Female Greeting)",
+      "group": "GREET"
+    },
+    {
+      "id": 9,
+      "label": "H\u00e1\u014b (Yes)",
+      "group": "GREET"
+    },
+    {
+      "id": 10,
+      "label": "Hiy\u00e1 (No)",
+      "group": "GREET"
+    },
+    {
+      "id": 11,
+      "label": "Pid\u00e1mayaye (Thank You)",
+      "group": "GREET"
+    },
+    {
+      "id": 12,
+      "label": "Tokh\u00e9ya (Goodbye)",
+      "group": "GREET"
+    },
+    {
+      "id": 13,
+      "label": "L\u00e9\u010dha\u014bna (See You Soon)",
+      "group": "GREET"
+    },
+    {
+      "id": 14,
+      "label": "T\u00f3khe\u010da \u0160ni (You're Welcome)",
+      "group": "GREET"
+    },
+    {
+      "id": 15,
+      "label": "Passive Name Construction",
+      "group": "GRAM"
+    },
+    {
+      "id": 16,
+      "label": "Em\u00e1\u010diyapi (My Name Is)",
+      "group": "GREET"
+    },
+    {
+      "id": 17,
+      "label": "En\u00ed\u010diyapi (Your Name Is)",
+      "group": "GREET"
+    },
+    {
+      "id": 18,
+      "label": "Personal Pronouns Dakota",
+      "group": "GRAM"
+    },
+    {
+      "id": 19,
+      "label": "M\u00edye (I / Me)",
+      "group": "GRAM"
+    },
+    {
+      "id": 20,
+      "label": "N\u00edye (You)",
+      "group": "GRAM"
+    },
+    {
+      "id": 21,
+      "label": "Iye (He / She / It)",
+      "group": "GRAM"
+    },
+    {
+      "id": 22,
+      "label": "U\u014bk\u00edyepi (We Inclusive)",
+      "group": "GRAM"
+    },
+    {
+      "id": 23,
+      "label": "Niy\u00e9pi (You All)",
+      "group": "GRAM"
+    },
+    {
+      "id": 24,
+      "label": "Iy\u00e9pi (They)",
+      "group": "GRAM"
+    },
+    {
+      "id": 25,
+      "label": "Tiy\u00f3\u0161paye (Family Band)",
+      "group": "CULT"
+    },
+    {
+      "id": 26,
+      "label": "O\u010dh\u00e9thi \u0160ak\u00f3wi\u014b Overview",
+      "group": "HIST"
+    },
+    {
+      "id": 27,
+      "label": "Seven Council Fires Names",
+      "group": "HIST"
+    },
+    {
+      "id": 28,
+      "label": "Dakota Dialect Group",
+      "group": "FOUND"
+    },
+    {
+      "id": 29,
+      "label": "Nakota Dialect Group",
+      "group": "FOUND"
+    },
+    {
+      "id": 30,
+      "label": "Lakota Dialect Group",
+      "group": "FOUND"
+    },
+    {
+      "id": 31,
+      "label": "Bdew\u00e1kha\u014bthu\u014bwa\u014b (Mdewakanton)",
+      "group": "HIST"
+    },
+    {
+      "id": 32,
+      "label": "Wa\u021fp\u00e9khute (Wahpekute)",
+      "group": "HIST"
+    },
+    {
+      "id": 33,
+      "label": "Sis\u00edthu\u014bwa\u014b (Sisseton)",
+      "group": "HIST"
+    },
+    {
+      "id": 34,
+      "label": "Wa\u021fp\u00e9thu\u014bwa\u014b (Wahpeton)",
+      "group": "HIST"
+    },
+    {
+      "id": 35,
+      "label": "Ih\u00e1\u014bkthu\u014bwa\u014b (Yankton)",
+      "group": "HIST"
+    },
+    {
+      "id": 36,
+      "label": "Ih\u00e1\u014bkthu\u014bwa\u014bna (Yanktonai)",
+      "group": "HIST"
+    },
+    {
+      "id": 37,
+      "label": "Th\u00edt\u021fu\u014bwa\u014b (Teton/Lakota)",
+      "group": "HIST"
+    },
+    {
+      "id": 38,
+      "label": "Pre-Contact Dakota Society",
+      "group": "HIST"
+    },
+    {
+      "id": 39,
+      "label": "Band-Level Governance",
+      "group": "HIST"
+    },
+    {
+      "id": 40,
+      "label": "Earned Leadership Model",
+      "group": "HIST"
+    },
+    {
+      "id": 41,
+      "label": "Numbers 1\u201310 in Dakota",
+      "group": "NUM"
+    },
+    {
+      "id": 42,
+      "label": "Wa\u014b\u017e\u00ed (One)",
+      "group": "NUM"
+    },
+    {
+      "id": 43,
+      "label": "N\u00fa\u014bpa (Two)",
+      "group": "NUM"
+    },
+    {
+      "id": 44,
+      "label": "Y\u00e1mni (Three)",
+      "group": "NUM"
+    },
+    {
+      "id": 45,
+      "label": "T\u00f3pa (Four)",
+      "group": "NUM"
+    },
+    {
+      "id": 46,
+      "label": "Z\u00e1pta\u014b (Five)",
+      "group": "NUM"
+    },
+    {
+      "id": 47,
+      "label": "\u0160\u00e1kpe (Six)",
+      "group": "NUM"
+    },
+    {
+      "id": 48,
+      "label": "\u0160ak\u00f3wi\u014b (Seven)",
+      "group": "NUM"
+    },
+    {
+      "id": 49,
+      "label": "\u0160agl\u00f3\u011fa\u014b (Eight)",
+      "group": "NUM"
+    },
+    {
+      "id": 50,
+      "label": "Nap\u010d\u00edyu\u014bka (Nine)",
+      "group": "NUM"
+    },
+    {
+      "id": 51,
+      "label": "Wik\u010d\u00e9mna (Ten)",
+      "group": "NUM"
+    },
+    {
+      "id": 52,
+      "label": "Numbers 11\u201319 Dakota",
+      "group": "NUM"
+    },
+    {
+      "id": 53,
+      "label": "Multiples of Ten Dakota",
+      "group": "NUM"
+    },
+    {
+      "id": 54,
+      "label": "Numbers 100\u20131000 Dakota",
+      "group": "NUM"
+    },
+    {
+      "id": 55,
+      "label": "Stative Verbs Overview",
+      "group": "GRAM"
+    },
+    {
+      "id": 56,
+      "label": "Stative Verbs as Descriptors",
+      "group": "GRAM"
+    },
+    {
+      "id": 57,
+      "label": "\u0160\u00e1 (It Is Red)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 58,
+      "label": "T\u00f3 (It Is Blue/Green)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 59,
+      "label": "S\u00e1pa (It Is Black)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 60,
+      "label": "S\u00e1\u014b (It Is White)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 61,
+      "label": "\u017di\u017e\u00ed (It Is Yellow/Orange)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 62,
+      "label": "\u011e\u00ed (It Is Brown)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 63,
+      "label": "\u0160\u00fa\u014bka (Dog)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 64,
+      "label": "Definite Article Ki\u014b",
+      "group": "GRAM"
+    },
+    {
+      "id": 65,
+      "label": "Indefinite Article Wa\u014b",
+      "group": "GRAM"
+    },
+    {
+      "id": 66,
+      "label": "Trade Network Vocabulary",
+      "group": "HIST"
+    },
+    {
+      "id": 67,
+      "label": "Wampum Cultural Context",
+      "group": "HIST"
+    },
+    {
+      "id": 68,
+      "label": "Dakota Counting Systems",
+      "group": "NUM"
+    },
+    {
+      "id": 69,
+      "label": "Animate vs. Inanimate Nouns",
+      "group": "GRAM"
+    },
+    {
+      "id": 70,
+      "label": "Possessive Prefixes",
+      "group": "GRAM"
+    },
+    {
+      "id": 71,
+      "label": "Dakota Word Order SOV",
+      "group": "GRAM"
+    },
+    {
+      "id": 72,
+      "label": "Subject-Object-Verb Structure",
+      "group": "GRAM"
+    },
+    {
+      "id": 73,
+      "label": "Action Verbs Dakota",
+      "group": "GRAM"
+    },
+    {
+      "id": 74,
+      "label": "Y\u00fata (To Eat)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 75,
+      "label": "M\u00e1ni (To Walk)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 76,
+      "label": "Y\u00e1 (To Go)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 77,
+      "label": "Ey\u00e1 (To Say / Speak)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 78,
+      "label": "B\u00edmaza (To Read / Write)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 79,
+      "label": "W\u00f3u\u014bsipi (Daily Life / Work)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 80,
+      "label": "Future Tense Suffix -kte",
+      "group": "GRAM"
+    },
+    {
+      "id": 81,
+      "label": "Negation Suffix -\u0161ni",
+      "group": "GRAM"
+    },
+    {
+      "id": 82,
+      "label": "Future Negative -kte-\u0161ni",
+      "group": "GRAM"
+    },
+    {
+      "id": 83,
+      "label": "Verb Suffix Order",
+      "group": "GRAM"
+    },
+    {
+      "id": 84,
+      "label": "SOV vs. SVO Comparison",
+      "group": "GRAM"
+    },
+    {
+      "id": 85,
+      "label": "Ki\u010dh\u00ed W\u00f3u\u014bsipi (Work Together)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 86,
+      "label": "Seasonal Calendar Overview",
+      "group": "CULT"
+    },
+    {
+      "id": 87,
+      "label": "W\u00e9t\u021fo (Spring)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 88,
+      "label": "Blok\u00e9tu (Summer)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 89,
+      "label": "Pta\u014by\u00e9tu (Fall/Autumn)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 90,
+      "label": "Wan\u00edyetu (Winter)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 91,
+      "label": "Bison Economy Overview",
+      "group": "HIST"
+    },
+    {
+      "id": 92,
+      "label": "Seasonal Lifeways",
+      "group": "HIST"
+    },
+    {
+      "id": 93,
+      "label": "Moon Names Dakota",
+      "group": "VOCAB"
+    },
+    {
+      "id": 94,
+      "label": "W\u00f3\u010dhekiye (Prayer/To Pray)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 95,
+      "label": "Oral Instruction Tradition",
+      "group": "CULT"
+    },
+    {
+      "id": 96,
+      "label": "Body Parts Vocabulary",
+      "group": "VOCAB"
+    },
+    {
+      "id": 97,
+      "label": "\u010cha\u014bt\u00e9 (Heart)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 98,
+      "label": "Mi\u010dh\u00e1\u014bte (My Heart)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 99,
+      "label": "Possessive Prefix Mi-",
+      "group": "GRAM"
+    },
+    {
+      "id": 100,
+      "label": "Health Expressions Dakota",
+      "group": "VOCAB"
+    },
+    {
+      "id": 101,
+      "label": "May\u00e1za\u014b (It Hurts / I Am Sick)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 102,
+      "label": "Family Relationship Terms",
+      "group": "VOCAB"
+    },
+    {
+      "id": 103,
+      "label": "Gender Speech in Kinship",
+      "group": "GRAM"
+    },
+    {
+      "id": 104,
+      "label": "\u010chank\u0161\u00ed (Sister Male Speaker)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 105,
+      "label": "\u010chuw\u00edtkala (Sister Female Speaker)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 106,
+      "label": "Kinship System Overview",
+      "group": "CULT"
+    },
+    {
+      "id": 107,
+      "label": "Medicine Traditions Dakota",
+      "group": "CULT"
+    },
+    {
+      "id": 108,
+      "label": "W\u00f3u\u014b\u0161ila (Compassion/Humility)",
+      "group": "CULT"
+    },
+    {
+      "id": 109,
+      "label": "Dakota Healing Practices",
+      "group": "CULT"
+    },
+    {
+      "id": 110,
+      "label": "Language and Wellness",
+      "group": "CULT"
+    },
+    {
+      "id": 111,
+      "label": "Mit\u00e1kuye Oy\u00e1s\u02bci\u014b (All My Relations)",
+      "group": "CULT"
+    },
+    {
+      "id": 112,
+      "label": "Relational Worldview Dakota",
+      "group": "CULT"
+    },
+    {
+      "id": 113,
+      "label": "Wak\u021f\u00e1\u014b T\u021f\u00e1\u014bka (Great Mystery)",
+      "group": "CULT"
+    },
+    {
+      "id": 114,
+      "label": "Dakota Sacred Traditions",
+      "group": "CULT"
+    },
+    {
+      "id": 115,
+      "label": "Wa\u010dh\u00e1\u014btognaka (Generosity)",
+      "group": "CULT"
+    },
+    {
+      "id": 116,
+      "label": "Oh\u00edtika (Bravery)",
+      "group": "CULT"
+    },
+    {
+      "id": 117,
+      "label": "Ksap\u00e1 (Wisdom)",
+      "group": "CULT"
+    },
+    {
+      "id": 118,
+      "label": "Seven Dakota Values",
+      "group": "CULT"
+    },
+    {
+      "id": 119,
+      "label": "W\u00f3\u010dhekiye as Verb",
+      "group": "GRAM"
+    },
+    {
+      "id": 120,
+      "label": "Prayer Language Dakota",
+      "group": "VOCAB"
+    },
+    {
+      "id": 121,
+      "label": "Sacred vs. Public Knowledge",
+      "group": "CULT"
+    },
+    {
+      "id": 122,
+      "label": "Spiritual Traditions Overview",
+      "group": "CULT"
+    },
+    {
+      "id": 123,
+      "label": "\u010cha\u014bt\u00e9\u010dhila (I Love You)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 124,
+      "label": "\u010cha\u014bt\u00e9\u010dhilapi (Closing Blessing)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 125,
+      "label": "Protocol for Sacred Content",
+      "group": "CULT"
+    },
+    {
+      "id": 126,
+      "label": "Mak\u00f3\u010dhe (Land/Homeland)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 127,
+      "label": "Land as Relational Concept",
+      "group": "CULT"
+    },
+    {
+      "id": 128,
+      "label": "Cardinal Directions Dakota",
+      "group": "VOCAB"
+    },
+    {
+      "id": 129,
+      "label": "Wiy\u00f3hi\u014bya\u014bpa (East)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 130,
+      "label": "Wiy\u00f3hpeyata (West)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 131,
+      "label": "Waz\u00edyata (North)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 132,
+      "label": "It\u00f3kaga (South)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 133,
+      "label": "Direction Origin Meanings",
+      "group": "CULT"
+    },
+    {
+      "id": 134,
+      "label": "Bd\u00f3te (Confluence/Sacred Center)",
+      "group": "HIST"
+    },
+    {
+      "id": 135,
+      "label": "Mn\u00edsota Mak\u00f3\u010dhe (Minnesota)",
+      "group": "HIST"
+    },
+    {
+      "id": 136,
+      "label": "Seasonal Vocabulary Extended",
+      "group": "VOCAB"
+    },
+    {
+      "id": 137,
+      "label": "Moon Names Extended",
+      "group": "VOCAB"
+    },
+    {
+      "id": 138,
+      "label": "\u010cha\u014bw\u00e1pe-kasn\u00e1-wi (Leaf-Falling Moon)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 139,
+      "label": "Celestial Knowledge Dakota",
+      "group": "CULT"
+    },
+    {
+      "id": 140,
+      "label": "Land and Language Connection",
+      "group": "CULT"
+    },
+    {
+      "id": 141,
+      "label": "\u00c1\u014bpetu (Day)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 142,
+      "label": "H\u00e1\u014bh\u00e9pi (Night)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 143,
+      "label": "Locative Suffixes Dakota",
+      "group": "GRAM"
+    },
+    {
+      "id": 144,
+      "label": "Seasonal Lifeways Extended",
+      "group": "HIST"
+    },
+    {
+      "id": 145,
+      "label": "Treaty Land Cession Geography",
+      "group": "HIST"
+    },
+    {
+      "id": 146,
+      "label": "W\u00f3oyake (Story/Oral Narrative)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 147,
+      "label": "Aadizookaanan Concept",
+      "group": "CULT"
+    },
+    {
+      "id": 148,
+      "label": "Ikt\u00f3mi (Spider/Trickster)",
+      "group": "CULT"
+    },
+    {
+      "id": 149,
+      "label": "Trickster Story Functions",
+      "group": "CULT"
+    },
+    {
+      "id": 150,
+      "label": "Eh\u00e1\u014bni (Long Ago/Once)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 151,
+      "label": "Ey\u00e1pi (They Say/Evidential)",
+      "group": "GRAM"
+    },
+    {
+      "id": 152,
+      "label": "H\u00e9\u010dhel (And So/Thus)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 153,
+      "label": "Narrative Connectors Dakota",
+      "group": "GRAM"
+    },
+    {
+      "id": 154,
+      "label": "Oral Tradition Pedagogy",
+      "group": "CULT"
+    },
+    {
+      "id": 155,
+      "label": "Ceremony Overview",
+      "group": "CULT"
+    },
+    {
+      "id": 156,
+      "label": "Suppression of Ceremony",
+      "group": "HIST"
+    },
+    {
+      "id": 157,
+      "label": "Code of Indian Offenses 1883",
+      "group": "HIST"
+    },
+    {
+      "id": 158,
+      "label": "Story as Moral Instruction",
+      "group": "CULT"
+    },
+    {
+      "id": 159,
+      "label": "Community Storytelling Roles",
+      "group": "CULT"
+    },
+    {
+      "id": 160,
+      "label": "W\u00f3kiksuye (Remembrance)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 161,
+      "label": "Oy\u00e1te (Nation/People)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 162,
+      "label": "Dakota Sovereignty Concept",
+      "group": "HIST"
+    },
+    {
+      "id": 163,
+      "label": "1851 Treaty Traverse des Sioux",
+      "group": "HIST"
+    },
+    {
+      "id": 164,
+      "label": "1851 Treaty of Mendota",
+      "group": "HIST"
+    },
+    {
+      "id": 165,
+      "label": "1858 Minnesota Treaties",
+      "group": "HIST"
+    },
+    {
+      "id": 166,
+      "label": "Treaty Language and Deception",
+      "group": "HIST"
+    },
+    {
+      "id": 167,
+      "label": "U.S.-Dakota War of 1862",
+      "group": "HIST"
+    },
+    {
+      "id": 168,
+      "label": "Causes of 1862 War",
+      "group": "HIST"
+    },
+    {
+      "id": 169,
+      "label": "Fort Snelling Imprisonment",
+      "group": "HIST"
+    },
+    {
+      "id": 170,
+      "label": "Mankato Executions 1862",
+      "group": "HIST"
+    },
+    {
+      "id": 171,
+      "label": "Dakota Exile from Minnesota",
+      "group": "HIST"
+    },
+    {
+      "id": 172,
+      "label": "Crow Creek Relocation",
+      "group": "HIST"
+    },
+    {
+      "id": 173,
+      "label": "Wokiksuye Memorial Ride",
+      "group": "HIST"
+    },
+    {
+      "id": 174,
+      "label": "Contemporary Dakota Communities",
+      "group": "HIST"
+    },
+    {
+      "id": 175,
+      "label": "Language Revitalization Overview",
+      "group": "REV"
+    },
+    {
+      "id": 176,
+      "label": "Master-Apprentice Programs",
+      "group": "REV"
+    },
+    {
+      "id": 177,
+      "label": "Language Immersion Programs",
+      "group": "REV"
+    },
+    {
+      "id": 178,
+      "label": "Dakh\u00f3ta I\u00e1pi Okh\u00f3daki\u010dhiye",
+      "group": "REV"
+    },
+    {
+      "id": 179,
+      "label": "ACTFL Proficiency Scale",
+      "group": "LANG"
+    },
+    {
+      "id": 180,
+      "label": "Novice Low Proficiency",
+      "group": "LANG"
+    },
+    {
+      "id": 181,
+      "label": "Novice Mid Proficiency",
+      "group": "LANG"
+    },
+    {
+      "id": 182,
+      "label": "Novice High Proficiency",
+      "group": "LANG"
+    },
+    {
+      "id": 183,
+      "label": "Intermediate Low Proficiency",
+      "group": "LANG"
+    },
+    {
+      "id": 184,
+      "label": "Language and Worldview",
+      "group": "FOUND"
+    },
+    {
+      "id": 185,
+      "label": "Language Endangerment",
+      "group": "REV"
+    },
+    {
+      "id": 186,
+      "label": "Language Sovereignty",
+      "group": "REV"
+    },
+    {
+      "id": 187,
+      "label": "Boarding School Era",
+      "group": "HIST"
+    },
+    {
+      "id": 188,
+      "label": "Indian Boarding Schools MN",
+      "group": "HIST"
+    },
+    {
+      "id": 189,
+      "label": "Cultural Suppression Policies",
+      "group": "HIST"
+    },
+    {
+      "id": 190,
+      "label": "Treaty Rights Overview",
+      "group": "HIST"
+    },
+    {
+      "id": 191,
+      "label": "Mille Lacs Band v. Minnesota",
+      "group": "HIST"
+    },
+    {
+      "id": 192,
+      "label": "Indigenous Water Rights",
+      "group": "CULT"
+    },
+    {
+      "id": 193,
+      "label": "Environmental Justice Dakota",
+      "group": "CULT"
+    },
+    {
+      "id": 194,
+      "label": "Land Acknowledgment Practice",
+      "group": "CULT"
+    },
+    {
+      "id": 195,
+      "label": "Learner Responsibilities",
+      "group": "CULT"
+    },
+    {
+      "id": 196,
+      "label": "Non-Native Learner Ethics",
+      "group": "CULT"
+    },
+    {
+      "id": 197,
+      "label": "Cultural Humility",
+      "group": "CULT"
+    },
+    {
+      "id": 198,
+      "label": "Dabaadendiziwin (Humility)",
+      "group": "VOCAB"
+    },
+    {
+      "id": 199,
+      "label": "Community-Based Language Learning",
+      "group": "REV"
+    },
+    {
+      "id": 200,
+      "label": "AI and Indigenous Language Ethics",
+      "group": "CULT"
+    }
+  ],
+  "edges": [
+    {
+      "from": 2,
+      "to": 1
+    },
+    {
+      "from": 3,
+      "to": 2
+    },
+    {
+      "from": 4,
+      "to": 2
+    },
+    {
+      "from": 5,
+      "to": 2
+    },
+    {
+      "from": 6,
+      "to": 1
+    },
+    {
+      "from": 6,
+      "to": 2
+    },
+    {
+      "from": 7,
+      "to": 6
+    },
+    {
+      "from": 8,
+      "to": 6
+    },
+    {
+      "from": 9,
+      "to": 6
+    },
+    {
+      "from": 10,
+      "to": 6
+    },
+    {
+      "from": 11,
+      "to": 6
+    },
+    {
+      "from": 12,
+      "to": 6
+    },
+    {
+      "from": 13,
+      "to": 6
+    },
+    {
+      "from": 13,
+      "to": 12
+    },
+    {
+      "from": 14,
+      "to": 6
+    },
+    {
+      "from": 14,
+      "to": 11
+    },
+    {
+      "from": 15,
+      "to": 1
+    },
+    {
+      "from": 15,
+      "to": 6
+    },
+    {
+      "from": 16,
+      "to": 15
+    },
+    {
+      "from": 17,
+      "to": 15
+    },
+    {
+      "from": 18,
+      "to": 1
+    },
+    {
+      "from": 19,
+      "to": 18
+    },
+    {
+      "from": 20,
+      "to": 18
+    },
+    {
+      "from": 21,
+      "to": 18
+    },
+    {
+      "from": 22,
+      "to": 18
+    },
+    {
+      "from": 23,
+      "to": 18
+    },
+    {
+      "from": 24,
+      "to": 18
+    },
+    {
+      "from": 25,
+      "to": 1
+    },
+    {
+      "from": 26,
+      "to": 1
+    },
+    {
+      "from": 26,
+      "to": 25
+    },
+    {
+      "from": 27,
+      "to": 26
+    },
+    {
+      "from": 28,
+      "to": 26
+    },
+    {
+      "from": 28,
+      "to": 1
+    },
+    {
+      "from": 29,
+      "to": 26
+    },
+    {
+      "from": 29,
+      "to": 1
+    },
+    {
+      "from": 30,
+      "to": 26
+    },
+    {
+      "from": 30,
+      "to": 1
+    },
+    {
+      "from": 31,
+      "to": 27
+    },
+    {
+      "from": 31,
+      "to": 28
+    },
+    {
+      "from": 32,
+      "to": 27
+    },
+    {
+      "from": 32,
+      "to": 28
+    },
+    {
+      "from": 33,
+      "to": 27
+    },
+    {
+      "from": 33,
+      "to": 28
+    },
+    {
+      "from": 34,
+      "to": 27
+    },
+    {
+      "from": 34,
+      "to": 28
+    },
+    {
+      "from": 35,
+      "to": 27
+    },
+    {
+      "from": 35,
+      "to": 29
+    },
+    {
+      "from": 36,
+      "to": 27
+    },
+    {
+      "from": 36,
+      "to": 29
+    },
+    {
+      "from": 37,
+      "to": 27
+    },
+    {
+      "from": 37,
+      "to": 30
+    },
+    {
+      "from": 38,
+      "to": 26
+    },
+    {
+      "from": 38,
+      "to": 25
+    },
+    {
+      "from": 39,
+      "to": 38
+    },
+    {
+      "from": 39,
+      "to": 25
+    },
+    {
+      "from": 40,
+      "to": 39
+    },
+    {
+      "from": 41,
+      "to": 1
+    },
+    {
+      "from": 41,
+      "to": 2
+    },
+    {
+      "from": 42,
+      "to": 41
+    },
+    {
+      "from": 43,
+      "to": 41
+    },
+    {
+      "from": 44,
+      "to": 41
+    },
+    {
+      "from": 45,
+      "to": 41
+    },
+    {
+      "from": 46,
+      "to": 41
+    },
+    {
+      "from": 47,
+      "to": 41
+    },
+    {
+      "from": 48,
+      "to": 41
+    },
+    {
+      "from": 49,
+      "to": 41
+    },
+    {
+      "from": 50,
+      "to": 41
+    },
+    {
+      "from": 51,
+      "to": 41
+    },
+    {
+      "from": 52,
+      "to": 41
+    },
+    {
+      "from": 52,
+      "to": 51
+    },
+    {
+      "from": 53,
+      "to": 52
+    },
+    {
+      "from": 53,
+      "to": 51
+    },
+    {
+      "from": 54,
+      "to": 53
+    },
+    {
+      "from": 55,
+      "to": 1
+    },
+    {
+      "from": 55,
+      "to": 18
+    },
+    {
+      "from": 56,
+      "to": 55
+    },
+    {
+      "from": 57,
+      "to": 56
+    },
+    {
+      "from": 58,
+      "to": 56
+    },
+    {
+      "from": 59,
+      "to": 56
+    },
+    {
+      "from": 60,
+      "to": 56
+    },
+    {
+      "from": 61,
+      "to": 56
+    },
+    {
+      "from": 62,
+      "to": 56
+    },
+    {
+      "from": 63,
+      "to": 1
+    },
+    {
+      "from": 64,
+      "to": 1
+    },
+    {
+      "from": 64,
+      "to": 18
+    },
+    {
+      "from": 65,
+      "to": 1
+    },
+    {
+      "from": 65,
+      "to": 18
+    },
+    {
+      "from": 66,
+      "to": 38
+    },
+    {
+      "from": 67,
+      "to": 66
+    },
+    {
+      "from": 68,
+      "to": 41
+    },
+    {
+      "from": 68,
+      "to": 38
+    },
+    {
+      "from": 69,
+      "to": 1
+    },
+    {
+      "from": 69,
+      "to": 55
+    },
+    {
+      "from": 70,
+      "to": 18
+    },
+    {
+      "from": 70,
+      "to": 69
+    },
+    {
+      "from": 71,
+      "to": 1
+    },
+    {
+      "from": 71,
+      "to": 18
+    },
+    {
+      "from": 72,
+      "to": 71
+    },
+    {
+      "from": 73,
+      "to": 1
+    },
+    {
+      "from": 73,
+      "to": 55
+    },
+    {
+      "from": 74,
+      "to": 73
+    },
+    {
+      "from": 75,
+      "to": 73
+    },
+    {
+      "from": 76,
+      "to": 73
+    },
+    {
+      "from": 77,
+      "to": 73
+    },
+    {
+      "from": 78,
+      "to": 73
+    },
+    {
+      "from": 79,
+      "to": 73
+    },
+    {
+      "from": 80,
+      "to": 73
+    },
+    {
+      "from": 80,
+      "to": 72
+    },
+    {
+      "from": 81,
+      "to": 73
+    },
+    {
+      "from": 81,
+      "to": 72
+    },
+    {
+      "from": 82,
+      "to": 80
+    },
+    {
+      "from": 82,
+      "to": 81
+    },
+    {
+      "from": 83,
+      "to": 80
+    },
+    {
+      "from": 83,
+      "to": 81
+    },
+    {
+      "from": 83,
+      "to": 82
+    },
+    {
+      "from": 84,
+      "to": 72
+    },
+    {
+      "from": 84,
+      "to": 71
+    },
+    {
+      "from": 85,
+      "to": 79
+    },
+    {
+      "from": 85,
+      "to": 73
+    },
+    {
+      "from": 86,
+      "to": 38
+    },
+    {
+      "from": 87,
+      "to": 86
+    },
+    {
+      "from": 88,
+      "to": 86
+    },
+    {
+      "from": 89,
+      "to": 86
+    },
+    {
+      "from": 90,
+      "to": 86
+    },
+    {
+      "from": 91,
+      "to": 38
+    },
+    {
+      "from": 91,
+      "to": 86
+    },
+    {
+      "from": 92,
+      "to": 86
+    },
+    {
+      "from": 92,
+      "to": 91
+    },
+    {
+      "from": 93,
+      "to": 86
+    },
+    {
+      "from": 93,
+      "to": 2
+    },
+    {
+      "from": 94,
+      "to": 1
+    },
+    {
+      "from": 94,
+      "to": 73
+    },
+    {
+      "from": 95,
+      "to": 38
+    },
+    {
+      "from": 95,
+      "to": 1
+    },
+    {
+      "from": 96,
+      "to": 1
+    },
+    {
+      "from": 96,
+      "to": 69
+    },
+    {
+      "from": 97,
+      "to": 96
+    },
+    {
+      "from": 98,
+      "to": 97
+    },
+    {
+      "from": 98,
+      "to": 70
+    },
+    {
+      "from": 99,
+      "to": 70
+    },
+    {
+      "from": 100,
+      "to": 96
+    },
+    {
+      "from": 100,
+      "to": 73
+    },
+    {
+      "from": 101,
+      "to": 100
+    },
+    {
+      "from": 102,
+      "to": 25
+    },
+    {
+      "from": 102,
+      "to": 70
+    },
+    {
+      "from": 103,
+      "to": 6
+    },
+    {
+      "from": 103,
+      "to": 102
+    },
+    {
+      "from": 104,
+      "to": 103
+    },
+    {
+      "from": 104,
+      "to": 102
+    },
+    {
+      "from": 105,
+      "to": 103
+    },
+    {
+      "from": 105,
+      "to": 102
+    },
+    {
+      "from": 106,
+      "to": 25
+    },
+    {
+      "from": 106,
+      "to": 102
+    },
+    {
+      "from": 107,
+      "to": 38
+    },
+    {
+      "from": 107,
+      "to": 106
+    },
+    {
+      "from": 108,
+      "to": 25
+    },
+    {
+      "from": 109,
+      "to": 107
+    },
+    {
+      "from": 109,
+      "to": 108
+    },
+    {
+      "from": 110,
+      "to": 1
+    },
+    {
+      "from": 110,
+      "to": 109
+    },
+    {
+      "from": 111,
+      "to": 1
+    },
+    {
+      "from": 111,
+      "to": 106
+    },
+    {
+      "from": 112,
+      "to": 111
+    },
+    {
+      "from": 112,
+      "to": 25
+    },
+    {
+      "from": 113,
+      "to": 1
+    },
+    {
+      "from": 113,
+      "to": 112
+    },
+    {
+      "from": 114,
+      "to": 113
+    },
+    {
+      "from": 114,
+      "to": 112
+    },
+    {
+      "from": 115,
+      "to": 112
+    },
+    {
+      "from": 116,
+      "to": 112
+    },
+    {
+      "from": 117,
+      "to": 112
+    },
+    {
+      "from": 118,
+      "to": 115
+    },
+    {
+      "from": 118,
+      "to": 116
+    },
+    {
+      "from": 118,
+      "to": 117
+    },
+    {
+      "from": 118,
+      "to": 108
+    },
+    {
+      "from": 119,
+      "to": 94
+    },
+    {
+      "from": 119,
+      "to": 73
+    },
+    {
+      "from": 120,
+      "to": 119
+    },
+    {
+      "from": 120,
+      "to": 114
+    },
+    {
+      "from": 121,
+      "to": 114
+    },
+    {
+      "from": 121,
+      "to": 95
+    },
+    {
+      "from": 122,
+      "to": 114
+    },
+    {
+      "from": 122,
+      "to": 112
+    },
+    {
+      "from": 123,
+      "to": 97
+    },
+    {
+      "from": 123,
+      "to": 70
+    },
+    {
+      "from": 124,
+      "to": 123
+    },
+    {
+      "from": 124,
+      "to": 16
+    },
+    {
+      "from": 125,
+      "to": 121
+    },
+    {
+      "from": 125,
+      "to": 114
+    },
+    {
+      "from": 126,
+      "to": 1
+    },
+    {
+      "from": 126,
+      "to": 112
+    },
+    {
+      "from": 127,
+      "to": 126
+    },
+    {
+      "from": 127,
+      "to": 112
+    },
+    {
+      "from": 128,
+      "to": 1
+    },
+    {
+      "from": 128,
+      "to": 2
+    },
+    {
+      "from": 129,
+      "to": 128
+    },
+    {
+      "from": 130,
+      "to": 128
+    },
+    {
+      "from": 131,
+      "to": 128
+    },
+    {
+      "from": 132,
+      "to": 128
+    },
+    {
+      "from": 133,
+      "to": 129
+    },
+    {
+      "from": 133,
+      "to": 130
+    },
+    {
+      "from": 133,
+      "to": 131
+    },
+    {
+      "from": 133,
+      "to": 132
+    },
+    {
+      "from": 134,
+      "to": 126
+    },
+    {
+      "from": 134,
+      "to": 38
+    },
+    {
+      "from": 135,
+      "to": 126
+    },
+    {
+      "from": 135,
+      "to": 134
+    },
+    {
+      "from": 136,
+      "to": 87
+    },
+    {
+      "from": 136,
+      "to": 88
+    },
+    {
+      "from": 136,
+      "to": 89
+    },
+    {
+      "from": 136,
+      "to": 90
+    },
+    {
+      "from": 137,
+      "to": 93
+    },
+    {
+      "from": 137,
+      "to": 86
+    },
+    {
+      "from": 138,
+      "to": 137
+    },
+    {
+      "from": 139,
+      "to": 93
+    },
+    {
+      "from": 139,
+      "to": 86
+    },
+    {
+      "from": 139,
+      "to": 38
+    },
+    {
+      "from": 140,
+      "to": 126
+    },
+    {
+      "from": 140,
+      "to": 1
+    },
+    {
+      "from": 140,
+      "to": 127
+    },
+    {
+      "from": 141,
+      "to": 1
+    },
+    {
+      "from": 142,
+      "to": 1
+    },
+    {
+      "from": 143,
+      "to": 72
+    },
+    {
+      "from": 143,
+      "to": 126
+    },
+    {
+      "from": 144,
+      "to": 92
+    },
+    {
+      "from": 144,
+      "to": 136
+    },
+    {
+      "from": 145,
+      "to": 126
+    },
+    {
+      "from": 145,
+      "to": 135
+    },
+    {
+      "from": 146,
+      "to": 1
+    },
+    {
+      "from": 146,
+      "to": 95
+    },
+    {
+      "from": 147,
+      "to": 146
+    },
+    {
+      "from": 147,
+      "to": 95
+    },
+    {
+      "from": 148,
+      "to": 146
+    },
+    {
+      "from": 148,
+      "to": 147
+    },
+    {
+      "from": 149,
+      "to": 148
+    },
+    {
+      "from": 149,
+      "to": 147
+    },
+    {
+      "from": 150,
+      "to": 146
+    },
+    {
+      "from": 150,
+      "to": 1
+    },
+    {
+      "from": 151,
+      "to": 73
+    },
+    {
+      "from": 151,
+      "to": 1
+    },
+    {
+      "from": 152,
+      "to": 146
+    },
+    {
+      "from": 152,
+      "to": 1
+    },
+    {
+      "from": 153,
+      "to": 150
+    },
+    {
+      "from": 153,
+      "to": 151
+    },
+    {
+      "from": 153,
+      "to": 152
+    },
+    {
+      "from": 154,
+      "to": 95
+    },
+    {
+      "from": 154,
+      "to": 146
+    },
+    {
+      "from": 154,
+      "to": 147
+    },
+    {
+      "from": 155,
+      "to": 114
+    },
+    {
+      "from": 155,
+      "to": 122
+    },
+    {
+      "from": 156,
+      "to": 155
+    },
+    {
+      "from": 157,
+      "to": 156
+    },
+    {
+      "from": 158,
+      "to": 149
+    },
+    {
+      "from": 158,
+      "to": 154
+    },
+    {
+      "from": 159,
+      "to": 154
+    },
+    {
+      "from": 159,
+      "to": 25
+    },
+    {
+      "from": 160,
+      "to": 1
+    },
+    {
+      "from": 160,
+      "to": 146
+    },
+    {
+      "from": 161,
+      "to": 1
+    },
+    {
+      "from": 161,
+      "to": 26
+    },
+    {
+      "from": 162,
+      "to": 161
+    },
+    {
+      "from": 162,
+      "to": 39
+    },
+    {
+      "from": 163,
+      "to": 145
+    },
+    {
+      "from": 163,
+      "to": 162
+    },
+    {
+      "from": 164,
+      "to": 145
+    },
+    {
+      "from": 164,
+      "to": 162
+    },
+    {
+      "from": 165,
+      "to": 163
+    },
+    {
+      "from": 165,
+      "to": 164
+    },
+    {
+      "from": 166,
+      "to": 163
+    },
+    {
+      "from": 166,
+      "to": 164
+    },
+    {
+      "from": 166,
+      "to": 165
+    },
+    {
+      "from": 167,
+      "to": 166
+    },
+    {
+      "from": 167,
+      "to": 91
+    },
+    {
+      "from": 167,
+      "to": 165
+    },
+    {
+      "from": 168,
+      "to": 167
+    },
+    {
+      "from": 168,
+      "to": 166
+    },
+    {
+      "from": 169,
+      "to": 167
+    },
+    {
+      "from": 170,
+      "to": 167
+    },
+    {
+      "from": 170,
+      "to": 169
+    },
+    {
+      "from": 171,
+      "to": 170
+    },
+    {
+      "from": 171,
+      "to": 169
+    },
+    {
+      "from": 172,
+      "to": 171
+    },
+    {
+      "from": 173,
+      "to": 160
+    },
+    {
+      "from": 173,
+      "to": 171
+    },
+    {
+      "from": 174,
+      "to": 171
+    },
+    {
+      "from": 174,
+      "to": 175
+    },
+    {
+      "from": 175,
+      "to": 1
+    },
+    {
+      "from": 175,
+      "to": 187
+    },
+    {
+      "from": 176,
+      "to": 175
+    },
+    {
+      "from": 177,
+      "to": 175
+    },
+    {
+      "from": 178,
+      "to": 175
+    },
+    {
+      "from": 179,
+      "to": 1
+    },
+    {
+      "from": 180,
+      "to": 179
+    },
+    {
+      "from": 181,
+      "to": 180
+    },
+    {
+      "from": 182,
+      "to": 181
+    },
+    {
+      "from": 183,
+      "to": 182
+    },
+    {
+      "from": 184,
+      "to": 1
+    },
+    {
+      "from": 184,
+      "to": 112
+    },
+    {
+      "from": 185,
+      "to": 1
+    },
+    {
+      "from": 185,
+      "to": 187
+    },
+    {
+      "from": 186,
+      "to": 162
+    },
+    {
+      "from": 186,
+      "to": 185
+    },
+    {
+      "from": 186,
+      "to": 175
+    },
+    {
+      "from": 187,
+      "to": 38
+    },
+    {
+      "from": 187,
+      "to": 167
+    },
+    {
+      "from": 188,
+      "to": 187
+    },
+    {
+      "from": 188,
+      "to": 135
+    },
+    {
+      "from": 189,
+      "to": 157
+    },
+    {
+      "from": 189,
+      "to": 188
+    },
+    {
+      "from": 190,
+      "to": 163
+    },
+    {
+      "from": 190,
+      "to": 164
+    },
+    {
+      "from": 190,
+      "to": 165
+    },
+    {
+      "from": 191,
+      "to": 190
+    },
+    {
+      "from": 191,
+      "to": 31
+    },
+    {
+      "from": 192,
+      "to": 126
+    },
+    {
+      "from": 192,
+      "to": 162
+    },
+    {
+      "from": 193,
+      "to": 192
+    },
+    {
+      "from": 193,
+      "to": 127
+    },
+    {
+      "from": 194,
+      "to": 127
+    },
+    {
+      "from": 194,
+      "to": 140
+    },
+    {
+      "from": 195,
+      "to": 184
+    },
+    {
+      "from": 195,
+      "to": 125
+    },
+    {
+      "from": 196,
+      "to": 195
+    },
+    {
+      "from": 196,
+      "to": 186
+    },
+    {
+      "from": 197,
+      "to": 196
+    },
+    {
+      "from": 197,
+      "to": 108
+    },
+    {
+      "from": 198,
+      "to": 108
+    },
+    {
+      "from": 198,
+      "to": 197
+    },
+    {
+      "from": 199,
+      "to": 175
+    },
+    {
+      "from": 199,
+      "to": 176
+    },
+    {
+      "from": 199,
+      "to": 177
+    },
+    {
+      "from": 200,
+      "to": 196
+    },
+    {
+      "from": 200,
+      "to": 193
+    }
+  ]
+}
