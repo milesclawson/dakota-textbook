@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter Exit Ticket</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 12px 16px 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px;
+      background: #fafafa;
+      color: #222;
+    }
+
+    h2 {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 0 0 4px;
+      color: #b71c1c;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: #666;
+      margin: 0 0 14px;
+    }
+
+    .step { display: none; }
+    .step.active { display: block; }
+
+    .question {
+      font-weight: 600;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    /* Confidence stars */
+    .star-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .star-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      border: 2px solid #ddd;
+      background: #fff;
+      font-size: 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .star-btn:hover { border-color: #b71c1c; background: #fff5f5; }
+    .star-btn.selected { border-color: #b71c1c; background: #fff5f5; }
+
+    .confidence-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #888;
+      margin-top: -10px;
+      margin-bottom: 14px;
+    }
+
+    /* Radio options */
+    .radio-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .radio-option:hover { border-color: #b71c1c; background: #fff5f5; }
+    .radio-option input { accent-color: #b71c1c; width: 16px; height: 16px; }
+    .radio-option.selected { border-color: #b71c1c; background: #fff5f5; }
+
+    textarea {
+      width: 100%;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 70px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    textarea:focus { border-color: #b71c1c; }
+
+    .char-hint { font-size: 11px; color: #aaa; margin-top: 3px; margin-bottom: 10px; }
+
+    /* Background checkbox group */
+    .check-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+
+    .check-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .check-option:hover { border-color: #888; background: #f5f5f5; }
+    .check-option input { accent-color: #b71c1c; width: 16px; height: 16px; }
+
+    /* Nav buttons */
+    .nav {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    button.primary {
+      background: #b71c1c;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    button.primary:hover { background: #921515; }
+    button.primary:disabled { background: #ccc; cursor: default; }
+
+    button.secondary {
+      background: #fff;
+      color: #555;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      padding: 9px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    button.secondary:hover { border-color: #aaa; }
+
+    .progress-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ddd;
+      transition: background 0.2s;
+    }
+
+    .dot.done { background: #b71c1c; }
+    .dot.active { background: #b71c1c; box-shadow: 0 0 0 3px #f5c6c6; }
+
+    /* Done screen */
+    .done-icon { font-size: 40px; margin-bottom: 8px; }
+
+    .done-summary {
+      background: #fff;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #444;
+      margin: 10px 0 12px;
+      line-height: 1.6;
+    }
+
+    .done-summary strong { color: #b71c1c; }
+
+    .mailto-btn {
+      display: inline-block;
+      background: #fff;
+      border: 2px solid #b71c1c;
+      color: #b71c1c;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      margin-right: 6px;
+    }
+
+    .mailto-btn:hover { background: #fff5f5; }
+
+    .copy-btn {
+      background: #f0f0f0;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 12px;
+      cursor: pointer;
+      color: #555;
+    }
+
+    .copy-btn:hover { background: #e0e0e0; }
+
+    .notice {
+      font-size: 11px;
+      color: #999;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .highlight-box {
+      background: #fff3e0;
+      border-left: 3px solid #e65100;
+      border-radius: 4px;
+      padding: 8px 10px;
+      font-size: 12px;
+      color: #5d4037;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+<h2 id="ticket-title">Exit Ticket</h2>
+<div class="subtitle" id="ticket-subtitle">Chapter reflection · ~90 seconds</div>
+
+<div class="progress-dots" id="dots"></div>
+
+<!-- Step 1: Confidence -->
+<div class="step active" id="step-1">
+  <div class="question">How confident do you feel about this chapter's content?</div>
+  <div class="star-row" id="stars">
+    <button class="star-btn" data-val="1" title="Not confident at all">😕</button>
+    <button class="star-btn" data-val="2" title="A little shaky">🤔</button>
+    <button class="star-btn" data-val="3" title="Getting it">🙂</button>
+    <button class="star-btn" data-val="4" title="Pretty confident">😊</button>
+    <button class="star-btn" data-val="5" title="Very confident">🌟</button>
+  </div>
+  <div class="confidence-labels">
+    <span>Not confident</span>
+    <span>Very confident</span>
+  </div>
+  <div class="nav">
+    <button class="primary" id="btn-1" disabled onclick="go(2)">Next →</button>
+  </div>
+</div>
+
+<!-- Step 2: Accuracy check -->
+<div class="step" id="step-2">
+  <div class="highlight-box">
+    ⚠️ The language content in this course is AI-assisted and has not yet been verified by Dakota-speaking community members. Your feedback helps us catch errors.
+  </div>
+  <div class="question">Did any vocabulary, pronunciation, or grammar in this chapter seem incorrect or unfamiliar?</div>
+  <div class="radio-group" id="accuracy-group">
+    <label class="radio-option">
+      <input type="radio" name="accuracy" value="no"> No — everything seemed accurate to me
+    </label>
+    <label class="radio-option">
+      <input type="radio" name="accuracy" value="unsure"> I'm not sure / I don't have enough background to say
+    </label>
+    <label class="radio-option">
+      <input type="radio" name="accuracy" value="yes"> Yes — I noticed something that may be incorrect
+    </label>
+    <label class="radio-option">
+      <input type="radio" name="accuracy" value="confirmed"> Yes — and I can confirm it is correct (I have Dakota knowledge)
+    </label>
+  </div>
+  <div class="nav">
+    <button class="secondary" onclick="go(1)">← Back</button>
+    <button class="primary" id="btn-2" disabled onclick="goAccuracy()">Next →</button>
+  </div>
+</div>
+
+<!-- Step 3a: Error detail (shown only if "yes" or "unsure") -->
+<div class="step" id="step-3a">
+  <div class="question">What did you notice? Be as specific as possible — include the word, phrase, or concept.</div>
+  <textarea id="error-detail" placeholder="Example: 'The pronunciation guide for napčíyuŋka didn't match what I've heard. My grandmother says it differently.'" maxlength="500"></textarea>
+  <div class="char-hint" id="char-count-a">0 / 500</div>
+  <div class="question" style="margin-top:4px;">Your Dakota language background (optional):</div>
+  <div class="radio-group">
+    <label class="radio-option">
+      <input type="radio" name="bg" value="none"> No background — I'm learning for the first time
+    </label>
+    <label class="radio-option">
+      <input type="radio" name="bg" value="some"> Some exposure — family, community, or prior class
+    </label>
+    <label class="radio-option">
+      <input type="radio" name="bg" value="speaker"> Dakota speaker or heritage learner
+    </label>
+  </div>
+  <div class="nav">
+    <button class="secondary" onclick="go(2)">← Back</button>
+    <button class="primary" onclick="go(4)">Submit →</button>
+  </div>
+</div>
+
+<!-- Step 3b: Confirmation detail (shown if "confirmed") -->
+<div class="step" id="step-3b">
+  <div class="question">Thank you — your knowledge helps us. What can you confirm or add?</div>
+  <textarea id="confirm-detail" placeholder="Example: 'Pidámayaye is the correct Dakota form. The Lakota version is Philámayaye. This chapter correctly distinguishes them.'" maxlength="500"></textarea>
+  <div class="char-hint" id="char-count-b">0 / 500</div>
+  <div class="question" style="margin-top:4px;">Your Dakota language background:</div>
+  <div class="radio-group">
+    <label class="radio-option">
+      <input type="radio" name="bg2" value="some"> Some exposure — family, community, or prior class
+    </label>
+    <label class="radio-option">
+      <input type="radio" name="bg2" value="speaker"> Dakota speaker or heritage learner
+    </label>
+    <label class="radio-option">
+      <input type="radio" name="bg2" value="teacher"> Language teacher or instructor
+    </label>
+  </div>
+  <div class="nav">
+    <button class="secondary" onclick="go(2)">← Back</button>
+    <button class="primary" onclick="go(4)">Submit →</button>
+  </div>
+</div>
+
+<!-- Step 4: Done -->
+<div class="step" id="step-4">
+  <div class="done-icon">✅</div>
+  <div class="question">Exit ticket complete.</div>
+  <div class="done-summary" id="done-summary"></div>
+  <div id="action-buttons"></div>
+  <div class="notice" id="done-notice"></div>
+</div>
+
+<script>
+  // --- Parse URL params ---
+  const params = new URLSearchParams(window.location.search);
+  const chapterTitle = params.get('title') || 'This Chapter';
+  const chapterKey   = params.get('chapter') || 'unknown';
+  const teacherEmail = params.get('email') || '';
+  const concepts     = (params.get('concepts') || '').split(',').filter(Boolean);
+
+  // Set header
+  document.getElementById('ticket-title').textContent = 'Exit Ticket — ' + chapterTitle;
+
+  // --- State ---
+  const state = {
+    confidence: null,
+    accuracy: null,
+    errorDetail: '',
+    confirmDetail: '',
+    background: ''
+  };
+
+  const TOTAL_STEPS = 4;
+
+  // --- Dots ---
+  function renderDots(active) {
+    const container = document.getElementById('dots');
+    container.innerHTML = '';
+    for (let i = 1; i <= TOTAL_STEPS; i++) {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i < active ? ' done' : i === active ? ' active' : '');
+      container.appendChild(d);
+    }
+  }
+
+  // --- Navigation ---
+  function go(n) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step-' + n)?.classList.add('active');
+    if (n === 4) buildDone();
+    renderDots(n === '3a' || n === '3b' ? 3 : n);
+  }
+
+  function goAccuracy() {
+    const val = state.accuracy;
+    if (val === 'yes' || val === 'unsure') {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById('step-3a').classList.add('active');
+      renderDots(3);
+    } else if (val === 'confirmed') {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById('step-3b').classList.add('active');
+      renderDots(3);
+    } else {
+      go(4);
+    }
+  }
+
+  renderDots(1);
+
+  // --- Confidence stars ---
+  document.querySelectorAll('.star-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.confidence = parseInt(btn.dataset.val);
+      document.querySelectorAll('.star-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('btn-1').disabled = false;
+    });
+  });
+
+  // --- Accuracy radio ---
+  document.querySelectorAll('input[name="accuracy"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      state.accuracy = radio.value;
+      document.querySelectorAll('#accuracy-group .radio-option').forEach(o => o.classList.remove('selected'));
+      radio.closest('.radio-option').classList.add('selected');
+      document.getElementById('btn-2').disabled = false;
+    });
+  });
+
+  // --- Textarea char counters ---
+  document.getElementById('error-detail').addEventListener('input', function() {
+    state.errorDetail = this.value;
+    document.getElementById('char-count-a').textContent = this.value.length + ' / 500';
+  });
+
+  document.getElementById('confirm-detail').addEventListener('input', function() {
+    state.confirmDetail = this.value;
+    document.getElementById('char-count-b').textContent = this.value.length + ' / 500';
+  });
+
+  // --- Background radios (shared across steps) ---
+  ['bg', 'bg2'].forEach(name => {
+    document.querySelectorAll('input[name="' + name + '"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        state.background = radio.value;
+        radio.closest('.radio-group').querySelectorAll('.radio-option').forEach(o => o.classList.remove('selected'));
+        radio.closest('.radio-option').classList.add('selected');
+      });
+    });
+  });
+
+  // --- Confidence label ---
+  const CONF_LABELS = ['', 'Not confident', 'A little shaky', 'Getting it', 'Pretty confident', 'Very confident'];
+  const ACCURACY_LABELS = {
+    no: 'Content seemed accurate',
+    unsure: 'Unsure about accuracy',
+    yes: 'Flagged a potential error',
+    confirmed: 'Confirmed content as accurate'
+  };
+  const BG_LABELS = { none: 'No prior Dakota background', some: 'Some exposure', speaker: 'Dakota speaker / heritage learner', teacher: 'Language teacher' };
+
+  function buildDone() {
+    const detail = state.errorDetail || state.confirmDetail || '';
+    const bg = state.background;
+
+    let summaryHTML = '<strong>Confidence:</strong> ' + CONF_LABELS[state.confidence || 3] + '<br>';
+    summaryHTML += '<strong>Accuracy check:</strong> ' + (ACCURACY_LABELS[state.accuracy] || '—') + '<br>';
+    if (detail) summaryHTML += '<strong>Your note:</strong> ' + detail.replace(/</g,'&lt;') + '<br>';
+    if (bg) summaryHTML += '<strong>Your background:</strong> ' + (BG_LABELS[bg] || bg);
+
+    document.getElementById('done-summary').innerHTML = summaryHTML;
+
+    // Build mailto body
+    const body = [
+      'Chapter: ' + chapterTitle + ' (' + chapterKey + ')',
+      'Confidence: ' + CONF_LABELS[state.confidence || 3],
+      'Accuracy: ' + (ACCURACY_LABELS[state.accuracy] || '—'),
+      detail ? 'Note: ' + detail : '',
+      bg ? 'Background: ' + (BG_LABELS[bg] || bg) : ''
+    ].filter(Boolean).join('\n');
+
+    const subject = 'Dakota Course Feedback — ' + chapterTitle;
+    const actionDiv = document.getElementById('action-buttons');
+    const noticeDiv = document.getElementById('done-notice');
+
+    if (state.accuracy === 'no' && !detail) {
+      noticeDiv.textContent = 'No submission needed — your response has been recorded locally. Thank you!';
+      actionDiv.innerHTML = '';
+    } else {
+      // Show submit options
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'copy-btn';
+      copyBtn.textContent = '📋 Copy feedback';
+      copyBtn.onclick = () => {
+        navigator.clipboard.writeText(body).then(() => { copyBtn.textContent = '✓ Copied!'; });
+      };
+      actionDiv.innerHTML = '';
+
+      if (teacherEmail) {
+        const a = document.createElement('a');
+        a.className = 'mailto-btn';
+        a.href = 'mailto:' + teacherEmail + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+        a.textContent = '✉️ Send to teacher';
+        actionDiv.appendChild(a);
+      }
+
+      actionDiv.appendChild(copyBtn);
+      noticeDiv.textContent = teacherEmail
+        ? 'Clicking "Send to teacher" will open your email app with your feedback pre-filled. You can review it before sending.'
+        : 'Copy your feedback and share it with your teacher, or show this screen.';
+    }
+  }
+</script>
+</body>
+</html>
