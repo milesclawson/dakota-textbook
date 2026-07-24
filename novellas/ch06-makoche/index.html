@@ -3,587 +3,179 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Makóčhe Kiŋ — Dakhotiyapi — Beginning Dakota Language</title>
+<title>Makóčhe Kiŋ — Dakhotiyapi</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Georgia',serif;background:#f5f0e8;color:#2d1e0f;min-height:100vh;display:flex;flex-direction:column;align-items:center}
-.book-wrap{max-width:780px;width:100%;padding:20px 16px 40px}
-.book-header{text-align:center;padding:28px 0 18px;border-bottom:2px solid #8b5e3c}
-.book-header h1{font-size:1.7rem;color:#5c2e00;letter-spacing:.03em}
-.book-header .subtitle{font-size:1rem;color:#7a5030;margin-top:6px;font-style:italic}
-.book-header .chapter-label{font-size:.8rem;color:#9a7050;margin-top:4px;text-transform:uppercase;letter-spacing:.1em}
-
-/* page navigation */
-.page-nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0 10px;font-size:.85rem;color:#7a5030}
-.page-nav button{background:#8b5e3c;color:#fff;border:none;border-radius:6px;padding:7px 18px;cursor:pointer;font-family:Georgia,serif;font-size:.85rem}
-.page-nav button:disabled{background:#ccc;cursor:default}
-.page-indicator{font-style:italic}
-
-/* story page */
-.story-page{display:none}
-.story-page.active{display:block}
-.illustration{width:100%;max-height:220px;margin:20px 0;overflow:hidden}
-.illustration svg{width:100%;height:220px}
-.page-content{line-height:1.8}
-
-/* interlinear */
-.sentence-block{margin:18px 0;padding:12px 16px;background:rgba(255,255,255,.55);border-left:3px solid #a06030;border-radius:4px}
-.interlinear{display:flex;flex-wrap:wrap;gap:0 6px;margin-bottom:6px}
-.iword{display:inline-flex;flex-direction:column;align-items:center;margin-bottom:4px}
-.iword .native{font-size:1.15rem;font-weight:600;color:#3d1a00}
-.iword .gloss{font-size:.68rem;color:#8a5a30;margin-top:2px;font-style:italic;text-align:center}
-.smooth{font-size:.9rem;color:#5a3a18;margin-top:6px;font-style:italic;display:none}
-.show-trans .smooth{display:block}
-.trans-toggle{background:none;border:1px solid #a06030;border-radius:4px;color:#a06030;padding:3px 10px;font-size:.78rem;cursor:pointer;margin-top:8px}
-
-/* section heads */
-.section-page{display:none}
-.section-page.active{display:block}
-
-/* vocabulary test */
-.vocab-test{padding:10px 0}
-.vocab-test h2{font-size:1.2rem;color:#5c2e00;margin-bottom:12px}
-.match-area{display:flex;gap:20px;flex-wrap:wrap}
-.match-col{flex:1;min-width:140px}
-.match-col h3{font-size:.8rem;text-transform:uppercase;color:#8a5a30;margin-bottom:8px;letter-spacing:.08em}
-.match-item{padding:8px 12px;margin:6px 0;background:#fff;border:2px solid #d4a070;border-radius:6px;cursor:pointer;font-size:.95rem;transition:background .2s}
-.match-item.selected{background:#ffe0b0;border-color:#8b5e3c}
-.match-item.correct{background:#d4edda;border-color:#28a745;cursor:default}
-.match-item.wrong{background:#f8d7da;border-color:#dc3545}
-.match-item.used{opacity:.45;cursor:default}
-.vocab-result{margin-top:14px;font-weight:600;font-size:1rem}
-
-/* quiz */
-.quiz-section h2{font-size:1.2rem;color:#5c2e00;margin-bottom:14px}
-.quiz-q{margin:16px 0;padding:12px 14px;background:#fff;border-radius:6px;border:1px solid #d4a070}
-.quiz-q p{font-weight:600;margin-bottom:8px;font-size:.95rem}
-.quiz-q label{display:block;padding:5px 0;cursor:pointer;font-size:.9rem}
-.quiz-q label input{margin-right:8px}
-.q-feedback{margin-top:6px;font-size:.85rem;font-weight:600}
-.q-feedback.correct{color:#28a745}
-.q-feedback.wrong{color:#dc3545}
-.quiz-submit{margin-top:14px;background:#8b5e3c;color:#fff;border:none;border-radius:6px;padding:9px 22px;cursor:pointer;font-size:.95rem;font-family:Georgia,serif}
-.quiz-score{margin-top:12px;font-size:1.05rem;font-weight:600;color:#5c2e00}
-
-/* oral fluency */
-.oral-section h2{font-size:1.2rem;color:#5c2e00;margin-bottom:8px}
-.oral-intro{font-size:.9rem;color:#5a3a18;margin-bottom:16px;font-style:italic}
-.oral-phrase{margin:12px 0;padding:12px 16px;background:#fff;border-radius:6px;border:1px solid #d4a070}
-.oral-phrase .phrase-native{font-size:1.2rem;font-weight:600;color:#3d1a00;margin-bottom:4px}
-.oral-phrase .phrase-english{font-size:.85rem;color:#7a5030;font-style:italic;margin-bottom:10px}
-.oral-controls{display:flex;gap:10px;flex-wrap:wrap}
-.btn-record{background:#c0392b;color:#fff;border:none;border-radius:6px;padding:7px 16px;cursor:pointer;font-size:.85rem}
-.btn-record.recording{background:#e74c3c;animation:pulse 1s infinite}
-.btn-play{background:#27ae60;color:#fff;border:none;border-radius:6px;padding:7px 16px;cursor:pointer;font-size:.85rem;display:none}
-.btn-play.visible{display:inline-block}
-.rec-status{font-size:.8rem;color:#8a5a30;align-self:center;font-style:italic}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
-
-/* translation */
-.trans-section h2{font-size:1.2rem;color:#5c2e00;margin-bottom:14px}
-.trans-warning{background:#fff3cd;border:1px solid #ffc107;border-radius:6px;padding:10px 14px;font-size:.85rem;margin-bottom:16px;color:#856404}
-.trans-page-block{margin:14px 0;padding:12px 16px;background:#fff;border-radius:6px;border:1px solid #d4a070}
-.trans-page-block h4{font-size:.78rem;text-transform:uppercase;color:#8a5a30;margin-bottom:8px;letter-spacing:.08em}
-.trans-page-block p{font-size:.95rem;line-height:1.7;color:#3d1a00}
-
-/* end nav */
-.end-nav{display:flex;justify-content:space-between;margin-top:20px;padding-top:14px;border-top:1px solid #d4a070}
-
-/* responsive */
-@media(max-width:500px){
-  .book-header h1{font-size:1.3rem}
-  .match-area{flex-direction:column}
-  .iword .native{font-size:1rem}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.65}
+.gn-header{background:#8B2500;color:#fff;padding:28px 20px 22px;text-align:center}
+.gn-header .subtitle{font-size:.95rem;opacity:.85;margin-top:6px;font-style:italic}
+.gn-header h1{font-size:1.7rem;font-weight:bold;letter-spacing:.5px}
+.gn-header .meta{font-size:.82rem;opacity:.7;margin-top:4px}
+.container{max-width:860px;margin:0 auto;padding:0 16px 60px}
+.opening{background:white;border-left:5px solid #8B2500;border-radius:0 8px 8px 0;
+  padding:22px 24px;margin:32px 0 24px;font-size:1.05rem;color:#2d1800;
+  box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.opening .label{font-size:.78rem;text-transform:uppercase;letter-spacing:1.5px;
+  color:#8B2500;font-weight:bold;margin-bottom:8px}
+.panel{background:white;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,.08);
+  margin:22px 0;overflow:hidden}
+.panel-img{width:100%;display:block;background:#e8d0b0}
+.panel-caption{padding:18px 22px 20px}
+.panel-num{display:inline-block;background:#8B2500;color:white;width:28px;height:28px;
+  border-radius:50%;text-align:center;line-height:28px;font-size:.8rem;font-weight:bold;
+  margin-right:10px;flex-shrink:0}
+.panel-top{display:flex;align-items:center;margin-bottom:10px}
+.panel-top-title{font-weight:bold;font-size:1rem;color:#8B2500}
+.panel-text{font-size:.97rem;color:#2d1800;line-height:1.7}
+.native-inline{font-weight:bold;color:#8B2500;font-size:1.05em}
+.section-head{margin:36px 0 12px;padding-bottom:6px;border-bottom:2px solid #8B2500;
+  font-size:1.15rem;font-weight:bold;color:#8B2500;text-transform:uppercase;letter-spacing:.5px}
+.teaching-table{width:100%;border-collapse:collapse;margin-bottom:16px;background:white;
+  border-radius:8px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+.teaching-table th{background:#8B2500;color:white;padding:10px 14px;text-align:left;font-size:.88rem}
+.teaching-table td{padding:10px 14px;border-bottom:1px solid #ede6d6;font-size:.93rem;vertical-align:top}
+.teaching-table tr:last-child td{border-bottom:none}
+.teaching-table tr:nth-child(even) td{background:#faf7f1}
+.phrase-card{background:white;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.07);
+  margin:10px 0;padding:16px 18px;display:flex;gap:16px;align-items:flex-start}
+.phrase-native{font-size:1.18rem;font-weight:bold;color:#8B2500;min-width:200px}
+.phrase-eng{color:#5a4030;font-size:.93rem;padding-top:4px}
+.phrase-pron{font-size:.82rem;color:#888;font-style:italic}
+.back-link{display:inline-block;margin:10px 0 24px;color:#8B2500;font-size:.9rem;
+  text-decoration:none;border:1px solid #8B2500;border-radius:20px;padding:6px 18px}
+.back-link:hover{background:#8B2500;color:white}
+.cta-box{background:#8B2500;color:white;border-radius:10px;padding:22px 26px;margin:32px 0 8px}
+.cta-box h3{font-size:1.1rem;margin-bottom:10px}
+.cta-box ul{margin-left:18px;line-height:2}
+.cta-box li{font-size:.94rem}
+@media(max-width:600px){
+  .gn-header h1{font-size:1.35rem}
+  .phrase-card{flex-direction:column;gap:8px}
+  .phrase-native{min-width:unset}
 }
 </style>
 
 </head>
 <body>
-<div class="book-wrap">
-<div class="book-header">
-  <div class="chapter-label">Dakhotiyapi — Beginning Dakota Language · Chapter 6</div>
+<div class="gn-header">
+  <div class="meta">Dakhotiyapi · Chapter 6</div>
   <h1>Makóčhe Kiŋ</h1>
-  <div class="subtitle">"The Land"</div>
+  <div class="subtitle">The Land — Seasons, Directions & Sacred Geography</div>
 </div>
-<div class="page-nav">
-  <button id="btn-prev" onclick="showPage(currentPage-1)" disabled>← Previous</button>
-  <span id="pg-indicator" class="page-indicator">Page 1</span>
-  <button id="btn-next" onclick="showPage(currentPage+1)">Next →</button>
-</div>
-<div class="story-page" id="sp-0">
-<div class="illustration"><svg viewBox="0 0 780 220" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#87CEEB"/><stop offset="100%" stop-color="#FFD580"/></linearGradient></defs>
-  <rect width="780" height="220" fill="url(#sky)"/>
-  <ellipse cx="390" cy="230" rx="500" ry="80" fill="#7a9a50"/>
-  <ellipse cx="390" cy="240" rx="400" ry="60" fill="#5c7a30"/>
-  <!-- sun -->
-  <circle cx="640" cy="55" r="35" fill="#FFB300" opacity=".9"/>
-  <line x1="640" y1="5" x2="640" y2="20" stroke="#FFB300" stroke-width="3"/>
-  <line x1="640" y1="90" x2="640" y2="105" stroke="#FFB300" stroke-width="3"/>
-  <line x1="590" y1="55" x2="575" y2="55" stroke="#FFB300" stroke-width="3"/>
-  <line x1="690" y1="55" x2="705" y2="55" stroke="#FFB300" stroke-width="3"/>
-  <!-- tipi silhouettes -->
-  <polygon points="120,180 150,80 180,180" fill="#8B4513" opacity=".8"/>
-  <polygon points="160,180 195,70 230,180" fill="#6B3410" opacity=".8"/>
-  <polygon points="200,180 240,75 280,180" fill="#8B4513" opacity=".75"/>
-  <!-- birds -->
-  <path d="M300 60 Q310 52 320 60" stroke="#333" stroke-width="2" fill="none"/>
-  <path d="M340 45 Q352 37 364 45" stroke="#333" stroke-width="2" fill="none"/>
-</svg></div>
-<p style="font-size:.85rem;font-style:italic;color:#7a5030;margin-bottom:10px">Now Wakíŋyaŋ has been in the community through all four seasons. He is learning the language of the land.</p>
-<div class="page-content">
-<div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Wétȟo</span><span class="gloss">spring</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">hí</span><span class="gloss">arrived</span></span> <span class="iword"><span class="native">čha</span><span class="gloss">and</span></span> <span class="iword"><span class="native">Wakíŋyaŋ</span><span class="gloss">Wakíŋyaŋ</span></span> <span class="iword"><span class="native">iyúškinA.</span><span class="gloss">rejoiced.</span></span></div>
-  <div class="smooth">Spring arrived and Wakíŋyaŋ rejoiced.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div><div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Makóčhe</span><span class="gloss">the.land</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">wašté</span><span class="gloss">is.good</span></span> <span class="iword"><span class="native">čha</span><span class="gloss">and</span></span> <span class="iword"><span class="native">tȟáŋka.</span><span class="gloss">is.large.</span></span></div>
-  <div class="smooth">The land is good and large.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div><div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Uŋčí</span><span class="gloss">Grandmother</span></span> <span class="iword"><span class="native">makóčhe</span><span class="gloss">land</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">wóyake.</span><span class="gloss">she.told.about.</span></span></div>
-  <div class="smooth">Grandmother told about the land.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div>
-</div>
-</div><div class="story-page" id="sp-1">
-
-
-<div class="page-content">
-<div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Wétȟo</span><span class="gloss">spring</span></span> <span class="iword"><span class="native">—</span><span class="gloss">—</span></span> <span class="iword"><span class="native">bdóketu</span><span class="gloss">summer</span></span> <span class="iword"><span class="native">—</span><span class="gloss">—</span></span> <span class="iword"><span class="native">ptaŋyétu</span><span class="gloss">autumn</span></span> <span class="iword"><span class="native">—</span><span class="gloss">—</span></span> <span class="iword"><span class="native">waníyetu</span><span class="gloss">winter</span></span> <span class="iword"><span class="native">—</span><span class="gloss">—</span></span> <span class="iword"><span class="native">lé</span><span class="gloss">these</span></span> <span class="iword"><span class="native">tópa.</span><span class="gloss">are.four.</span></span></div>
-  <div class="smooth">Spring — summer — autumn — winter — these are four.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div><div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Makóčhe</span><span class="gloss">the.land</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">wičhóni</span><span class="gloss">lives</span></span> <span class="iword"><span class="native">čha</span><span class="gloss">and</span></span> <span class="iword"><span class="native">wóčhaǧe</span><span class="gloss">grows</span></span> <span class="iword"><span class="native">čha</span><span class="gloss">and</span></span> <span class="iword"><span class="native">wóiyupta.</span><span class="gloss">responds.</span></span></div>
-  <div class="smooth">The land lives and grows and responds.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div>
-</div>
-</div><div class="story-page" id="sp-2">
-<div class="illustration"><svg viewBox="0 0 780 220" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#87CEEB"/><stop offset="100%" stop-color="#FFD580"/></linearGradient></defs>
-  <rect width="780" height="220" fill="url(#sky)"/>
-  <ellipse cx="390" cy="230" rx="500" ry="80" fill="#7a9a50"/>
-  <ellipse cx="390" cy="240" rx="400" ry="60" fill="#5c7a30"/>
-  <!-- sun -->
-  <circle cx="640" cy="55" r="35" fill="#FFB300" opacity=".9"/>
-  <line x1="640" y1="5" x2="640" y2="20" stroke="#FFB300" stroke-width="3"/>
-  <line x1="640" y1="90" x2="640" y2="105" stroke="#FFB300" stroke-width="3"/>
-  <line x1="590" y1="55" x2="575" y2="55" stroke="#FFB300" stroke-width="3"/>
-  <line x1="690" y1="55" x2="705" y2="55" stroke="#FFB300" stroke-width="3"/>
-  <!-- tipi silhouettes -->
-  <polygon points="120,180 150,80 180,180" fill="#8B4513" opacity=".8"/>
-  <polygon points="160,180 195,70 230,180" fill="#6B3410" opacity=".8"/>
-  <polygon points="200,180 240,75 280,180" fill="#8B4513" opacity=".75"/>
-  <!-- birds -->
-  <path d="M300 60 Q310 52 320 60" stroke="#333" stroke-width="2" fill="none"/>
-  <path d="M340 45 Q352 37 364 45" stroke="#333" stroke-width="2" fill="none"/>
-</svg></div>
-
-<div class="page-content">
-<div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Wazíyata</span><span class="gloss">north</span></span> <span class="iword"><span class="native">ektá</span><span class="gloss">toward</span></span> <span class="iword"><span class="native">Wakíŋyaŋ</span><span class="gloss">Wakíŋyaŋ</span></span> <span class="iword"><span class="native">waŋblákA.</span><span class="gloss">he.looked.</span></span></div>
-  <div class="smooth">Wakíŋyaŋ looked toward the north.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div><div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Itókaga</span><span class="gloss">south</span></span> <span class="iword"><span class="native">ektá</span><span class="gloss">toward</span></span> <span class="iword"><span class="native">mní</span><span class="gloss">water</span></span> <span class="iword"><span class="native">tȟáŋka</span><span class="gloss">large</span></span> <span class="iword"><span class="native">waŋlákA.</span><span class="gloss">he.saw.</span></span></div>
-  <div class="smooth">He saw large water toward the south.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div><div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Wiyóhiŋyaŋpa</span><span class="gloss">east</span></span> <span class="iword"><span class="native">ektá</span><span class="gloss">toward</span></span> <span class="iword"><span class="native">aŋpétu</span><span class="gloss">day</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">hiyú.</span><span class="gloss">comes.from.</span></span></div>
-  <div class="smooth">The day comes from the east.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div><div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Wiyóheya</span><span class="gloss">west</span></span> <span class="iword"><span class="native">ektá</span><span class="gloss">toward</span></span> <span class="iword"><span class="native">aŋpétu</span><span class="gloss">day</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">blé.</span><span class="gloss">goes.</span></span></div>
-  <div class="smooth">The day goes to the west.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div>
-</div>
-</div><div class="story-page" id="sp-3">
-
-<p style="font-size:.85rem;font-style:italic;color:#7a5030;margin-bottom:10px">Bdóte (the confluence of the Minnesota and Mississippi rivers near present-day Mendota, MN) is the place of origin for the Dakota people.</p>
-<div class="page-content">
-<div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Bdóte</span><span class="gloss">confluence</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">—</span><span class="gloss">—</span></span> <span class="iword"><span class="native">mní</span><span class="gloss">water</span></span> <span class="iword"><span class="native">núŋpa</span><span class="gloss">two</span></span> <span class="iword"><span class="native">kičhí</span><span class="gloss">meet</span></span> <span class="iword"><span class="native">héčha</span><span class="gloss">that.is</span></span> <span class="iword"><span class="native">tukté</span><span class="gloss">where</span></span> <span class="iword"><span class="native">Dakhóta</span><span class="gloss">the.Dakota</span></span> <span class="iword"><span class="native">oyáte</span><span class="gloss">people</span></span> <span class="iword"><span class="native">tȟimáhel.</span><span class="gloss">within.</span></span></div>
-  <div class="smooth">Bdóte — where two waters meet — that is where the Dakota people are within.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div><div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Makóčhe</span><span class="gloss">the.land</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">nitáwa.</span><span class="gloss">is.yours.</span></span></div>
-  <div class="smooth">The land is yours.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div>
-</div>
-</div><div class="story-page" id="sp-4">
-<div class="illustration"><svg viewBox="0 0 780 220" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="wsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2a50"/><stop offset="100%" stop-color="#4a6a8a"/></linearGradient></defs>
-  <rect width="780" height="220" fill="url(#wsky)"/>
-  <ellipse cx="390" cy="240" rx="600" ry="100" fill="white"/>
-  <!-- snow ground -->
-  <rect x="0" y="185" width="780" height="35" fill="white" opacity=".9"/>
-  <!-- pine trees -->
-  <polygon points="100,185 130,100 160,185" fill="#1a4a1a"/>
-  <polygon points="90,185 130,115 170,185" fill="#1a4a1a" opacity=".7"/>
-  <polygon points="600,185 635,95 670,185" fill="#1a4a1a"/>
-  <polygon points="590,185 635,110 680,185" fill="#1a4a1a" opacity=".7"/>
-  <!-- aurora borealis -->
-  <path d="M0 80 Q200 40 390 70 Q580 100 780 60" stroke="#00ff88" stroke-width="3" fill="none" opacity=".5"/>
-  <path d="M0 100 Q200 65 390 90 Q580 115 780 80" stroke="#00ccff" stroke-width="2" fill="none" opacity=".4"/>
-  <path d="M0 90 Q200 50 390 80 Q580 110 780 70" stroke="#8844ff" stroke-width="2" fill="none" opacity=".35"/>
-  <!-- stars -->
-  <circle cx="300" cy="30" r="2" fill="white"/>
-  <circle cx="450" cy="20" r="2" fill="white"/>
-  <circle cx="220" cy="50" r="1.5" fill="white"/>
-  <circle cx="560" cy="45" r="1.5" fill="white"/>
-  <!-- snowflakes -->
-  <text x="250" y="140" font-size="18" fill="white" opacity=".6">❄</text>
-  <text x="480" y="120" font-size="14" fill="white" opacity=".5">❄</text>
-  <text x="380" y="155" font-size="12" fill="white" opacity=".5">❄</text>
-</svg></div>
-
-<div class="page-content">
-<div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Waníyetu</span><span class="gloss">winter</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">wičhásni</span><span class="gloss">cold</span></span> <span class="iword"><span class="native">čha</span><span class="gloss">and</span></span> <span class="iword"><span class="native">sáŋ.</span><span class="gloss">white.</span></span></div>
-  <div class="smooth">Winter is cold and white.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div><div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Tȟaŋíŋ</span><span class="gloss">Moon</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">waŋblákA</span><span class="gloss">he.saw</span></span> <span class="iword"><span class="native">čha</span><span class="gloss">and</span></span> <span class="iword"><span class="native">wóyake:</span><span class="gloss">he.thought/said:</span></span> <span class="iword"><span class="native">—</span><span class="gloss">—</span></span> <span class="iword"><span class="native">Waníčhoka</span><span class="gloss">Mid-winter.Moon</span></span> <span class="iword"><span class="native">Wí.</span><span class="gloss">Moon.</span></span></div>
-  <div class="smooth">He saw the Moon and said — Mid-winter Moon.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div><div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Uŋčí</span><span class="gloss">Grandmother</span></span> <span class="iword"><span class="native">iyúškinA</span><span class="gloss">was.glad</span></span> <span class="iword"><span class="native">čha</span><span class="gloss">and</span></span> <span class="iword"><span class="native">—</span><span class="gloss">—</span></span> <span class="iword"><span class="native">Hán,</span><span class="gloss">Yes,</span></span> <span class="iword"><span class="native">mitákuye.</span><span class="gloss">my.relative.</span></span></div>
-  <div class="smooth">Grandmother was glad and — Yes, my relative.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div>
-</div>
-</div><div class="story-page" id="sp-5">
-<div class="illustration"><svg viewBox="0 0 780 220" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#87CEEB"/><stop offset="100%" stop-color="#FFD580"/></linearGradient></defs>
-  <rect width="780" height="220" fill="url(#sky)"/>
-  <ellipse cx="390" cy="230" rx="500" ry="80" fill="#7a9a50"/>
-  <ellipse cx="390" cy="240" rx="400" ry="60" fill="#5c7a30"/>
-  <!-- sun -->
-  <circle cx="640" cy="55" r="35" fill="#FFB300" opacity=".9"/>
-  <line x1="640" y1="5" x2="640" y2="20" stroke="#FFB300" stroke-width="3"/>
-  <line x1="640" y1="90" x2="640" y2="105" stroke="#FFB300" stroke-width="3"/>
-  <line x1="590" y1="55" x2="575" y2="55" stroke="#FFB300" stroke-width="3"/>
-  <line x1="690" y1="55" x2="705" y2="55" stroke="#FFB300" stroke-width="3"/>
-  <!-- tipi silhouettes -->
-  <polygon points="120,180 150,80 180,180" fill="#8B4513" opacity=".8"/>
-  <polygon points="160,180 195,70 230,180" fill="#6B3410" opacity=".8"/>
-  <polygon points="200,180 240,75 280,180" fill="#8B4513" opacity=".75"/>
-  <!-- birds -->
-  <path d="M300 60 Q310 52 320 60" stroke="#333" stroke-width="2" fill="none"/>
-  <path d="M340 45 Q352 37 364 45" stroke="#333" stroke-width="2" fill="none"/>
-</svg></div>
-
-<div class="page-content">
-<div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Wakíŋyaŋ</span><span class="gloss">Wakíŋyaŋ</span></span> <span class="iword"><span class="native">makóčhe</span><span class="gloss">land</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">čhanté</span><span class="gloss">heart</span></span> <span class="iword"><span class="native">wašté</span><span class="gloss">good</span></span> <span class="iword"><span class="native">wičhákičhu.</span><span class="gloss">he.received.it.with.</span></span></div>
-  <div class="smooth">Wakíŋyaŋ received the land with a glad heart.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div><div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Mní</span><span class="gloss">water</span></span> <span class="iword"><span class="native">čha</span><span class="gloss">and</span></span> <span class="iword"><span class="native">pȟá</span><span class="gloss">hill</span></span> <span class="iword"><span class="native">čha</span><span class="gloss">and</span></span> <span class="iword"><span class="native">čhaŋ</span><span class="gloss">tree</span></span> <span class="iword"><span class="native">—</span><span class="gloss">—</span></span> <span class="iword"><span class="native">mitákuye</span><span class="gloss">my.relatives</span></span> <span class="iword"><span class="native">oyásʼiŋ.</span><span class="gloss">all.of.them.</span></span></div>
-  <div class="smooth">Water and hill and tree — all my relations.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div>
-</div>
-</div><div class="story-page" id="sp-6">
-<div class="illustration"><svg viewBox="0 0 780 220" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#87CEEB"/><stop offset="100%" stop-color="#FFD580"/></linearGradient></defs>
-  <rect width="780" height="220" fill="url(#sky)"/>
-  <ellipse cx="390" cy="230" rx="500" ry="80" fill="#7a9a50"/>
-  <ellipse cx="390" cy="240" rx="400" ry="60" fill="#5c7a30"/>
-  <!-- sun -->
-  <circle cx="640" cy="55" r="35" fill="#FFB300" opacity=".9"/>
-  <line x1="640" y1="5" x2="640" y2="20" stroke="#FFB300" stroke-width="3"/>
-  <line x1="640" y1="90" x2="640" y2="105" stroke="#FFB300" stroke-width="3"/>
-  <line x1="590" y1="55" x2="575" y2="55" stroke="#FFB300" stroke-width="3"/>
-  <line x1="690" y1="55" x2="705" y2="55" stroke="#FFB300" stroke-width="3"/>
-  <!-- tipi silhouettes -->
-  <polygon points="120,180 150,80 180,180" fill="#8B4513" opacity=".8"/>
-  <polygon points="160,180 195,70 230,180" fill="#6B3410" opacity=".8"/>
-  <polygon points="200,180 240,75 280,180" fill="#8B4513" opacity=".75"/>
-  <!-- birds -->
-  <path d="M300 60 Q310 52 320 60" stroke="#333" stroke-width="2" fill="none"/>
-  <path d="M340 45 Q352 37 364 45" stroke="#333" stroke-width="2" fill="none"/>
-</svg></div>
-
-<div class="page-content">
-<div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Wétȟo</span><span class="gloss">Spring</span></span> <span class="iword"><span class="native">tókheča</span><span class="gloss">another</span></span> <span class="iword"><span class="native">héčhel</span><span class="gloss">like.that</span></span> <span class="iword"><span class="native">hí</span><span class="gloss">will.come</span></span> <span class="iword"><span class="native">kte.</span><span class="gloss">will.</span></span></div>
-  <div class="smooth">Another spring will come like that.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div><div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Makóčhe</span><span class="gloss">The.land</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">wičhóni</span><span class="gloss">lives</span></span> <span class="iword"><span class="native">čha</span><span class="gloss">and</span></span> <span class="iword"><span class="native">wičhóni</span><span class="gloss">life</span></span> <span class="iword"><span class="native">tókheča</span><span class="gloss">another</span></span> <span class="iword"><span class="native">kičhú</span><span class="gloss">gives</span></span> <span class="iword"><span class="native">kte.</span><span class="gloss">will.</span></span></div>
-  <div class="smooth">The land lives and will give another life.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div><div class="sentence-block">
-  <div class="interlinear"><span class="iword"><span class="native">Dakhóta</span><span class="gloss">Dakota</span></span> <span class="iword"><span class="native">oyáte</span><span class="gloss">people</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">makóčhe</span><span class="gloss">land</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">kičhí</span><span class="gloss">with</span></span> <span class="iword"><span class="native">wičhóni.</span><span class="gloss">live.</span></span></div>
-  <div class="smooth">The Dakota people live with the land.</div>
-  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
-</div>
-</div>
-</div><div class="section-page"><div class="vocab-test">
-  <h2>Vocabulary Match</h2>
-  <p style="font-size:.9rem;color:#7a5030;margin-bottom:14px;font-style:italic">
-    Click a word on the left, then click its English meaning on the right.
-  </p>
-  <div class="match-area">
-    <div class="match-col native-col">
-      <h3>Native Language</h3>
-      <div class="match-item" data-word="wétȟo" onclick="selectWord(this,'native')">wétȟo</div><div class="match-item" data-word="bdóketu" onclick="selectWord(this,'native')">bdóketu</div><div class="match-item" data-word="ptaŋyétu" onclick="selectWord(this,'native')">ptaŋyétu</div><div class="match-item" data-word="waníyetu" onclick="selectWord(this,'native')">waníyetu</div><div class="match-item" data-word="wazíyata" onclick="selectWord(this,'native')">wazíyata</div><div class="match-item" data-word="itókaga" onclick="selectWord(this,'native')">itókaga</div><div class="match-item" data-word="wiyóhiŋyaŋpa" onclick="selectWord(this,'native')">wiyóhiŋyaŋpa</div><div class="match-item" data-word="wiyóheya" onclick="selectWord(this,'native')">wiyóheya</div><div class="match-item" data-word="makóčhe" onclick="selectWord(this,'native')">makóčhe</div><div class="match-item" data-word="Bdóte" onclick="selectWord(this,'native')">Bdóte</div>
+<div class="container">
+  <a class="back-link" href="../../chapters/06-makoche/">← Back to Chapter 6</a>
+  <div class="opening">
+    <div class="label">Setting the Scene</div>
+    <p>Late summer. Wakíŋyaŋ goes on a four-day journey with his uncle along the Minnesota River — what Dakota people call the <em>Mnísota Wakpá</em>. His uncle teaches navigation and seasonal knowledge entirely in Dakota, naming each direction, each moon, each change in the land.</p>
+  </div>
+  
+<div class="panel">
+  <svg viewBox="0 0 780 439" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:8px;display:block"><defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#87CEEB"/><stop offset="100%" stop-color="#FFF3C4"/></linearGradient></defs><rect width="780" height="439" fill="url(#bg)"/><rect x="0" y="290" width="780" height="149" fill="#6B8E43"/><ellipse cx="390" cy="290" rx="520" ry="28" fill="#4a6830"/><line x1="685" y1="60" x2="698" y2="60" stroke="#FFB300" stroke-width="3"/><line x1="675" y1="85" x2="684" y2="94" stroke="#FFB300" stroke-width="3"/><line x1="650" y1="95" x2="650" y2="108" stroke="#FFB300" stroke-width="3"/><line x1="625" y1="85" x2="616" y2="94" stroke="#FFB300" stroke-width="3"/><line x1="615" y1="60" x2="602" y2="60" stroke="#FFB300" stroke-width="3"/><line x1="625" y1="35" x2="616" y2="26" stroke="#FFB300" stroke-width="3"/><line x1="650" y1="25" x2="650" y2="12" stroke="#FFB300" stroke-width="3"/><line x1="675" y1="35" x2="684" y2="26" stroke="#FFB300" stroke-width="3"/><circle cx="650" cy="60" r="30" fill="#FFD54F"/><ellipse cx="200" cy="305" rx="280" ry="40" fill="#5a7a30" opacity=".6"/><ellipse cx="600" cy="300" rx="220" ry="35" fill="#5a7a30" opacity=".5"/><polygon points="375,290 410,192 445,290" fill="#8B4513"/><polygon points="375,290 410,192 445,290" fill="none" stroke="#D2691E" stroke-width="1.5" opacity=".6"/><polygon points="402,290 402,268 418,268 418,290" fill="#2d1a00"/><line x1="410" y1="192" x2="407" y2="170" stroke="#8B4513" stroke-width="3"/><line x1="410" y1="192" x2="413" y2="170" stroke="#8B4513" stroke-width="3"/><polygon points="455,290 500,165 545,290" fill="#6B3410"/><polygon points="455,290 500,165 545,290" fill="none" stroke="#D2691E" stroke-width="1.5" opacity=".6"/><polygon points="492,290 492,268 508,268 508,290" fill="#2d1a00"/><line x1="500" y1="165" x2="497" y2="143" stroke="#6B3410" stroke-width="3"/><line x1="500" y1="165" x2="503" y2="143" stroke="#6B3410" stroke-width="3"/><polygon points="553,290 590,185 628,290" fill="#7a3a10"/><polygon points="553,290 590,185 628,290" fill="none" stroke="#D2691E" stroke-width="1.5" opacity=".6"/><polygon points="582,290 582,268 598,268 598,290" fill="#2d1a00"/><line x1="590" y1="185" x2="587" y2="163" stroke="#7a3a10" stroke-width="3"/><line x1="590" y1="185" x2="593" y2="163" stroke="#7a3a10" stroke-width="3"/><polygon points="638,290 680,172 723,290" fill="#8B4513"/><polygon points="638,290 680,172 723,290" fill="none" stroke="#D2691E" stroke-width="1.5" opacity=".6"/><polygon points="672,290 672,268 688,268 688,290" fill="#2d1a00"/><line x1="680" y1="172" x2="677" y2="150" stroke="#8B4513" stroke-width="3"/><line x1="680" y1="172" x2="683" y2="150" stroke="#8B4513" stroke-width="3"/><circle cx="160" cy="212" r="12" fill="#3d1a00"/><rect x="150" y="227" width="21" height="39" rx="5" fill="#3d1a00"/><rect x="148" y="267" width="10" height="25" rx="4" fill="#3d1a00"/><rect x="162" y="267" width="10" height="25" rx="4" fill="#3d1a00"/><line x1="160" y1="235" x2="183" y2="252" stroke="#3d1a00" stroke-width="8" stroke-linecap="round"/><line x1="160" y1="235" x2="142" y2="245" stroke="#3d1a00" stroke-width="8" stroke-linecap="round"/><path d="M 80 292 Q 350 285 440 292" stroke="#c8a870" stroke-width="4" fill="none" opacity=".7"/><path d="M320,80 Q329,73 338,80" stroke="#333" stroke-width="2" fill="none"/><path d="M345,68 Q354,61 363,68" stroke="#333" stroke-width="2" fill="none"/><path d="M370,82 Q379,75 388,82" stroke="#333" stroke-width="2" fill="none"/><rect x="0" y="0" width="780" height="12" fill="#8B2500"/><rect x="0" y="427" width="780" height="12" fill="#8B2500"/><polygon points="14,6 21,16 14,20 7,16" fill="#8B2500" opacity=".5"/><polygon points="42,6 49,16 42,20 35,16" fill="#8B2500" opacity=".5"/><polygon points="70,6 77,16 70,20 63,16" fill="#8B2500" opacity=".5"/><polygon points="98,6 105,16 98,20 91,16" fill="#8B2500" opacity=".5"/><polygon points="126,6 133,16 126,20 119,16" fill="#8B2500" opacity=".5"/><polygon points="154,6 161,16 154,20 147,16" fill="#8B2500" opacity=".5"/><polygon points="182,6 189,16 182,20 175,16" fill="#8B2500" opacity=".5"/><polygon points="210,6 217,16 210,20 203,16" fill="#8B2500" opacity=".5"/><polygon points="238,6 245,16 238,20 231,16" fill="#8B2500" opacity=".5"/><polygon points="266,6 273,16 266,20 259,16" fill="#8B2500" opacity=".5"/><polygon points="294,6 301,16 294,20 287,16" fill="#8B2500" opacity=".5"/><polygon points="322,6 329,16 322,20 315,16" fill="#8B2500" opacity=".5"/><polygon points="350,6 357,16 350,20 343,16" fill="#8B2500" opacity=".5"/><polygon points="378,6 385,16 378,20 371,16" fill="#8B2500" opacity=".5"/><polygon points="406,6 413,16 406,20 399,16" fill="#8B2500" opacity=".5"/><polygon points="434,6 441,16 434,20 427,16" fill="#8B2500" opacity=".5"/><polygon points="462,6 469,16 462,20 455,16" fill="#8B2500" opacity=".5"/><polygon points="490,6 497,16 490,20 483,16" fill="#8B2500" opacity=".5"/><polygon points="518,6 525,16 518,20 511,16" fill="#8B2500" opacity=".5"/><polygon points="546,6 553,16 546,20 539,16" fill="#8B2500" opacity=".5"/><polygon points="574,6 581,16 574,20 567,16" fill="#8B2500" opacity=".5"/><polygon points="602,6 609,16 602,20 595,16" fill="#8B2500" opacity=".5"/><polygon points="630,6 637,16 630,20 623,16" fill="#8B2500" opacity=".5"/><polygon points="658,6 665,16 658,20 651,16" fill="#8B2500" opacity=".5"/><polygon points="686,6 693,16 686,20 679,16" fill="#8B2500" opacity=".5"/><polygon points="714,6 721,16 714,20 707,16" fill="#8B2500" opacity=".5"/><polygon points="742,6 749,16 742,20 735,16" fill="#8B2500" opacity=".5"/></svg>
+  <div class="panel-caption">
+    <div class="panel-top">
+      <span class="panel-num">1</span>
+      <span class="panel-top-title">Setting Out</span>
     </div>
-    <div class="match-col english-col">
-      <h3>English</h3>
-      <div class="match-item" data-word="west" onclick="selectWord(this,'english')">west</div><div class="match-item" data-word="winter" onclick="selectWord(this,'english')">winter</div><div class="match-item" data-word="autumn" onclick="selectWord(this,'english')">autumn</div><div class="match-item" data-word="land / earth" onclick="selectWord(this,'english')">land / earth</div><div class="match-item" data-word="south" onclick="selectWord(this,'english')">south</div><div class="match-item" data-word="east" onclick="selectWord(this,'english')">east</div><div class="match-item" data-word="confluence / place where waters meet" onclick="selectWord(this,'english')">confluence / place where waters meet</div><div class="match-item" data-word="north" onclick="selectWord(this,'english')">north</div><div class="match-item" data-word="spring" onclick="selectWord(this,'english')">spring</div><div class="match-item" data-word="summer" onclick="selectWord(this,'english')">summer</div>
+    <p class="panel-text">They leave at dawn heading east — <span class="native-inline">Wiyóhiŋyaŋpata</span> — toward where the sun rises. Uncle points to each direction: <span class="native-inline">Wazíyata</span> north, <span class="native-inline">Itókagata</span> south, <span class="native-inline">Wiyóhpeyata</span> west. Wakíŋyaŋ repeats each one facing that direction.</p>
+  </div>
+</div>
+<div class="panel">
+  <svg viewBox="0 0 780 439" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:8px;display:block"><defs><linearGradient id="lk_sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#87CEEB"/><stop offset="100%" stop-color="#b0dff5"/></linearGradient></defs><rect width="780" height="439" fill="url(#lk_sky)"/><line x1="683" y1="55" x2="696" y2="55" stroke="#FFB300" stroke-width="3"/><line x1="673" y1="78" x2="683" y2="88" stroke="#FFB300" stroke-width="3"/><line x1="650" y1="88" x2="650" y2="101" stroke="#FFB300" stroke-width="3"/><line x1="627" y1="78" x2="617" y2="88" stroke="#FFB300" stroke-width="3"/><line x1="617" y1="55" x2="604" y2="55" stroke="#FFB300" stroke-width="3"/><line x1="627" y1="32" x2="617" y2="22" stroke="#FFB300" stroke-width="3"/><line x1="650" y1="22" x2="650" y2="9" stroke="#FFB300" stroke-width="3"/><line x1="673" y1="32" x2="683" y2="22" stroke="#FFB300" stroke-width="3"/><circle cx="650" cy="55" r="28" fill="#FFD54F"/><ellipse cx="180" cy="275" rx="200" ry="28" fill="#4a7a30"/><ellipse cx="620" cy="273" rx="180" ry="24" fill="#4a7a30"/><defs><linearGradient id="water" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2a7aaa"/><stop offset="100%" stop-color="#1a4a7a"/></linearGradient></defs><rect x="0" y="265" width="780" height="174" fill="url(#water)"/><line x1="120" y1="290" x2="660" y2="290" stroke="white" stroke-width="1.5" opacity="0.25"/><line x1="120" y1="320" x2="660" y2="320" stroke="white" stroke-width="1.5" opacity="0.30"/><line x1="120" y1="355" x2="660" y2="355" stroke="white" stroke-width="1.5" opacity="0.35"/><circle cx="160" cy="188" r="12" fill="#3d1a00"/><rect x="150" y="203" width="20" height="38" rx="5" fill="#3d1a00"/><rect x="148" y="241" width="10" height="24" rx="4" fill="#3d1a00"/><rect x="162" y="241" width="10" height="24" rx="4" fill="#3d1a00"/><line x1="160" y1="211" x2="182" y2="227" stroke="#3d1a00" stroke-width="8" stroke-linecap="round"/><line x1="160" y1="211" x2="142" y2="221" stroke="#3d1a00" stroke-width="8" stroke-linecap="round"/><circle cx="380" cy="206" r="10" fill="#2d1000"/><ellipse cx="380" cy="198" rx="12" ry="7" fill="#2d1000" opacity=".6"/><rect x="370" y="218" width="21" height="26" rx="6" fill="#2d1000"/><rect x="370" y="246" width="8" height="19" rx="4" fill="#2d1000"/><rect x="381" y="246" width="8" height="19" rx="4" fill="#2d1000"/><line x1="380" y1="225" x2="399" y2="237" stroke="#2d1000" stroke-width="6" stroke-linecap="round"/><line x1="380" y1="225" x2="361" y2="237" stroke="#2d1000" stroke-width="6" stroke-linecap="round"/><ellipse cx="230" cy="50" rx="70" ry="22" fill="white" opacity=".75"/><ellipse cx="500" cy="38" rx="85" ry="18" fill="white" opacity=".7"/><rect x="0" y="0" width="780" height="12" fill="#8B2500"/><rect x="0" y="427" width="780" height="12" fill="#8B2500"/><polygon points="14,6 21,16 14,20 7,16" fill="#8B2500" opacity=".5"/><polygon points="42,6 49,16 42,20 35,16" fill="#8B2500" opacity=".5"/><polygon points="70,6 77,16 70,20 63,16" fill="#8B2500" opacity=".5"/><polygon points="98,6 105,16 98,20 91,16" fill="#8B2500" opacity=".5"/><polygon points="126,6 133,16 126,20 119,16" fill="#8B2500" opacity=".5"/><polygon points="154,6 161,16 154,20 147,16" fill="#8B2500" opacity=".5"/><polygon points="182,6 189,16 182,20 175,16" fill="#8B2500" opacity=".5"/><polygon points="210,6 217,16 210,20 203,16" fill="#8B2500" opacity=".5"/><polygon points="238,6 245,16 238,20 231,16" fill="#8B2500" opacity=".5"/><polygon points="266,6 273,16 266,20 259,16" fill="#8B2500" opacity=".5"/><polygon points="294,6 301,16 294,20 287,16" fill="#8B2500" opacity=".5"/><polygon points="322,6 329,16 322,20 315,16" fill="#8B2500" opacity=".5"/><polygon points="350,6 357,16 350,20 343,16" fill="#8B2500" opacity=".5"/><polygon points="378,6 385,16 378,20 371,16" fill="#8B2500" opacity=".5"/><polygon points="406,6 413,16 406,20 399,16" fill="#8B2500" opacity=".5"/><polygon points="434,6 441,16 434,20 427,16" fill="#8B2500" opacity=".5"/><polygon points="462,6 469,16 462,20 455,16" fill="#8B2500" opacity=".5"/><polygon points="490,6 497,16 490,20 483,16" fill="#8B2500" opacity=".5"/><polygon points="518,6 525,16 518,20 511,16" fill="#8B2500" opacity=".5"/><polygon points="546,6 553,16 546,20 539,16" fill="#8B2500" opacity=".5"/><polygon points="574,6 581,16 574,20 567,16" fill="#8B2500" opacity=".5"/><polygon points="602,6 609,16 602,20 595,16" fill="#8B2500" opacity=".5"/><polygon points="630,6 637,16 630,20 623,16" fill="#8B2500" opacity=".5"/><polygon points="658,6 665,16 658,20 651,16" fill="#8B2500" opacity=".5"/><polygon points="686,6 693,16 686,20 679,16" fill="#8B2500" opacity=".5"/><polygon points="714,6 721,16 714,20 707,16" fill="#8B2500" opacity=".5"/><polygon points="742,6 749,16 742,20 735,16" fill="#8B2500" opacity=".5"/></svg>
+  <div class="panel-caption">
+    <div class="panel-top">
+      <span class="panel-num">2</span>
+      <span class="panel-top-title">The River Has a Name</span>
     </div>
-  </div>
-  <div id="vocab-result" class="vocab-result"></div>
-</div>
-<script>pairs["wétȟo"] = "spring";
-pairs["bdóketu"] = "summer";
-pairs["ptaŋyétu"] = "autumn";
-pairs["waníyetu"] = "winter";
-pairs["wazíyata"] = "north";
-pairs["itókaga"] = "south";
-pairs["wiyóhiŋyaŋpa"] = "east";
-pairs["wiyóheya"] = "west";
-pairs["makóčhe"] = "land / earth";
-pairs["Bdóte"] = "confluence / place where waters meet";</script></div><div class="section-page"><div class="quiz-section">
-  <h2>Comprehension Check</h2>
-  <div class="quiz-q" data-answer="Four">
-  <p>How many seasons does the Dakota year have?</p>
-  <label><input type="radio" name="q0" value="Two"> Two</label><label><input type="radio" name="q0" value="Three"> Three</label><label><input type="radio" name="q0" value="Four"> Four</label><label><input type="radio" name="q0" value="Five"> Five</label>
-  <div class="q-feedback"></div>
-</div><div class="quiz-q" data-answer="Wiyóhiŋyaŋpa (east)">
-  <p>Which direction does the day (sun) come from?</p>
-  <label><input type="radio" name="q1" value="Wazíyata (north)"> Wazíyata (north)</label><label><input type="radio" name="q1" value="Itókaga (south)"> Itókaga (south)</label><label><input type="radio" name="q1" value="Wiyóhiŋyaŋpa (east)"> Wiyóhiŋyaŋpa (east)</label><label><input type="radio" name="q1" value="Wiyóheya (west)"> Wiyóheya (west)</label>
-  <div class="q-feedback"></div>
-</div><div class="quiz-q" data-answer="The place where two waters meet — Dakota place of origin">
-  <p>What is Bdóte?</p>
-  <label><input type="radio" name="q2" value="A Dakota name for winter"> A Dakota name for winter</label><label><input type="radio" name="q2" value="The place where two waters meet — Dakota place of origin"> The place where two waters meet — Dakota place of origin</label><label><input type="radio" name="q2" value="A type of ceremony"> A type of ceremony</label><label><input type="radio" name="q2" value="The moon in winter"> The moon in winter</label>
-  <div class="q-feedback"></div>
-</div><div class="quiz-q" data-answer="north">
-  <p>What does 'wazíyata' mean?</p>
-  <label><input type="radio" name="q3" value="south"> south</label><label><input type="radio" name="q3" value="east"> east</label><label><input type="radio" name="q3" value="north"> north</label><label><input type="radio" name="q3" value="west"> west</label>
-  <div class="q-feedback"></div>
-</div><div class="quiz-q" data-answer="Winter">
-  <p>In what season does Wakíŋyaŋ look at the moon and name it Waníčhoka Wí?</p>
-  <label><input type="radio" name="q4" value="Spring"> Spring</label><label><input type="radio" name="q4" value="Summer"> Summer</label><label><input type="radio" name="q4" value="Autumn"> Autumn</label><label><input type="radio" name="q4" value="Winter"> Winter</label>
-  <div class="q-feedback"></div>
-</div>
-  <button class="quiz-submit" onclick="submitQuiz()">Check Answers</button>
-  <div id="quiz-score" class="quiz-score"></div>
-</div></div><div class="section-page">
-<div class="oral-section">
-  <h2>Oral Fluency Practice</h2>
-  <p class="oral-intro">
-    Read each phrase aloud, then record yourself. Play it back and compare.
-    Your recording stays on your device — nothing is uploaded.
-  </p>
-  <div class="oral-phrase">
-  <div class="phrase-native">Wétȟo — bdóketu — ptaŋyétu — waníyetu.</div>
-  <div class="phrase-english">Spring — summer — autumn — winter.</div>
-  <div class="oral-controls">
-    <button class="btn-record" id="rec-p0" onclick="toggleRecord('p0')">🎙 Record</button>
-    <button class="btn-play visible" id="play-p0" onclick="playRecording('p0')" style="display:none">▶ Play Back</button>
-    <span class="rec-status" id="status-p0">Press record, say the phrase, press stop.</span>
-  </div>
-</div><div class="oral-phrase">
-  <div class="phrase-native">Makóčhe kiŋ wašté čha tȟáŋka.</div>
-  <div class="phrase-english">The land is good and large.</div>
-  <div class="oral-controls">
-    <button class="btn-record" id="rec-p1" onclick="toggleRecord('p1')">🎙 Record</button>
-    <button class="btn-play visible" id="play-p1" onclick="playRecording('p1')" style="display:none">▶ Play Back</button>
-    <span class="rec-status" id="status-p1">Press record, say the phrase, press stop.</span>
-  </div>
-</div><div class="oral-phrase">
-  <div class="phrase-native">Wazíyata ektá waŋblákA.</div>
-  <div class="phrase-english">I look toward the north.</div>
-  <div class="oral-controls">
-    <button class="btn-record" id="rec-p2" onclick="toggleRecord('p2')">🎙 Record</button>
-    <button class="btn-play visible" id="play-p2" onclick="playRecording('p2')" style="display:none">▶ Play Back</button>
-    <span class="rec-status" id="status-p2">Press record, say the phrase, press stop.</span>
-  </div>
-</div><div class="oral-phrase">
-  <div class="phrase-native">Wiyóhiŋyaŋpa ektá aŋpétu kiŋ hiyú.</div>
-  <div class="phrase-english">The day comes from the east.</div>
-  <div class="oral-controls">
-    <button class="btn-record" id="rec-p3" onclick="toggleRecord('p3')">🎙 Record</button>
-    <button class="btn-play visible" id="play-p3" onclick="playRecording('p3')" style="display:none">▶ Play Back</button>
-    <span class="rec-status" id="status-p3">Press record, say the phrase, press stop.</span>
-  </div>
-</div><div class="oral-phrase">
-  <div class="phrase-native">Bdóte — mní núŋpa kičhí tukté héčha.</div>
-  <div class="phrase-english">Bdóte — where two waters meet.</div>
-  <div class="oral-controls">
-    <button class="btn-record" id="rec-p4" onclick="toggleRecord('p4')">🎙 Record</button>
-    <button class="btn-play visible" id="play-p4" onclick="playRecording('p4')" style="display:none">▶ Play Back</button>
-    <span class="rec-status" id="status-p4">Press record, say the phrase, press stop.</span>
+    <p class="panel-text"><span class="native-inline">Mnísota Wakpá</span> — smoky or cloudy water river. <span class="native-inline">Mní</span> is water. <span class="native-inline">Sota</span> means smoke-clouded. Every place name tells you something about the land — what it looks like, what happened there, who it belongs to.</p>
   </div>
 </div>
-</div>
-</div><div class="section-page"><div class="trans-section">
-  <h2>Full English Translation</h2>
-  <div class="trans-warning">
-    ⚠ The language in this novella is AI-generated and may contain errors.
-    If you notice something incorrect, use the Exit Ticket at the bottom of your chapter to let your teacher know.
+<div class="panel">
+  <svg viewBox="0 0 780 439" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:8px;display:block"><defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#87CEEB"/><stop offset="100%" stop-color="#FFF3C4"/></linearGradient></defs><rect width="780" height="439" fill="url(#bg)"/><rect x="0" y="295" width="780" height="144" fill="#6B8E43"/><ellipse cx="390" cy="295" rx="520" ry="28" fill="#4a6830"/><line x1="683" y1="55" x2="696" y2="55" stroke="#FFB300" stroke-width="3"/><line x1="673" y1="78" x2="683" y2="88" stroke="#FFB300" stroke-width="3"/><line x1="650" y1="88" x2="650" y2="101" stroke="#FFB300" stroke-width="3"/><line x1="627" y1="78" x2="617" y2="88" stroke="#FFB300" stroke-width="3"/><line x1="617" y1="55" x2="604" y2="55" stroke="#FFB300" stroke-width="3"/><line x1="627" y1="32" x2="617" y2="22" stroke="#FFB300" stroke-width="3"/><line x1="650" y1="22" x2="650" y2="9" stroke="#FFB300" stroke-width="3"/><line x1="673" y1="32" x2="683" y2="22" stroke="#FFB300" stroke-width="3"/><circle cx="650" cy="55" r="28" fill="#FFD54F"/><polygon points="375,295 410,197 445,295" fill="#8B4513"/><polygon points="375,295 410,197 445,295" fill="none" stroke="#D2691E" stroke-width="1.5" opacity=".6"/><polygon points="402,295 402,273 418,273 418,295" fill="#2d1a00"/><line x1="410" y1="197" x2="407" y2="175" stroke="#8B4513" stroke-width="3"/><line x1="410" y1="197" x2="413" y2="175" stroke="#8B4513" stroke-width="3"/><polygon points="455,295 500,170 545,295" fill="#6B3410"/><polygon points="455,295 500,170 545,295" fill="none" stroke="#D2691E" stroke-width="1.5" opacity=".6"/><polygon points="492,295 492,273 508,273 508,295" fill="#2d1a00"/><line x1="500" y1="170" x2="497" y2="148" stroke="#6B3410" stroke-width="3"/><line x1="500" y1="170" x2="503" y2="148" stroke="#6B3410" stroke-width="3"/><polygon points="553,295 590,190 628,295" fill="#7a3a10"/><polygon points="553,295 590,190 628,295" fill="none" stroke="#D2691E" stroke-width="1.5" opacity=".6"/><polygon points="582,295 582,273 598,273 598,295" fill="#2d1a00"/><line x1="590" y1="190" x2="587" y2="168" stroke="#7a3a10" stroke-width="3"/><line x1="590" y1="190" x2="593" y2="168" stroke="#7a3a10" stroke-width="3"/><rect x="0" y="0" width="780" height="12" fill="#8B2500"/><rect x="0" y="427" width="780" height="12" fill="#8B2500"/><polygon points="14,6 21,16 14,20 7,16" fill="#8B2500" opacity=".5"/><polygon points="42,6 49,16 42,20 35,16" fill="#8B2500" opacity=".5"/><polygon points="70,6 77,16 70,20 63,16" fill="#8B2500" opacity=".5"/><polygon points="98,6 105,16 98,20 91,16" fill="#8B2500" opacity=".5"/><polygon points="126,6 133,16 126,20 119,16" fill="#8B2500" opacity=".5"/><polygon points="154,6 161,16 154,20 147,16" fill="#8B2500" opacity=".5"/><polygon points="182,6 189,16 182,20 175,16" fill="#8B2500" opacity=".5"/><polygon points="210,6 217,16 210,20 203,16" fill="#8B2500" opacity=".5"/><polygon points="238,6 245,16 238,20 231,16" fill="#8B2500" opacity=".5"/><polygon points="266,6 273,16 266,20 259,16" fill="#8B2500" opacity=".5"/><polygon points="294,6 301,16 294,20 287,16" fill="#8B2500" opacity=".5"/><polygon points="322,6 329,16 322,20 315,16" fill="#8B2500" opacity=".5"/><polygon points="350,6 357,16 350,20 343,16" fill="#8B2500" opacity=".5"/><polygon points="378,6 385,16 378,20 371,16" fill="#8B2500" opacity=".5"/><polygon points="406,6 413,16 406,20 399,16" fill="#8B2500" opacity=".5"/><polygon points="434,6 441,16 434,20 427,16" fill="#8B2500" opacity=".5"/><polygon points="462,6 469,16 462,20 455,16" fill="#8B2500" opacity=".5"/><polygon points="490,6 497,16 490,20 483,16" fill="#8B2500" opacity=".5"/><polygon points="518,6 525,16 518,20 511,16" fill="#8B2500" opacity=".5"/><polygon points="546,6 553,16 546,20 539,16" fill="#8B2500" opacity=".5"/><polygon points="574,6 581,16 574,20 567,16" fill="#8B2500" opacity=".5"/><polygon points="602,6 609,16 602,20 595,16" fill="#8B2500" opacity=".5"/><polygon points="630,6 637,16 630,20 623,16" fill="#8B2500" opacity=".5"/><polygon points="658,6 665,16 658,20 651,16" fill="#8B2500" opacity=".5"/><polygon points="686,6 693,16 686,20 679,16" fill="#8B2500" opacity=".5"/><polygon points="714,6 721,16 714,20 707,16" fill="#8B2500" opacity=".5"/><polygon points="742,6 749,16 742,20 735,16" fill="#8B2500" opacity=".5"/><rect x="314" y="181" width="152" height="76" rx="10" fill="rgba(255,255,255,0.88)"/><text x="390" y="214" text-anchor="middle" font-family="Georgia,serif" font-size="30" font-weight="bold" fill="#8B2500">Bdokétu</text><text x="390" y="243" text-anchor="middle" font-family="Georgia,serif" font-size="14" fill="#7a5030" font-style="italic">Summer — the warm season</text></svg>
+  <div class="panel-caption">
+    <div class="panel-top">
+      <span class="panel-num">3</span>
+      <span class="panel-top-title">The Four Seasons</span>
+    </div>
+    <p class="panel-text">Uncle names the seasons: <span class="native-inline">Waniyetu</span> — winter; <span class="native-inline">Wétu</span> — spring; <span class="native-inline">Bdokétu</span> — summer; <span class="native-inline">Ptaŋyétu</span> — fall. Each name describes the feel of the time: <span class="native-inline">waniyetu</span> contains the word for cold and for year.</p>
   </div>
-  <div class="trans-page-block"><h4>Page 1</h4><p>Spring arrived and Wakíŋyaŋ rejoiced. The land is good and large. Grandmother told about the land.</p></div><div class="trans-page-block"><h4>Page 2</h4><p>Spring — summer — autumn — winter — these are four. The land lives and grows and responds.</p></div><div class="trans-page-block"><h4>Page 3</h4><p>Wakíŋyaŋ looked toward the north. He saw large water toward the south. The day comes from the east. The day goes to the west.</p></div><div class="trans-page-block"><h4>Page 4</h4><p>Bdóte — where two waters meet — that is where the Dakota people are within. The land is yours.</p></div><div class="trans-page-block"><h4>Page 5</h4><p>Winter is cold and white. He saw the Moon and said — Mid-winter Moon. Grandmother was glad and — Yes, my relative.</p></div><div class="trans-page-block"><h4>Page 6</h4><p>Wakíŋyaŋ received the land with a glad heart. Water and hill and tree — all my relations.</p></div><div class="trans-page-block"><h4>Page 7</h4><p>Another spring will come like that. The land lives and will give another life. The Dakota people live with the land.</p></div>
-</div></div>
 </div>
-
-<script>
-// ── Page navigation ──────────────────────────────────────────────
-const allPages = () => document.querySelectorAll('.story-page, .section-page');
-let currentPage = 0;
-
-function showPage(n) {
-  const pages = allPages();
-  pages.forEach(p => p.classList.remove('active'));
-  currentPage = Math.max(0, Math.min(n, pages.length - 1));
-  pages[currentPage].classList.add('active');
-  document.getElementById('pg-indicator').textContent =
-    'Page ' + (currentPage + 1) + ' of ' + pages.length;
-  document.getElementById('btn-prev').disabled = currentPage === 0;
-  document.getElementById('btn-next').disabled = currentPage === pages.length - 1;
-  window.scrollTo(0,0);
-}
-
-// ── Smooth translation toggle ─────────────────────────────────────
-function toggleTrans(btn) {
-  const block = btn.closest('.sentence-block');
-  block.classList.toggle('show-trans');
-  btn.textContent = block.classList.contains('show-trans') ? 'Hide English' : 'Show English';
-}
-
-// ── Vocabulary matching ───────────────────────────────────────────
-let selectedNative = null, selectedEnglish = null;
-const pairs = {};   // populated from inline data
-let matchScore = 0, matchTotal = 0;
-
-function selectWord(el, side) {
-  const col = side === 'native'
-    ? document.querySelectorAll('.native-col .match-item')
-    : document.querySelectorAll('.english-col .match-item');
-
-  col.forEach(i => i.classList.remove('selected'));
-  el.classList.add('selected');
-
-  if (side === 'native') selectedNative = el;
-  else selectedEnglish = el;
-
-  if (selectedNative && selectedEnglish) checkMatch();
-}
-
-function checkMatch() {
-  const nw = selectedNative.dataset.word;
-  const ew = selectedEnglish.dataset.word;
-  if (pairs[nw] === ew) {
-    selectedNative.classList.add('correct');
-    selectedEnglish.classList.add('correct');
-    selectedNative.classList.remove('selected');
-    selectedEnglish.classList.remove('selected');
-    selectedNative.onclick = null;
-    selectedEnglish.onclick = null;
-    matchScore++;
-    if (matchScore === matchTotal) {
-      document.getElementById('vocab-result').textContent = '✓ All matched! Great work.';
-    }
-  } else {
-    selectedNative.classList.add('wrong');
-    selectedEnglish.classList.add('wrong');
-    setTimeout(() => {
-      selectedNative.classList.remove('wrong','selected');
-      selectedEnglish.classList.remove('wrong','selected');
-      selectedNative = null;
-      selectedEnglish = null;
-    }, 900);
-    return;
-  }
-  selectedNative = null; selectedEnglish = null;
-}
-
-// ── Knowledge quiz ────────────────────────────────────────────────
-function submitQuiz() {
-  const qs = document.querySelectorAll('.quiz-q');
-  let score = 0;
-  qs.forEach(q => {
-    const chosen = q.querySelector('input:checked');
-    const fb = q.querySelector('.q-feedback');
-    const correct = q.dataset.answer;
-    fb.textContent = '';
-    if (!chosen) { fb.textContent = '— no answer selected'; fb.className = 'q-feedback wrong'; return; }
-    if (chosen.value === correct) {
-      score++;
-      fb.textContent = '✓ Correct!';
-      fb.className = 'q-feedback correct';
-    } else {
-      fb.textContent = '✗ The answer is: ' + correct;
-      fb.className = 'q-feedback wrong';
-    }
-  });
-  document.getElementById('quiz-score').textContent =
-    'Score: ' + score + ' / ' + qs.length;
-}
-
-// ── Record & playback ─────────────────────────────────────────────
-const recStates = {};
-
-async function toggleRecord(phraseId) {
-  if (!recStates[phraseId]) recStates[phraseId] = {};
-  const state = recStates[phraseId];
-  const btn = document.getElementById('rec-' + phraseId);
-  const playBtn = document.getElementById('play-' + phraseId);
-  const status = document.getElementById('status-' + phraseId);
-
-  if (state.recording) {
-    state.recorder.stop();
-    state.recording = false;
-    btn.textContent = '🎙 Record';
-    btn.classList.remove('recording');
-    status.textContent = 'Recorded. Press play to review.';
-    return;
-  }
-
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({audio: true});
-    const recorder = new MediaRecorder(stream);
-    const chunks = [];
-    recorder.ondataavailable = e => chunks.push(e.data);
-    recorder.onstop = () => {
-      const blob = new Blob(chunks, {type: 'audio/webm'});
-      state.audioURL = URL.createObjectURL(blob);
-      playBtn.classList.add('visible');
-      stream.getTracks().forEach(t => t.stop());
-    };
-    recorder.start();
-    state.recorder = recorder;
-    state.recording = true;
-    btn.textContent = '⏹ Stop';
-    btn.classList.add('recording');
-    status.textContent = 'Recording…';
-  } catch(e) {
-    status.textContent = 'Microphone not available.';
-  }
-}
-
-function playRecording(phraseId) {
-  const state = recStates[phraseId];
-  if (!state || !state.audioURL) return;
-  const audio = new Audio(state.audioURL);
-  audio.play();
-}
-
-// ── Init ──────────────────────────────────────────────────────────
-window.addEventListener('DOMContentLoaded', () => {
-  showPage(0);
-  // count match pairs from DOM
-  matchTotal = document.querySelectorAll('.native-col .match-item').length;
-});
-</script>
-
+<div class="panel">
+  <svg viewBox="0 0 780 439" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:8px;display:block"><defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0d1b3e"/><stop offset="100%" stop-color="#1a3460"/></linearGradient></defs><rect width="780" height="439" fill="url(#bg)"/><rect x="0" y="295" width="780" height="144" fill="#1a2e10"/><ellipse cx="390" cy="295" rx="520" ry="28" fill="#0e1e08"/><circle cx="640" cy="70" r="38" fill="#FFE88A"/><circle cx="652" cy="63" r="31" fill="#1a3460"/><circle cx="674" cy="38" r="1.2" fill="white" opacity=".85"/><circle cx="301" cy="72" r="1.5" fill="white" opacity=".85"/><circle cx="124" cy="183" r="2.2" fill="white" opacity=".85"/><circle cx="578" cy="32" r="2.0" fill="white" opacity=".85"/><circle cx="52" cy="17" r="1.3" fill="white" opacity=".85"/><circle cx="258" cy="139" r="2.0" fill="white" opacity=".85"/><circle cx="594" cy="60" r="2.1" fill="white" opacity=".85"/><circle cx="738" cy="149" r="1.7" fill="white" opacity=".85"/><circle cx="479" cy="160" r="1.6" fill="white" opacity=".85"/><circle cx="26" cy="204" r="2.2" fill="white" opacity=".85"/><circle cx="734" cy="118" r="1.6" fill="white" opacity=".85"/><circle cx="179" cy="65" r="2.4" fill="white" opacity=".85"/><circle cx="364" cy="36" r="1.3" fill="white" opacity=".85"/><circle cx="119" cy="101" r="2.3" fill="white" opacity=".85"/><circle cx="638" cy="77" r="2.2" fill="white" opacity=".85"/><circle cx="490" cy="147" r="1.4" fill="white" opacity=".85"/><circle cx="407" cy="30" r="1.9" fill="white" opacity=".85"/><circle cx="663" cy="168" r="2.4" fill="white" opacity=".85"/><circle cx="370" cy="220" r="12" fill="#3d1a00"/><rect x="360" y="235" width="20" height="38" rx="5" fill="#3d1a00"/><rect x="358" y="273" width="10" height="24" rx="4" fill="#3d1a00"/><rect x="372" y="273" width="10" height="24" rx="4" fill="#3d1a00"/><line x1="370" y1="243" x2="392" y2="259" stroke="#3d1a00" stroke-width="8" stroke-linecap="round"/><line x1="370" y1="243" x2="352" y2="253" stroke="#3d1a00" stroke-width="8" stroke-linecap="round"/><line x1="0" y1="295" x2="780" y2="295" stroke="#FFB300" stroke-width="2" opacity=".4"/><rect x="0" y="0" width="780" height="12" fill="#8B2500"/><rect x="0" y="427" width="780" height="12" fill="#8B2500"/><polygon points="14,6 21,16 14,20 7,16" fill="#8B2500" opacity=".5"/><polygon points="42,6 49,16 42,20 35,16" fill="#8B2500" opacity=".5"/><polygon points="70,6 77,16 70,20 63,16" fill="#8B2500" opacity=".5"/><polygon points="98,6 105,16 98,20 91,16" fill="#8B2500" opacity=".5"/><polygon points="126,6 133,16 126,20 119,16" fill="#8B2500" opacity=".5"/><polygon points="154,6 161,16 154,20 147,16" fill="#8B2500" opacity=".5"/><polygon points="182,6 189,16 182,20 175,16" fill="#8B2500" opacity=".5"/><polygon points="210,6 217,16 210,20 203,16" fill="#8B2500" opacity=".5"/><polygon points="238,6 245,16 238,20 231,16" fill="#8B2500" opacity=".5"/><polygon points="266,6 273,16 266,20 259,16" fill="#8B2500" opacity=".5"/><polygon points="294,6 301,16 294,20 287,16" fill="#8B2500" opacity=".5"/><polygon points="322,6 329,16 322,20 315,16" fill="#8B2500" opacity=".5"/><polygon points="350,6 357,16 350,20 343,16" fill="#8B2500" opacity=".5"/><polygon points="378,6 385,16 378,20 371,16" fill="#8B2500" opacity=".5"/><polygon points="406,6 413,16 406,20 399,16" fill="#8B2500" opacity=".5"/><polygon points="434,6 441,16 434,20 427,16" fill="#8B2500" opacity=".5"/><polygon points="462,6 469,16 462,20 455,16" fill="#8B2500" opacity=".5"/><polygon points="490,6 497,16 490,20 483,16" fill="#8B2500" opacity=".5"/><polygon points="518,6 525,16 518,20 511,16" fill="#8B2500" opacity=".5"/><polygon points="546,6 553,16 546,20 539,16" fill="#8B2500" opacity=".5"/><polygon points="574,6 581,16 574,20 567,16" fill="#8B2500" opacity=".5"/><polygon points="602,6 609,16 602,20 595,16" fill="#8B2500" opacity=".5"/><polygon points="630,6 637,16 630,20 623,16" fill="#8B2500" opacity=".5"/><polygon points="658,6 665,16 658,20 651,16" fill="#8B2500" opacity=".5"/><polygon points="686,6 693,16 686,20 679,16" fill="#8B2500" opacity=".5"/><polygon points="714,6 721,16 714,20 707,16" fill="#8B2500" opacity=".5"/><polygon points="742,6 749,16 742,20 735,16" fill="#8B2500" opacity=".5"/></svg>
+  <div class="panel-caption">
+    <div class="panel-top">
+      <span class="panel-num">4</span>
+      <span class="panel-top-title">The Moon Calendar</span>
+    </div>
+    <p class="panel-text">The full moon rises. Uncle tells him its name: <span class="native-inline">Wasútoŋ Wi</span> — the Moon When Corn Ripens (August). Each moon has a name tied to what the land and community are doing. Time is not a clock — it is an ecological story.</p>
+  </div>
+</div>
+<div class="panel">
+  <svg viewBox="0 0 780 439" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:8px;display:block"><defs><linearGradient id="sp_sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2a5c"/><stop offset="100%" stop-color="#3a5a8a"/></linearGradient></defs><rect width="780" height="439" fill="url(#sp_sky)"/><circle cx="674" cy="38" r="1.2" fill="white" opacity=".85"/><circle cx="301" cy="72" r="1.5" fill="white" opacity=".85"/><circle cx="124" cy="183" r="2.2" fill="white" opacity=".85"/><circle cx="578" cy="32" r="2.0" fill="white" opacity=".85"/><circle cx="52" cy="17" r="1.3" fill="white" opacity=".85"/><circle cx="258" cy="139" r="2.0" fill="white" opacity=".85"/><circle cx="594" cy="60" r="2.1" fill="white" opacity=".85"/><circle cx="738" cy="149" r="1.7" fill="white" opacity=".85"/><circle cx="479" cy="160" r="1.6" fill="white" opacity=".85"/><circle cx="26" cy="204" r="2.2" fill="white" opacity=".85"/><circle cx="734" cy="118" r="1.6" fill="white" opacity=".85"/><circle cx="179" cy="65" r="2.4" fill="white" opacity=".85"/><circle cx="364" cy="36" r="1.3" fill="white" opacity=".85"/><circle cx="119" cy="101" r="2.3" fill="white" opacity=".85"/><circle cx="638" cy="77" r="2.2" fill="white" opacity=".85"/><circle cx="490" cy="147" r="1.4" fill="white" opacity=".85"/><circle cx="407" cy="30" r="1.9" fill="white" opacity=".85"/><circle cx="663" cy="168" r="2.4" fill="white" opacity=".85"/><circle cx="390" cy="157" r="1.4" fill="white" opacity=".85"/><circle cx="91" cy="21" r="2.1" fill="white" opacity=".85"/><circle cx="316" cy="30" r="2.3" fill="white" opacity=".85"/><circle cx="123" cy="107" r="1.6" fill="white" opacity=".85"/><circle cx="670" cy="103" r="1.4" fill="white" opacity=".85"/><circle cx="383" cy="63" r="2.1" fill="white" opacity=".85"/><circle cx="738" cy="184" r="2.0" fill="white" opacity=".85"/><circle cx="390" cy="80" r="50" fill="#FFE88A"/><circle cx="390" cy="140" r="120" fill="none" stroke="#FFB300" stroke-width="1.5" opacity="0.20"/><circle cx="390" cy="140" r="90" fill="none" stroke="#FFB300" stroke-width="1.5" opacity="0.35"/><circle cx="390" cy="140" r="65" fill="none" stroke="#FFB300" stroke-width="1.5" opacity="0.48"/><circle cx="390" cy="140" r="40" fill="none" stroke="#FFB300" stroke-width="1.5" opacity="0.60"/><ellipse cx="390" cy="140" r="20" fill="#FFE066" opacity=".9"/><path d="M 340 200 Q 390 160 440 200 Q 390 185 340 200Z" fill="#3d1a00" opacity=".8"/><rect x="0" y="280" width="780" height="159" fill="#2d4a1e" opacity=".8"/><rect x="0" y="0" width="780" height="12" fill="#8B2500"/><rect x="0" y="427" width="780" height="12" fill="#8B2500"/><polygon points="14,6 21,16 14,20 7,16" fill="#8B2500" opacity=".5"/><polygon points="42,6 49,16 42,20 35,16" fill="#8B2500" opacity=".5"/><polygon points="70,6 77,16 70,20 63,16" fill="#8B2500" opacity=".5"/><polygon points="98,6 105,16 98,20 91,16" fill="#8B2500" opacity=".5"/><polygon points="126,6 133,16 126,20 119,16" fill="#8B2500" opacity=".5"/><polygon points="154,6 161,16 154,20 147,16" fill="#8B2500" opacity=".5"/><polygon points="182,6 189,16 182,20 175,16" fill="#8B2500" opacity=".5"/><polygon points="210,6 217,16 210,20 203,16" fill="#8B2500" opacity=".5"/><polygon points="238,6 245,16 238,20 231,16" fill="#8B2500" opacity=".5"/><polygon points="266,6 273,16 266,20 259,16" fill="#8B2500" opacity=".5"/><polygon points="294,6 301,16 294,20 287,16" fill="#8B2500" opacity=".5"/><polygon points="322,6 329,16 322,20 315,16" fill="#8B2500" opacity=".5"/><polygon points="350,6 357,16 350,20 343,16" fill="#8B2500" opacity=".5"/><polygon points="378,6 385,16 378,20 371,16" fill="#8B2500" opacity=".5"/><polygon points="406,6 413,16 406,20 399,16" fill="#8B2500" opacity=".5"/><polygon points="434,6 441,16 434,20 427,16" fill="#8B2500" opacity=".5"/><polygon points="462,6 469,16 462,20 455,16" fill="#8B2500" opacity=".5"/><polygon points="490,6 497,16 490,20 483,16" fill="#8B2500" opacity=".5"/><polygon points="518,6 525,16 518,20 511,16" fill="#8B2500" opacity=".5"/><polygon points="546,6 553,16 546,20 539,16" fill="#8B2500" opacity=".5"/><polygon points="574,6 581,16 574,20 567,16" fill="#8B2500" opacity=".5"/><polygon points="602,6 609,16 602,20 595,16" fill="#8B2500" opacity=".5"/><polygon points="630,6 637,16 630,20 623,16" fill="#8B2500" opacity=".5"/><polygon points="658,6 665,16 658,20 651,16" fill="#8B2500" opacity=".5"/><polygon points="686,6 693,16 686,20 679,16" fill="#8B2500" opacity=".5"/><polygon points="714,6 721,16 714,20 707,16" fill="#8B2500" opacity=".5"/><polygon points="742,6 749,16 742,20 735,16" fill="#8B2500" opacity=".5"/></svg>
+  <div class="panel-caption">
+    <div class="panel-top">
+      <span class="panel-num">5</span>
+      <span class="panel-top-title">Bdóte — The Meeting of Waters</span>
+    </div>
+    <p class="panel-text">They reach the confluence of the Minnesota and Mississippi rivers. Uncle says quietly: <span class="native-inline">Bdóte.</span> The meeting place. This is the center of the Dakota world — where the Mdewakanton originated. Wakíŋyaŋ stands at the edge and feels the weight of the word.</p>
+  </div>
+</div>
+<div class="panel">
+  <svg viewBox="0 0 780 439" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:8px;display:block"><rect width="780" height="439" fill="#1a2a50"/><path d="M0,80 Q195,52 390,80 Q585,105 780,65" stroke="#00ff88" stroke-width="3" fill="none" opacity="0.45"/><path d="M0,100 Q195,72 390,100 Q585,125 780,85" stroke="#00ccff" stroke-width="3" fill="none" opacity="0.35"/><path d="M0,92 Q195,64 390,92 Q585,117 780,77" stroke="#8844ff" stroke-width="3" fill="none" opacity="0.3"/><path d="M0,115 Q195,87 390,115 Q585,140 780,100" stroke="#00ff88" stroke-width="3" fill="none" opacity="0.25"/><circle cx="674" cy="38" r="1.2" fill="white" opacity=".85"/><circle cx="301" cy="72" r="1.5" fill="white" opacity=".85"/><circle cx="124" cy="183" r="2.2" fill="white" opacity=".85"/><circle cx="578" cy="32" r="2.0" fill="white" opacity=".85"/><circle cx="52" cy="17" r="1.3" fill="white" opacity=".85"/><circle cx="258" cy="139" r="2.0" fill="white" opacity=".85"/><circle cx="594" cy="60" r="2.1" fill="white" opacity=".85"/><circle cx="738" cy="149" r="1.7" fill="white" opacity=".85"/><circle cx="479" cy="160" r="1.6" fill="white" opacity=".85"/><circle cx="26" cy="204" r="2.2" fill="white" opacity=".85"/><circle cx="734" cy="118" r="1.6" fill="white" opacity=".85"/><circle cx="179" cy="65" r="2.4" fill="white" opacity=".85"/><circle cx="364" cy="36" r="1.3" fill="white" opacity=".85"/><circle cx="119" cy="101" r="2.3" fill="white" opacity=".85"/><circle cx="638" cy="77" r="2.2" fill="white" opacity=".85"/><circle cx="490" cy="147" r="1.4" fill="white" opacity=".85"/><circle cx="407" cy="30" r="1.9" fill="white" opacity=".85"/><circle cx="663" cy="168" r="2.4" fill="white" opacity=".85"/><circle cx="390" cy="157" r="1.4" fill="white" opacity=".85"/><circle cx="91" cy="21" r="2.1" fill="white" opacity=".85"/><circle cx="316" cy="30" r="2.3" fill="white" opacity=".85"/><circle cx="123" cy="107" r="1.6" fill="white" opacity=".85"/><rect x="0" y="310" width="780" height="129" fill="white"/><ellipse cx="390" cy="310" rx="520" ry="22" fill="#e0ecff"/><polygon points="80,190 30,310 130,310" fill="#1e5c1e"/><polygon points="80,226.0 45.0,286.0 115.0,286.0" fill="#2e7c2e"/><rect x="74" y="310" width="12" height="25" fill="#5a3210"/><polygon points="140,190 90,310 190,310" fill="#1e5c1e"/><polygon points="140,226.0 105.0,286.0 175.0,286.0" fill="#2e7c2e"/><rect x="134" y="310" width="12" height="25" fill="#5a3210"/><polygon points="640,190 590,310 690,310" fill="#1e5c1e"/><polygon points="640,226.0 605.0,286.0 675.0,286.0" fill="#2e7c2e"/><rect x="634" y="310" width="12" height="25" fill="#5a3210"/><polygon points="700,190 650,310 750,310" fill="#1e5c1e"/><polygon points="700,226.0 665.0,286.0 735.0,286.0" fill="#2e7c2e"/><rect x="694" y="310" width="12" height="25" fill="#5a3210"/><circle cx="390" cy="232" r="12" fill="#3d1a00"/><rect x="380" y="247" width="21" height="39" rx="5" fill="#3d1a00"/><rect x="378" y="287" width="10" height="25" rx="4" fill="#3d1a00"/><rect x="392" y="287" width="10" height="25" rx="4" fill="#3d1a00"/><line x1="390" y1="255" x2="413" y2="272" stroke="#3d1a00" stroke-width="8" stroke-linecap="round"/><line x1="390" y1="255" x2="372" y2="265" stroke="#3d1a00" stroke-width="8" stroke-linecap="round"/><text x="200" y="220" font-size="18" fill="white" opacity=".6">❄</text><text x="560" y="190" font-size="14" fill="white" opacity=".6">❄</text><text x="430" y="260" font-size="12" fill="white" opacity=".6">❄</text><text x="300" y="240" font-size="16" fill="white" opacity=".6">❄</text><rect x="0" y="0" width="780" height="12" fill="#8B2500"/><rect x="0" y="427" width="780" height="12" fill="#8B2500"/><polygon points="14,6 21,16 14,20 7,16" fill="#8B2500" opacity=".5"/><polygon points="42,6 49,16 42,20 35,16" fill="#8B2500" opacity=".5"/><polygon points="70,6 77,16 70,20 63,16" fill="#8B2500" opacity=".5"/><polygon points="98,6 105,16 98,20 91,16" fill="#8B2500" opacity=".5"/><polygon points="126,6 133,16 126,20 119,16" fill="#8B2500" opacity=".5"/><polygon points="154,6 161,16 154,20 147,16" fill="#8B2500" opacity=".5"/><polygon points="182,6 189,16 182,20 175,16" fill="#8B2500" opacity=".5"/><polygon points="210,6 217,16 210,20 203,16" fill="#8B2500" opacity=".5"/><polygon points="238,6 245,16 238,20 231,16" fill="#8B2500" opacity=".5"/><polygon points="266,6 273,16 266,20 259,16" fill="#8B2500" opacity=".5"/><polygon points="294,6 301,16 294,20 287,16" fill="#8B2500" opacity=".5"/><polygon points="322,6 329,16 322,20 315,16" fill="#8B2500" opacity=".5"/><polygon points="350,6 357,16 350,20 343,16" fill="#8B2500" opacity=".5"/><polygon points="378,6 385,16 378,20 371,16" fill="#8B2500" opacity=".5"/><polygon points="406,6 413,16 406,20 399,16" fill="#8B2500" opacity=".5"/><polygon points="434,6 441,16 434,20 427,16" fill="#8B2500" opacity=".5"/><polygon points="462,6 469,16 462,20 455,16" fill="#8B2500" opacity=".5"/><polygon points="490,6 497,16 490,20 483,16" fill="#8B2500" opacity=".5"/><polygon points="518,6 525,16 518,20 511,16" fill="#8B2500" opacity=".5"/><polygon points="546,6 553,16 546,20 539,16" fill="#8B2500" opacity=".5"/><polygon points="574,6 581,16 574,20 567,16" fill="#8B2500" opacity=".5"/><polygon points="602,6 609,16 602,20 595,16" fill="#8B2500" opacity=".5"/><polygon points="630,6 637,16 630,20 623,16" fill="#8B2500" opacity=".5"/><polygon points="658,6 665,16 658,20 651,16" fill="#8B2500" opacity=".5"/><polygon points="686,6 693,16 686,20 679,16" fill="#8B2500" opacity=".5"/><polygon points="714,6 721,16 714,20 707,16" fill="#8B2500" opacity=".5"/><polygon points="742,6 749,16 742,20 735,16" fill="#8B2500" opacity=".5"/></svg>
+  <div class="panel-caption">
+    <div class="panel-top">
+      <span class="panel-num">6</span>
+      <span class="panel-top-title">Talking About Weather</span>
+    </div>
+    <p class="panel-text">A thunderstorm rolls in from the west. <span class="native-inline">Wakinyan kiŋ hí.</span> — The thunderbirds are coming. <span class="native-inline">Mahpíya sápa.</span> — The sky is black. The word <span class="native-inline">wakinyan</span> — thunderbird — is the same sound as his own name. He had not noticed until now.</p>
+  </div>
+</div>
+<div class="panel">
+  <svg viewBox="0 0 780 439" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:8px;display:block"><defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFD180"/><stop offset="100%" stop-color="#FFAB40"/></linearGradient></defs><rect width="780" height="439" fill="url(#bg)"/><rect x="0" y="295" width="780" height="144" fill="#6B8E43"/><ellipse cx="390" cy="295" rx="520" ry="28" fill="#4a6830"/><line x1="673" y1="55" x2="686" y2="55" stroke="#FFB300" stroke-width="3"/><line x1="663" y1="78" x2="673" y2="88" stroke="#FFB300" stroke-width="3"/><line x1="640" y1="88" x2="640" y2="101" stroke="#FFB300" stroke-width="3"/><line x1="617" y1="78" x2="607" y2="88" stroke="#FFB300" stroke-width="3"/><line x1="607" y1="55" x2="594" y2="55" stroke="#FFB300" stroke-width="3"/><line x1="617" y1="32" x2="607" y2="22" stroke="#FFB300" stroke-width="3"/><line x1="640" y1="22" x2="640" y2="9" stroke="#FFB300" stroke-width="3"/><line x1="663" y1="32" x2="673" y2="22" stroke="#FFB300" stroke-width="3"/><circle cx="640" cy="55" r="28" fill="#FFD54F"/><rect x="310" y="175" width="160" height="120" fill="#8B4513" opacity=".8"/><polygon points="290,175 390,105 490,175" fill="#6B3410" opacity=".9"/><circle cx="160" cy="220" r="12" fill="#3d1a00"/><rect x="150" y="235" width="20" height="38" rx="5" fill="#3d1a00"/><rect x="148" y="273" width="10" height="24" rx="4" fill="#3d1a00"/><rect x="162" y="273" width="10" height="24" rx="4" fill="#3d1a00"/><line x1="160" y1="243" x2="182" y2="259" stroke="#3d1a00" stroke-width="8" stroke-linecap="round"/><line x1="160" y1="243" x2="142" y2="253" stroke="#3d1a00" stroke-width="8" stroke-linecap="round"/><circle cx="230" cy="229" r="10" fill="#3d1a00"/><rect x="222" y="243" width="17" height="33" rx="5" fill="#3d1a00"/><rect x="220" y="276" width="8" height="21" rx="4" fill="#3d1a00"/><rect x="231" y="276" width="8" height="21" rx="4" fill="#3d1a00"/><line x1="230" y1="250" x2="249" y2="264" stroke="#3d1a00" stroke-width="7" stroke-linecap="round"/><line x1="230" y1="250" x2="215" y2="258" stroke="#3d1a00" stroke-width="7" stroke-linecap="round"/><circle cx="305" cy="234" r="9" fill="#3d1a00"/><rect x="297" y="246" width="16" height="31" rx="5" fill="#3d1a00"/><rect x="296" y="277" width="8" height="19" rx="4" fill="#3d1a00"/><rect x="306" y="277" width="8" height="19" rx="4" fill="#3d1a00"/><line x1="305" y1="252" x2="323" y2="265" stroke="#3d1a00" stroke-width="6" stroke-linecap="round"/><line x1="305" y1="252" x2="291" y2="260" stroke="#3d1a00" stroke-width="6" stroke-linecap="round"/><circle cx="480" cy="234" r="9" fill="#3d1a00"/><rect x="472" y="246" width="16" height="31" rx="5" fill="#3d1a00"/><rect x="471" y="277" width="8" height="19" rx="4" fill="#3d1a00"/><rect x="481" y="277" width="8" height="19" rx="4" fill="#3d1a00"/><line x1="480" y1="252" x2="462" y2="265" stroke="#3d1a00" stroke-width="6" stroke-linecap="round"/><line x1="480" y1="252" x2="494" y2="260" stroke="#3d1a00" stroke-width="6" stroke-linecap="round"/><circle cx="550" cy="229" r="10" fill="#3d1a00"/><rect x="542" y="243" width="17" height="33" rx="5" fill="#3d1a00"/><rect x="540" y="276" width="8" height="21" rx="4" fill="#3d1a00"/><rect x="551" y="276" width="8" height="21" rx="4" fill="#3d1a00"/><line x1="550" y1="250" x2="531" y2="264" stroke="#3d1a00" stroke-width="7" stroke-linecap="round"/><line x1="550" y1="250" x2="565" y2="258" stroke="#3d1a00" stroke-width="7" stroke-linecap="round"/><circle cx="625" cy="220" r="12" fill="#3d1a00"/><rect x="615" y="235" width="20" height="38" rx="5" fill="#3d1a00"/><rect x="613" y="273" width="10" height="24" rx="4" fill="#3d1a00"/><rect x="627" y="273" width="10" height="24" rx="4" fill="#3d1a00"/><line x1="625" y1="243" x2="603" y2="259" stroke="#3d1a00" stroke-width="8" stroke-linecap="round"/><line x1="625" y1="243" x2="643" y2="253" stroke="#3d1a00" stroke-width="8" stroke-linecap="round"/><circle cx="390" cy="236" r="11" fill="#2d1000"/><ellipse cx="390" cy="228" rx="12" ry="7" fill="#2d1000" opacity=".6"/><rect x="379" y="248" width="22" height="27" rx="6" fill="#2d1000"/><rect x="379" y="277" width="9" height="20" rx="4" fill="#2d1000"/><rect x="391" y="277" width="9" height="20" rx="4" fill="#2d1000"/><line x1="390" y1="255" x2="410" y2="268" stroke="#2d1000" stroke-width="6" stroke-linecap="round"/><line x1="390" y1="255" x2="370" y2="268" stroke="#2d1000" stroke-width="6" stroke-linecap="round"/><rect x="0" y="0" width="780" height="12" fill="#8B2500"/><rect x="0" y="427" width="780" height="12" fill="#8B2500"/><polygon points="14,6 21,16 14,20 7,16" fill="#8B2500" opacity=".5"/><polygon points="42,6 49,16 42,20 35,16" fill="#8B2500" opacity=".5"/><polygon points="70,6 77,16 70,20 63,16" fill="#8B2500" opacity=".5"/><polygon points="98,6 105,16 98,20 91,16" fill="#8B2500" opacity=".5"/><polygon points="126,6 133,16 126,20 119,16" fill="#8B2500" opacity=".5"/><polygon points="154,6 161,16 154,20 147,16" fill="#8B2500" opacity=".5"/><polygon points="182,6 189,16 182,20 175,16" fill="#8B2500" opacity=".5"/><polygon points="210,6 217,16 210,20 203,16" fill="#8B2500" opacity=".5"/><polygon points="238,6 245,16 238,20 231,16" fill="#8B2500" opacity=".5"/><polygon points="266,6 273,16 266,20 259,16" fill="#8B2500" opacity=".5"/><polygon points="294,6 301,16 294,20 287,16" fill="#8B2500" opacity=".5"/><polygon points="322,6 329,16 322,20 315,16" fill="#8B2500" opacity=".5"/><polygon points="350,6 357,16 350,20 343,16" fill="#8B2500" opacity=".5"/><polygon points="378,6 385,16 378,20 371,16" fill="#8B2500" opacity=".5"/><polygon points="406,6 413,16 406,20 399,16" fill="#8B2500" opacity=".5"/><polygon points="434,6 441,16 434,20 427,16" fill="#8B2500" opacity=".5"/><polygon points="462,6 469,16 462,20 455,16" fill="#8B2500" opacity=".5"/><polygon points="490,6 497,16 490,20 483,16" fill="#8B2500" opacity=".5"/><polygon points="518,6 525,16 518,20 511,16" fill="#8B2500" opacity=".5"/><polygon points="546,6 553,16 546,20 539,16" fill="#8B2500" opacity=".5"/><polygon points="574,6 581,16 574,20 567,16" fill="#8B2500" opacity=".5"/><polygon points="602,6 609,16 602,20 595,16" fill="#8B2500" opacity=".5"/><polygon points="630,6 637,16 630,20 623,16" fill="#8B2500" opacity=".5"/><polygon points="658,6 665,16 658,20 651,16" fill="#8B2500" opacity=".5"/><polygon points="686,6 693,16 686,20 679,16" fill="#8B2500" opacity=".5"/><polygon points="714,6 721,16 714,20 707,16" fill="#8B2500" opacity=".5"/><polygon points="742,6 749,16 742,20 735,16" fill="#8B2500" opacity=".5"/></svg>
+  <div class="panel-caption">
+    <div class="panel-top">
+      <span class="panel-num">7</span>
+      <span class="panel-top-title">Returning Home</span>
+    </div>
+    <p class="panel-text">On the fourth day they return. Uncle says: <span class="native-inline">Makóčhe kiŋ waúŋkičuŋpi.</span> — We carry the land with us. Land in Dakota is not owned — it is held in relationship. The language does not have a word for "my land" the way English does.</p>
+  </div>
+</div>
+<div class="panel">
+  <svg viewBox="0 0 780 439" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:8px;display:block"><defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FF7043"/><stop offset="100%" stop-color="#FFB300"/></linearGradient></defs><rect width="780" height="439" fill="url(#bg)"/><rect x="0" y="290" width="780" height="149" fill="#5a7a30"/><ellipse cx="390" cy="290" rx="520" ry="28" fill="#3a5020"/><line x1="440" y1="285" x2="453" y2="285" stroke="#FFB300" stroke-width="3"/><line x1="425" y1="320" x2="435" y2="330" stroke="#FFB300" stroke-width="3"/><line x1="390" y1="335" x2="390" y2="348" stroke="#FFB300" stroke-width="3"/><line x1="355" y1="320" x2="345" y2="330" stroke="#FFB300" stroke-width="3"/><line x1="340" y1="285" x2="327" y2="285" stroke="#FFB300" stroke-width="3"/><line x1="355" y1="250" x2="345" y2="240" stroke="#FFB300" stroke-width="3"/><line x1="390" y1="235" x2="390" y2="222" stroke="#FFB300" stroke-width="3"/><line x1="425" y1="250" x2="435" y2="240" stroke="#FFB300" stroke-width="3"/><circle cx="390" cy="285" r="45" fill="#FFD54F"/><ellipse cx="390" cy="290" rx="300" ry="55" fill="#FF7043" opacity=".12"/><circle cx="260" cy="215" r="12" fill="#2d1000"/><rect x="250" y="230" width="20" height="38" rx="5" fill="#2d1000"/><rect x="248" y="268" width="10" height="24" rx="4" fill="#2d1000"/><rect x="262" y="268" width="10" height="24" rx="4" fill="#2d1000"/><line x1="260" y1="238" x2="282" y2="254" stroke="#2d1000" stroke-width="8" stroke-linecap="round"/><line x1="260" y1="238" x2="242" y2="248" stroke="#2d1000" stroke-width="8" stroke-linecap="round"/><circle cx="340" cy="224" r="10" fill="#2d1000"/><rect x="332" y="238" width="17" height="33" rx="5" fill="#2d1000"/><rect x="330" y="271" width="8" height="21" rx="4" fill="#2d1000"/><rect x="341" y="271" width="8" height="21" rx="4" fill="#2d1000"/><line x1="340" y1="245" x2="359" y2="259" stroke="#2d1000" stroke-width="7" stroke-linecap="round"/><line x1="340" y1="245" x2="325" y2="253" stroke="#2d1000" stroke-width="7" stroke-linecap="round"/><circle cx="420" cy="212" r="12" fill="#2d1000"/><rect x="410" y="227" width="21" height="39" rx="5" fill="#2d1000"/><rect x="408" y="267" width="10" height="25" rx="4" fill="#2d1000"/><rect x="422" y="267" width="10" height="25" rx="4" fill="#2d1000"/><line x1="420" y1="235" x2="443" y2="252" stroke="#2d1000" stroke-width="8" stroke-linecap="round"/><line x1="420" y1="235" x2="402" y2="245" stroke="#2d1000" stroke-width="8" stroke-linecap="round"/><circle cx="500" cy="223" r="10" fill="#2d1000"/><rect x="491" y="236" width="18" height="34" rx="5" fill="#2d1000"/><rect x="490" y="271" width="9" height="21" rx="4" fill="#2d1000"/><rect x="501" y="271" width="9" height="21" rx="4" fill="#2d1000"/><line x1="500" y1="243" x2="519" y2="257" stroke="#2d1000" stroke-width="7" stroke-linecap="round"/><line x1="500" y1="243" x2="484" y2="252" stroke="#2d1000" stroke-width="7" stroke-linecap="round"/><circle cx="580" cy="227" r="10" fill="#2d1000"/><rect x="572" y="239" width="17" height="32" rx="5" fill="#2d1000"/><rect x="570" y="272" width="8" height="20" rx="4" fill="#2d1000"/><rect x="581" y="272" width="8" height="20" rx="4" fill="#2d1000"/><line x1="580" y1="245" x2="598" y2="259" stroke="#2d1000" stroke-width="6" stroke-linecap="round"/><line x1="580" y1="245" x2="565" y2="254" stroke="#2d1000" stroke-width="6" stroke-linecap="round"/><rect x="249" y="50" width="282" height="75" rx="10" fill="rgba(0,0,0,0.55)"/><text x="390" y="93" text-anchor="middle" font-family="Georgia,serif" font-size="28" font-weight="bold" fill="#FFE066">Mnísota Wakpá</text><text x="390" y="116" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#FFB300" font-style="italic">The cloudy-water river — Minnesota</text><rect x="0" y="0" width="780" height="12" fill="#8B2500"/><rect x="0" y="427" width="780" height="12" fill="#8B2500"/><polygon points="14,6 21,16 14,20 7,16" fill="#8B2500" opacity=".5"/><polygon points="42,6 49,16 42,20 35,16" fill="#8B2500" opacity=".5"/><polygon points="70,6 77,16 70,20 63,16" fill="#8B2500" opacity=".5"/><polygon points="98,6 105,16 98,20 91,16" fill="#8B2500" opacity=".5"/><polygon points="126,6 133,16 126,20 119,16" fill="#8B2500" opacity=".5"/><polygon points="154,6 161,16 154,20 147,16" fill="#8B2500" opacity=".5"/><polygon points="182,6 189,16 182,20 175,16" fill="#8B2500" opacity=".5"/><polygon points="210,6 217,16 210,20 203,16" fill="#8B2500" opacity=".5"/><polygon points="238,6 245,16 238,20 231,16" fill="#8B2500" opacity=".5"/><polygon points="266,6 273,16 266,20 259,16" fill="#8B2500" opacity=".5"/><polygon points="294,6 301,16 294,20 287,16" fill="#8B2500" opacity=".5"/><polygon points="322,6 329,16 322,20 315,16" fill="#8B2500" opacity=".5"/><polygon points="350,6 357,16 350,20 343,16" fill="#8B2500" opacity=".5"/><polygon points="378,6 385,16 378,20 371,16" fill="#8B2500" opacity=".5"/><polygon points="406,6 413,16 406,20 399,16" fill="#8B2500" opacity=".5"/><polygon points="434,6 441,16 434,20 427,16" fill="#8B2500" opacity=".5"/><polygon points="462,6 469,16 462,20 455,16" fill="#8B2500" opacity=".5"/><polygon points="490,6 497,16 490,20 483,16" fill="#8B2500" opacity=".5"/><polygon points="518,6 525,16 518,20 511,16" fill="#8B2500" opacity=".5"/><polygon points="546,6 553,16 546,20 539,16" fill="#8B2500" opacity=".5"/><polygon points="574,6 581,16 574,20 567,16" fill="#8B2500" opacity=".5"/><polygon points="602,6 609,16 602,20 595,16" fill="#8B2500" opacity=".5"/><polygon points="630,6 637,16 630,20 623,16" fill="#8B2500" opacity=".5"/><polygon points="658,6 665,16 658,20 651,16" fill="#8B2500" opacity=".5"/><polygon points="686,6 693,16 686,20 679,16" fill="#8B2500" opacity=".5"/><polygon points="714,6 721,16 714,20 707,16" fill="#8B2500" opacity=".5"/><polygon points="742,6 749,16 742,20 735,16" fill="#8B2500" opacity=".5"/></svg>
+  <div class="panel-caption">
+    <div class="panel-top">
+      <span class="panel-num">8</span>
+      <span class="panel-top-title">The Land Speaks</span>
+    </div>
+    <p class="panel-text">Every Dakota place name is also a teaching about that place. When the English names replaced Dakota ones, something about the land was erased. Wakíŋyaŋ vows to learn as many place names as he can. The land has been speaking all along.</p>
+  </div>
+</div>
+  <div class="section-head">What This Story Teaches Us</div>
+  <table class="teaching-table">
+    <thead><tr><th>Story Moment</th><th>What We Notice</th><th>Language Focus</th></tr></thead>
+    <tbody><tr><td>Four directions named while walking</td><td>Wiyóhiŋyaŋpata / Wazíyata / Itókagata / Wiyóhpeyata</td><td><strong>Four directions</strong></td></tr><tr><td>River name decoded</td><td>Mní (water) + sota (smoky) = Mnísota</td><td><strong>Place name morphology</strong></td></tr><tr><td>Seasons listed by uncle</td><td>Waniyetu / Wétu / Bdokétu / Ptaŋyétu</td><td><strong>Four seasons</strong></td></tr><tr><td>Moon name explained</td><td>Moon names tied to ecological events</td><td><strong>Wasútoŋ Wi (August moon)</strong></td></tr><tr><td>Bdóte visited</td><td>Center of Dakota world; name means "meeting of waters"</td><td><strong>Bdóte</strong></td></tr></tbody>
+  </table>
+  <div class="section-head">Key Phrases — Say It Out Loud</div>
+  <div class="phrase-card">
+  <div><div class="phrase-native">Wiyóhiŋyaŋpata</div><div class="phrase-pron">wee-YOH-heen-yahn-pah-tah</div></div>
+  <div class="phrase-eng">East (where sun rises)</div>
+</div><div class="phrase-card">
+  <div><div class="phrase-native">Wazíyata</div><div class="phrase-pron">wah-ZEE-yah-tah</div></div>
+  <div class="phrase-eng">North</div>
+</div><div class="phrase-card">
+  <div><div class="phrase-native">Bdokétu</div><div class="phrase-pron">bdoh-KAY-too</div></div>
+  <div class="phrase-eng">Summer</div>
+</div><div class="phrase-card">
+  <div><div class="phrase-native">Waniyetu</div><div class="phrase-pron">wah-NEE-yeh-too</div></div>
+  <div class="phrase-eng">Winter / year</div>
+</div><div class="phrase-card">
+  <div><div class="phrase-native">Mnísota Wakpá</div><div class="phrase-pron">mnee-SOH-tah WAHK-pah</div></div>
+  <div class="phrase-eng">Minnesota River (cloudy water)</div>
+</div>
+  <div class="cta-box">
+    <h3>You Can Do This Too</h3>
+    <ul><li>Look up the Dakota name for the nearest river or lake to your school.</li><li>Name all four seasons in Dakota out loud, facing each direction as you say it.</li><li>Find out what moon month it is right now in the Dakota calendar.</li><li>Write "The land speaks" as a prompt and freewrite for five minutes.</li></ul>
+  </div>
+</div>
 </body>
 </html>
