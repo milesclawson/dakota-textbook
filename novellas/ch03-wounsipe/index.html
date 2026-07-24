@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aŋpétu Wašté — Dakhotiyapi — Beginning Dakota Language</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Georgia',serif;background:#f5f0e8;color:#2d1e0f;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+.book-wrap{max-width:780px;width:100%;padding:20px 16px 40px}
+.book-header{text-align:center;padding:28px 0 18px;border-bottom:2px solid #8b5e3c}
+.book-header h1{font-size:1.7rem;color:#5c2e00;letter-spacing:.03em}
+.book-header .subtitle{font-size:1rem;color:#7a5030;margin-top:6px;font-style:italic}
+.book-header .chapter-label{font-size:.8rem;color:#9a7050;margin-top:4px;text-transform:uppercase;letter-spacing:.1em}
+
+/* page navigation */
+.page-nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0 10px;font-size:.85rem;color:#7a5030}
+.page-nav button{background:#8b5e3c;color:#fff;border:none;border-radius:6px;padding:7px 18px;cursor:pointer;font-family:Georgia,serif;font-size:.85rem}
+.page-nav button:disabled{background:#ccc;cursor:default}
+.page-indicator{font-style:italic}
+
+/* story page */
+.story-page{display:none}
+.story-page.active{display:block}
+.illustration{width:100%;max-height:220px;margin:20px 0;overflow:hidden}
+.illustration svg{width:100%;height:220px}
+.page-content{line-height:1.8}
+
+/* interlinear */
+.sentence-block{margin:18px 0;padding:12px 16px;background:rgba(255,255,255,.55);border-left:3px solid #a06030;border-radius:4px}
+.interlinear{display:flex;flex-wrap:wrap;gap:0 6px;margin-bottom:6px}
+.iword{display:inline-flex;flex-direction:column;align-items:center;margin-bottom:4px}
+.iword .native{font-size:1.15rem;font-weight:600;color:#3d1a00}
+.iword .gloss{font-size:.68rem;color:#8a5a30;margin-top:2px;font-style:italic;text-align:center}
+.smooth{font-size:.9rem;color:#5a3a18;margin-top:6px;font-style:italic;display:none}
+.show-trans .smooth{display:block}
+.trans-toggle{background:none;border:1px solid #a06030;border-radius:4px;color:#a06030;padding:3px 10px;font-size:.78rem;cursor:pointer;margin-top:8px}
+
+/* section heads */
+.section-page{display:none}
+.section-page.active{display:block}
+
+/* vocabulary test */
+.vocab-test{padding:10px 0}
+.vocab-test h2{font-size:1.2rem;color:#5c2e00;margin-bottom:12px}
+.match-area{display:flex;gap:20px;flex-wrap:wrap}
+.match-col{flex:1;min-width:140px}
+.match-col h3{font-size:.8rem;text-transform:uppercase;color:#8a5a30;margin-bottom:8px;letter-spacing:.08em}
+.match-item{padding:8px 12px;margin:6px 0;background:#fff;border:2px solid #d4a070;border-radius:6px;cursor:pointer;font-size:.95rem;transition:background .2s}
+.match-item.selected{background:#ffe0b0;border-color:#8b5e3c}
+.match-item.correct{background:#d4edda;border-color:#28a745;cursor:default}
+.match-item.wrong{background:#f8d7da;border-color:#dc3545}
+.match-item.used{opacity:.45;cursor:default}
+.vocab-result{margin-top:14px;font-weight:600;font-size:1rem}
+
+/* quiz */
+.quiz-section h2{font-size:1.2rem;color:#5c2e00;margin-bottom:14px}
+.quiz-q{margin:16px 0;padding:12px 14px;background:#fff;border-radius:6px;border:1px solid #d4a070}
+.quiz-q p{font-weight:600;margin-bottom:8px;font-size:.95rem}
+.quiz-q label{display:block;padding:5px 0;cursor:pointer;font-size:.9rem}
+.quiz-q label input{margin-right:8px}
+.q-feedback{margin-top:6px;font-size:.85rem;font-weight:600}
+.q-feedback.correct{color:#28a745}
+.q-feedback.wrong{color:#dc3545}
+.quiz-submit{margin-top:14px;background:#8b5e3c;color:#fff;border:none;border-radius:6px;padding:9px 22px;cursor:pointer;font-size:.95rem;font-family:Georgia,serif}
+.quiz-score{margin-top:12px;font-size:1.05rem;font-weight:600;color:#5c2e00}
+
+/* oral fluency */
+.oral-section h2{font-size:1.2rem;color:#5c2e00;margin-bottom:8px}
+.oral-intro{font-size:.9rem;color:#5a3a18;margin-bottom:16px;font-style:italic}
+.oral-phrase{margin:12px 0;padding:12px 16px;background:#fff;border-radius:6px;border:1px solid #d4a070}
+.oral-phrase .phrase-native{font-size:1.2rem;font-weight:600;color:#3d1a00;margin-bottom:4px}
+.oral-phrase .phrase-english{font-size:.85rem;color:#7a5030;font-style:italic;margin-bottom:10px}
+.oral-controls{display:flex;gap:10px;flex-wrap:wrap}
+.btn-record{background:#c0392b;color:#fff;border:none;border-radius:6px;padding:7px 16px;cursor:pointer;font-size:.85rem}
+.btn-record.recording{background:#e74c3c;animation:pulse 1s infinite}
+.btn-play{background:#27ae60;color:#fff;border:none;border-radius:6px;padding:7px 16px;cursor:pointer;font-size:.85rem;display:none}
+.btn-play.visible{display:inline-block}
+.rec-status{font-size:.8rem;color:#8a5a30;align-self:center;font-style:italic}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+
+/* translation */
+.trans-section h2{font-size:1.2rem;color:#5c2e00;margin-bottom:14px}
+.trans-warning{background:#fff3cd;border:1px solid #ffc107;border-radius:6px;padding:10px 14px;font-size:.85rem;margin-bottom:16px;color:#856404}
+.trans-page-block{margin:14px 0;padding:12px 16px;background:#fff;border-radius:6px;border:1px solid #d4a070}
+.trans-page-block h4{font-size:.78rem;text-transform:uppercase;color:#8a5a30;margin-bottom:8px;letter-spacing:.08em}
+.trans-page-block p{font-size:.95rem;line-height:1.7;color:#3d1a00}
+
+/* end nav */
+.end-nav{display:flex;justify-content:space-between;margin-top:20px;padding-top:14px;border-top:1px solid #d4a070}
+
+/* responsive */
+@media(max-width:500px){
+  .book-header h1{font-size:1.3rem}
+  .match-area{flex-direction:column}
+  .iword .native{font-size:1rem}
+}
+</style>
+
+</head>
+<body>
+<div class="book-wrap">
+<div class="book-header">
+  <div class="chapter-label">Dakhotiyapi — Beginning Dakota Language · Chapter 3</div>
+  <h1>Aŋpétu Wašté</h1>
+  <div class="subtitle">"A Good Day"</div>
+</div>
+<div class="page-nav">
+  <button id="btn-prev" onclick="showPage(currentPage-1)" disabled>← Previous</button>
+  <span id="pg-indicator" class="page-indicator">Page 1</span>
+  <button id="btn-next" onclick="showPage(currentPage+1)">Next →</button>
+</div>
+<div class="story-page" id="sp-0">
+<div class="illustration"><svg viewBox="0 0 780 220" xmlns="http://www.w3.org/2000/svg">
+  <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#87CEEB"/><stop offset="100%" stop-color="#FFD580"/></linearGradient></defs>
+  <rect width="780" height="220" fill="url(#sky)"/>
+  <ellipse cx="390" cy="230" rx="500" ry="80" fill="#7a9a50"/>
+  <ellipse cx="390" cy="240" rx="400" ry="60" fill="#5c7a30"/>
+  <!-- sun -->
+  <circle cx="640" cy="55" r="35" fill="#FFB300" opacity=".9"/>
+  <line x1="640" y1="5" x2="640" y2="20" stroke="#FFB300" stroke-width="3"/>
+  <line x1="640" y1="90" x2="640" y2="105" stroke="#FFB300" stroke-width="3"/>
+  <line x1="590" y1="55" x2="575" y2="55" stroke="#FFB300" stroke-width="3"/>
+  <line x1="690" y1="55" x2="705" y2="55" stroke="#FFB300" stroke-width="3"/>
+  <!-- tipi silhouettes -->
+  <polygon points="120,180 150,80 180,180" fill="#8B4513" opacity=".8"/>
+  <polygon points="160,180 195,70 230,180" fill="#6B3410" opacity=".8"/>
+  <polygon points="200,180 240,75 280,180" fill="#8B4513" opacity=".75"/>
+  <!-- birds -->
+  <path d="M300 60 Q310 52 320 60" stroke="#333" stroke-width="2" fill="none"/>
+  <path d="M340 45 Q352 37 364 45" stroke="#333" stroke-width="2" fill="none"/>
+</svg></div>
+<p style="font-size:.85rem;font-style:italic;color:#7a5030;margin-bottom:10px">Wakíŋyaŋ is learning how Dakota sentences work: Object – Verb, with the subject often at the front.</p>
+<div class="page-content">
+<div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Haŋhépi</span><span class="gloss">night</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">blé</span><span class="gloss">I.go</span></span> <span class="iword"><span class="native">šni.</span><span class="gloss">not.</span></span></div>
+  <div class="smooth">I do not go at night.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div><div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Aŋpétu</span><span class="gloss">day</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">ičámna</span><span class="gloss">I.wake.up</span></span> <span class="iword"><span class="native">čha</span><span class="gloss">and</span></span> <span class="iword"><span class="native">wóyute</span><span class="gloss">food</span></span> <span class="iword"><span class="native">wéčhakiŋ.</span><span class="gloss">I.eat.</span></span></div>
+  <div class="smooth">In the day I wake up and I eat food.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div><div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Wakíŋyaŋ</span><span class="gloss">Wakíŋyaŋ</span></span> <span class="iword"><span class="native">aŋpétu</span><span class="gloss">day</span></span> <span class="iword"><span class="native">wašté</span><span class="gloss">good</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">wičháčhuwi.</span><span class="gloss">he.planned.</span></span></div>
+  <div class="smooth">Wakíŋyaŋ planned a good day.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div>
+</div>
+</div><div class="story-page" id="sp-1">
+
+
+<div class="page-content">
+<div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Wakíŋyaŋ</span><span class="gloss">Wakíŋyaŋ</span></span> <span class="iword"><span class="native">hanhépi</span><span class="gloss">early.morning</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">ičháȟmna.</span><span class="gloss">he.woke.up.</span></span></div>
+  <div class="smooth">Wakíŋyaŋ woke up early in the morning.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div><div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Mní</span><span class="gloss">water</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">yatká.</span><span class="gloss">he.drank.</span></span></div>
+  <div class="smooth">He drank the water.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div><div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Wóyute</span><span class="gloss">food</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">wičháyutA.</span><span class="gloss">he.ate.it.</span></span></div>
+  <div class="smooth">He ate the food.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div>
+</div>
+</div><div class="story-page" id="sp-2">
+
+
+<div class="page-content">
+<div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Uŋčí</span><span class="gloss">Grandmother</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">wóyute</span><span class="gloss">food</span></span> <span class="iword"><span class="native">kičhú.</span><span class="gloss">gave.to.him.</span></span></div>
+  <div class="smooth">Grandmother gave him food.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div><div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Phaŋpháŋ</span><span class="gloss">bread</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">wičhéheyatA.</span><span class="gloss">she.passed.it.to.him.</span></span></div>
+  <div class="smooth">She passed the bread to him.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div><div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Wakíŋyaŋ</span><span class="gloss">Wakíŋyaŋ</span></span> <span class="iword"><span class="native">—</span><span class="gloss">—</span></span> <span class="iword"><span class="native">Philámayaye!</span><span class="gloss">Thank.you!</span></span> <span class="iword"><span class="native">—</span><span class="gloss">—</span></span> <span class="iword"><span class="native">eyáȟakA.</span><span class="gloss">he.said.</span></span></div>
+  <div class="smooth">Wakíŋyaŋ said — Thank you!</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div>
+</div>
+</div><div class="story-page" id="sp-3">
+
+
+<div class="page-content">
+<div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Hehéčhel</span><span class="gloss">after.that</span></span> <span class="iword"><span class="native">Wakíŋyaŋ</span><span class="gloss">Wakíŋyaŋ</span></span> <span class="iword"><span class="native">mní</span><span class="gloss">water</span></span> <span class="iword"><span class="native">ektá</span><span class="gloss">to</span></span> <span class="iword"><span class="native">iyáye.</span><span class="gloss">he.went.</span></span></div>
+  <div class="smooth">After that Wakíŋyaŋ went to the water.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div><div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Šúŋka</span><span class="gloss">dogs</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">kičhí</span><span class="gloss">with.him</span></span> <span class="iword"><span class="native">inkpáta.</span><span class="gloss">they.ran.</span></span></div>
+  <div class="smooth">The dogs ran with him.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div><div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Wakíŋyaŋ</span><span class="gloss">Wakíŋyaŋ</span></span> <span class="iword"><span class="native">kaȟníǧA</span><span class="gloss">laughed</span></span> <span class="iword"><span class="native">čha</span><span class="gloss">and</span></span> <span class="iword"><span class="native">iyúškinA.</span><span class="gloss">he.rejoiced.</span></span></div>
+  <div class="smooth">Wakíŋyaŋ laughed and rejoiced.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div>
+</div>
+</div><div class="story-page" id="sp-4">
+<div class="illustration"><svg viewBox="0 0 780 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="780" height="220" fill="#e8c882"/>
+  <ellipse cx="390" cy="220" rx="500" ry="70" fill="#8B6914"/>
+  <!-- fire circle -->
+  <ellipse cx="390" cy="175" rx="60" ry="20" fill="#5a3a00" opacity=".5"/>
+  <!-- flames -->
+  <ellipse cx="390" cy="150" rx="18" ry="35" fill="#FF6B35" opacity=".9"/>
+  <ellipse cx="378" cy="158" rx="10" ry="22" fill="#FFB300"/>
+  <ellipse cx="402" cy="155" rx="10" ry="25" fill="#FF8C00"/>
+  <ellipse cx="390" cy="145" rx="7" ry="18" fill="#FFE066"/>
+  <!-- silhouette people around fire -->
+  <ellipse cx="300" cy="172" rx="15" ry="8" fill="#2d1a00"/>
+  <circle cx="300" cy="158" r="10" fill="#2d1a00"/>
+  <ellipse cx="480" cy="172" rx="15" ry="8" fill="#2d1a00"/>
+  <circle cx="480" cy="158" r="10" fill="#2d1a00"/>
+  <ellipse cx="360" cy="175" rx="12" ry="7" fill="#2d1a00"/>
+  <circle cx="360" cy="163" r="9" fill="#2d1a00"/>
+  <ellipse cx="420" cy="175" rx="12" ry="7" fill="#2d1a00"/>
+  <circle cx="420" cy="163" r="9" fill="#2d1a00"/>
+  <!-- stars -->
+  <circle cx="100" cy="30" r="2" fill="#FFE066"/>
+  <circle cx="200" cy="15" r="2" fill="#FFE066"/>
+  <circle cx="600" cy="25" r="2" fill="#FFE066"/>
+  <circle cx="680" cy="12" r="2" fill="#FFE066"/>
+  <!-- dark sky top -->
+  <rect width="780" height="70" fill="#1a2a40" opacity=".6"/>
+</svg></div>
+
+<div class="page-content">
+<div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Čhaŋtéčhikiyapi</span><span class="gloss">Čhaŋtéčhikiyapi</span></span> <span class="iword"><span class="native">wóyutapi</span><span class="gloss">food.gathering</span></span> <span class="iword"><span class="native">ektá</span><span class="gloss">to</span></span> <span class="iword"><span class="native">iyáye.</span><span class="gloss">she.went.</span></span></div>
+  <div class="smooth">Čhaŋtéčhikiyapi went to gather food.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div><div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Wóyute</span><span class="gloss">food</span></span> <span class="iword"><span class="native">tȟáŋka</span><span class="gloss">much</span></span> <span class="iword"><span class="native">kičhí</span><span class="gloss">with.her</span></span> <span class="iword"><span class="native">glíčhu.</span><span class="gloss">she.brought.back.</span></span></div>
+  <div class="smooth">She brought much food back with her.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div><div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Háŋhanna</span><span class="gloss">Evening</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">wóčhekiye</span><span class="gloss">prayer</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">duzáhA.</span><span class="gloss">they.did.together.</span></span></div>
+  <div class="smooth">In the evening they prayed together.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div>
+</div>
+</div><div class="story-page" id="sp-5">
+
+
+<div class="page-content">
+<div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Wakíŋyaŋ</span><span class="gloss">Wakíŋyaŋ</span></span> <span class="iword"><span class="native">blé</span><span class="gloss">I.go</span></span> <span class="iword"><span class="native">šni</span><span class="gloss">not</span></span> <span class="iword"><span class="native">kte,</span><span class="gloss">will,</span></span> <span class="iword"><span class="native">—</span><span class="gloss">—</span></span> <span class="iword"><span class="native">ečhéčha</span><span class="gloss">like.this</span></span> <span class="iword"><span class="native">wičhóni</span><span class="gloss">I.will.live</span></span> <span class="iword"><span class="native">kte.</span><span class="gloss">will.</span></span></div>
+  <div class="smooth">I will not leave — I will live like this.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div><div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Dakhóta</span><span class="gloss">Dakota</span></span> <span class="iword"><span class="native">iyápi</span><span class="gloss">language</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">wayáwA</span><span class="gloss">I.study</span></span> <span class="iword"><span class="native">kte.</span><span class="gloss">will.</span></span></div>
+  <div class="smooth">I will study the Dakota language.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div><div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Uŋčí</span><span class="gloss">Grandmother</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">čhanté</span><span class="gloss">heart</span></span> <span class="iword"><span class="native">wašté</span><span class="gloss">good</span></span> <span class="iword"><span class="native">kičhú.</span><span class="gloss">gave.to.him.</span></span></div>
+  <div class="smooth">Grandmother gave him a glad heart.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div>
+</div>
+</div><div class="story-page" id="sp-6">
+<div class="illustration"><svg viewBox="0 0 780 220" xmlns="http://www.w3.org/2000/svg">
+  <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#87CEEB"/><stop offset="100%" stop-color="#FFD580"/></linearGradient></defs>
+  <rect width="780" height="220" fill="url(#sky)"/>
+  <ellipse cx="390" cy="230" rx="500" ry="80" fill="#7a9a50"/>
+  <ellipse cx="390" cy="240" rx="400" ry="60" fill="#5c7a30"/>
+  <!-- sun -->
+  <circle cx="640" cy="55" r="35" fill="#FFB300" opacity=".9"/>
+  <line x1="640" y1="5" x2="640" y2="20" stroke="#FFB300" stroke-width="3"/>
+  <line x1="640" y1="90" x2="640" y2="105" stroke="#FFB300" stroke-width="3"/>
+  <line x1="590" y1="55" x2="575" y2="55" stroke="#FFB300" stroke-width="3"/>
+  <line x1="690" y1="55" x2="705" y2="55" stroke="#FFB300" stroke-width="3"/>
+  <!-- tipi silhouettes -->
+  <polygon points="120,180 150,80 180,180" fill="#8B4513" opacity=".8"/>
+  <polygon points="160,180 195,70 230,180" fill="#6B3410" opacity=".8"/>
+  <polygon points="200,180 240,75 280,180" fill="#8B4513" opacity=".75"/>
+  <!-- birds -->
+  <path d="M300 60 Q310 52 320 60" stroke="#333" stroke-width="2" fill="none"/>
+  <path d="M340 45 Q352 37 364 45" stroke="#333" stroke-width="2" fill="none"/>
+</svg></div>
+
+<div class="page-content">
+<div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Haŋhépi</span><span class="gloss">night</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">aŋpétu</span><span class="gloss">day</span></span> <span class="iword"><span class="native">wašté</span><span class="gloss">good</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">ečhéčha</span><span class="gloss">like.that</span></span> <span class="iword"><span class="native">waŋlákA.</span><span class="gloss">he.remembered.</span></span></div>
+  <div class="smooth">In the night he remembered the good day.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div><div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Dakhóta</span><span class="gloss">Dakota</span></span> <span class="iword"><span class="native">wičhóni</span><span class="gloss">way.of.living</span></span> <span class="iword"><span class="native">kiŋ</span><span class="gloss">the</span></span> <span class="iword"><span class="native">wašté.</span><span class="gloss">is.good.</span></span></div>
+  <div class="smooth">The Dakota way of living is good.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div><div class="sentence-block">
+  <div class="interlinear"><span class="iword"><span class="native">Aŋpétu</span><span class="gloss">day</span></span> <span class="iword"><span class="native">tókheča</span><span class="gloss">another</span></span> <span class="iword"><span class="native">héčhel</span><span class="gloss">like.that</span></span> <span class="iword"><span class="native">níčhA.</span><span class="gloss">he.will.live.</span></span></div>
+  <div class="smooth">Another day, he will live like that.</div>
+  <button class="trans-toggle" onclick="toggleTrans(this)">Show English</button>
+</div>
+</div>
+</div><div class="section-page"><div class="vocab-test">
+  <h2>Vocabulary Match</h2>
+  <p style="font-size:.9rem;color:#7a5030;margin-bottom:14px;font-style:italic">
+    Click a word on the left, then click its English meaning on the right.
+  </p>
+  <div class="match-area">
+    <div class="match-col native-col">
+      <h3>Native Language</h3>
+      <div class="match-item" data-word="ičámna" onclick="selectWord(this,'native')">ičámna</div><div class="match-item" data-word="yatká" onclick="selectWord(this,'native')">yatká</div><div class="match-item" data-word="wičháyutA" onclick="selectWord(this,'native')">wičháyutA</div><div class="match-item" data-word="blé" onclick="selectWord(this,'native')">blé</div><div class="match-item" data-word="kičhú" onclick="selectWord(this,'native')">kičhú</div><div class="match-item" data-word="kte" onclick="selectWord(this,'native')">kte</div><div class="match-item" data-word="šni" onclick="selectWord(this,'native')">šni</div><div class="match-item" data-word="Philámayaye!" onclick="selectWord(this,'native')">Philámayaye!</div><div class="match-item" data-word="wayáwA" onclick="selectWord(this,'native')">wayáwA</div><div class="match-item" data-word="hehéčhel" onclick="selectWord(this,'native')">hehéčhel</div>
+    </div>
+    <div class="match-col english-col">
+      <h3>English</h3>
+      <div class="match-item" data-word="Thank you!" onclick="selectWord(this,'english')">Thank you!</div><div class="match-item" data-word="I go" onclick="selectWord(this,'english')">I go</div><div class="match-item" data-word="he ate it" onclick="selectWord(this,'english')">he ate it</div><div class="match-item" data-word="I study / I read" onclick="selectWord(this,'english')">I study / I read</div><div class="match-item" data-word="future tense marker (will)" onclick="selectWord(this,'english')">future tense marker (will)</div><div class="match-item" data-word="negation marker (not)" onclick="selectWord(this,'english')">negation marker (not)</div><div class="match-item" data-word="after that" onclick="selectWord(this,'english')">after that</div><div class="match-item" data-word="gave to him/her" onclick="selectWord(this,'english')">gave to him/her</div><div class="match-item" data-word="I wake up" onclick="selectWord(this,'english')">I wake up</div><div class="match-item" data-word="he/she drank" onclick="selectWord(this,'english')">he/she drank</div>
+    </div>
+  </div>
+  <div id="vocab-result" class="vocab-result"></div>
+</div>
+<script>pairs["ičámna"] = "I wake up";
+pairs["yatká"] = "he/she drank";
+pairs["wičháyutA"] = "he ate it";
+pairs["blé"] = "I go";
+pairs["kičhú"] = "gave to him/her";
+pairs["kte"] = "future tense marker (will)";
+pairs["šni"] = "negation marker (not)";
+pairs["Philámayaye!"] = "Thank you!";
+pairs["wayáwA"] = "I study / I read";
+pairs["hehéčhel"] = "after that";</script></div><div class="section-page"><div class="quiz-section">
+  <h2>Comprehension Check</h2>
+  <div class="quiz-q" data-answer="Subject – Object – Verb">
+  <p>What is Dakota word order (most common)?</p>
+  <label><input type="radio" name="q0" value="Subject – Verb – Object"> Subject – Verb – Object</label><label><input type="radio" name="q0" value="Object – Subject – Verb"> Object – Subject – Verb</label><label><input type="radio" name="q0" value="Subject – Object – Verb"> Subject – Object – Verb</label><label><input type="radio" name="q0" value="Verb – Subject – Object"> Verb – Subject – Object</label>
+  <div class="q-feedback"></div>
+</div><div class="quiz-q" data-answer="Add -kte after the verb">
+  <p>How do you form the future tense in Dakota?</p>
+  <label><input type="radio" name="q1" value="Add -šni to the verb"> Add -šni to the verb</label><label><input type="radio" name="q1" value="Add -kte after the verb"> Add -kte after the verb</label><label><input type="radio" name="q1" value="Change the verb prefix"> Change the verb prefix</label><label><input type="radio" name="q1" value="Use a separate time word only"> Use a separate time word only</label>
+  <div class="q-feedback"></div>
+</div><div class="quiz-q" data-answer="Add šni after the verb">
+  <p>How do you negate a verb in Dakota?</p>
+  <label><input type="radio" name="q2" value="Add -kte before the verb"> Add -kte before the verb</label><label><input type="radio" name="q2" value="Add šni after the verb"> Add šni after the verb</label><label><input type="radio" name="q2" value="Use the word 'hán'"> Use the word 'hán'</label><label><input type="radio" name="q2" value="Remove the verb prefix"> Remove the verb prefix</label>
+  <div class="q-feedback"></div>
+</div><div class="quiz-q" data-answer="The Dakota language">
+  <p>What does Wakíŋyaŋ say he will study?</p>
+  <label><input type="radio" name="q3" value="Counting"> Counting</label><label><input type="radio" name="q3" value="The Dakota language"> The Dakota language</label><label><input type="radio" name="q3" value="Cooking"> Cooking</label><label><input type="radio" name="q3" value="The tiyóšpaye history"> The tiyóšpaye history</label>
+  <div class="q-feedback"></div>
+</div><div class="quiz-q" data-answer="Thank you">
+  <p>What does 'Philámayaye!' mean?</p>
+  <label><input type="radio" name="q4" value="Goodbye"> Goodbye</label><label><input type="radio" name="q4" value="Good morning"> Good morning</label><label><input type="radio" name="q4" value="Thank you"> Thank you</label><label><input type="radio" name="q4" value="Come here"> Come here</label>
+  <div class="q-feedback"></div>
+</div>
+  <button class="quiz-submit" onclick="submitQuiz()">Check Answers</button>
+  <div id="quiz-score" class="quiz-score"></div>
+</div></div><div class="section-page">
+<div class="oral-section">
+  <h2>Oral Fluency Practice</h2>
+  <p class="oral-intro">
+    Read each phrase aloud, then record yourself. Play it back and compare.
+    Your recording stays on your device — nothing is uploaded.
+  </p>
+  <div class="oral-phrase">
+  <div class="phrase-native">Aŋpétu kiŋ ičámna čha wóyute wéčhakiŋ.</div>
+  <div class="phrase-english">In the day I wake up and eat food.</div>
+  <div class="oral-controls">
+    <button class="btn-record" id="rec-p0" onclick="toggleRecord('p0')">🎙 Record</button>
+    <button class="btn-play visible" id="play-p0" onclick="playRecording('p0')" style="display:none">▶ Play Back</button>
+    <span class="rec-status" id="status-p0">Press record, say the phrase, press stop.</span>
+  </div>
+</div><div class="oral-phrase">
+  <div class="phrase-native">Mní kiŋ yatká.</div>
+  <div class="phrase-english">He/She drank the water.</div>
+  <div class="oral-controls">
+    <button class="btn-record" id="rec-p1" onclick="toggleRecord('p1')">🎙 Record</button>
+    <button class="btn-play visible" id="play-p1" onclick="playRecording('p1')" style="display:none">▶ Play Back</button>
+    <span class="rec-status" id="status-p1">Press record, say the phrase, press stop.</span>
+  </div>
+</div><div class="oral-phrase">
+  <div class="phrase-native">Dakhóta iyápi kiŋ wayáwA kte.</div>
+  <div class="phrase-english">I will study the Dakota language.</div>
+  <div class="oral-controls">
+    <button class="btn-record" id="rec-p2" onclick="toggleRecord('p2')">🎙 Record</button>
+    <button class="btn-play visible" id="play-p2" onclick="playRecording('p2')" style="display:none">▶ Play Back</button>
+    <span class="rec-status" id="status-p2">Press record, say the phrase, press stop.</span>
+  </div>
+</div><div class="oral-phrase">
+  <div class="phrase-native">Blé šni kte.</div>
+  <div class="phrase-english">I will not go.</div>
+  <div class="oral-controls">
+    <button class="btn-record" id="rec-p3" onclick="toggleRecord('p3')">🎙 Record</button>
+    <button class="btn-play visible" id="play-p3" onclick="playRecording('p3')" style="display:none">▶ Play Back</button>
+    <span class="rec-status" id="status-p3">Press record, say the phrase, press stop.</span>
+  </div>
+</div><div class="oral-phrase">
+  <div class="phrase-native">Philámayaye!</div>
+  <div class="phrase-english">Thank you!</div>
+  <div class="oral-controls">
+    <button class="btn-record" id="rec-p4" onclick="toggleRecord('p4')">🎙 Record</button>
+    <button class="btn-play visible" id="play-p4" onclick="playRecording('p4')" style="display:none">▶ Play Back</button>
+    <span class="rec-status" id="status-p4">Press record, say the phrase, press stop.</span>
+  </div>
+</div><div class="oral-phrase">
+  <div class="phrase-native">Aŋpétu wašté.</div>
+  <div class="phrase-english">A good day.</div>
+  <div class="oral-controls">
+    <button class="btn-record" id="rec-p5" onclick="toggleRecord('p5')">🎙 Record</button>
+    <button class="btn-play visible" id="play-p5" onclick="playRecording('p5')" style="display:none">▶ Play Back</button>
+    <span class="rec-status" id="status-p5">Press record, say the phrase, press stop.</span>
+  </div>
+</div>
+</div>
+</div><div class="section-page"><div class="trans-section">
+  <h2>Full English Translation</h2>
+  <div class="trans-warning">
+    ⚠ The language in this novella is AI-generated and may contain errors.
+    If you notice something incorrect, use the Exit Ticket at the bottom of your chapter to let your teacher know.
+  </div>
+  <div class="trans-page-block"><h4>Page 1</h4><p>I do not go at night. In the day I wake up and I eat food. Wakíŋyaŋ planned a good day.</p></div><div class="trans-page-block"><h4>Page 2</h4><p>Wakíŋyaŋ woke up early in the morning. He drank the water. He ate the food.</p></div><div class="trans-page-block"><h4>Page 3</h4><p>Grandmother gave him food. She passed the bread to him. Wakíŋyaŋ said — Thank you!</p></div><div class="trans-page-block"><h4>Page 4</h4><p>After that Wakíŋyaŋ went to the water. The dogs ran with him. Wakíŋyaŋ laughed and rejoiced.</p></div><div class="trans-page-block"><h4>Page 5</h4><p>Čhaŋtéčhikiyapi went to gather food. She brought much food back with her. In the evening they prayed together.</p></div><div class="trans-page-block"><h4>Page 6</h4><p>I will not leave — I will live like this. I will study the Dakota language. Grandmother gave him a glad heart.</p></div><div class="trans-page-block"><h4>Page 7</h4><p>In the night he remembered the good day. The Dakota way of living is good. Another day, he will live like that.</p></div>
+</div></div>
+</div>
+
+<script>
+// ── Page navigation ──────────────────────────────────────────────
+const allPages = () => document.querySelectorAll('.story-page, .section-page');
+let currentPage = 0;
+
+function showPage(n) {
+  const pages = allPages();
+  pages.forEach(p => p.classList.remove('active'));
+  currentPage = Math.max(0, Math.min(n, pages.length - 1));
+  pages[currentPage].classList.add('active');
+  document.getElementById('pg-indicator').textContent =
+    'Page ' + (currentPage + 1) + ' of ' + pages.length;
+  document.getElementById('btn-prev').disabled = currentPage === 0;
+  document.getElementById('btn-next').disabled = currentPage === pages.length - 1;
+  window.scrollTo(0,0);
+}
+
+// ── Smooth translation toggle ─────────────────────────────────────
+function toggleTrans(btn) {
+  const block = btn.closest('.sentence-block');
+  block.classList.toggle('show-trans');
+  btn.textContent = block.classList.contains('show-trans') ? 'Hide English' : 'Show English';
+}
+
+// ── Vocabulary matching ───────────────────────────────────────────
+let selectedNative = null, selectedEnglish = null;
+const pairs = {};   // populated from inline data
+let matchScore = 0, matchTotal = 0;
+
+function selectWord(el, side) {
+  const col = side === 'native'
+    ? document.querySelectorAll('.native-col .match-item')
+    : document.querySelectorAll('.english-col .match-item');
+
+  col.forEach(i => i.classList.remove('selected'));
+  el.classList.add('selected');
+
+  if (side === 'native') selectedNative = el;
+  else selectedEnglish = el;
+
+  if (selectedNative && selectedEnglish) checkMatch();
+}
+
+function checkMatch() {
+  const nw = selectedNative.dataset.word;
+  const ew = selectedEnglish.dataset.word;
+  if (pairs[nw] === ew) {
+    selectedNative.classList.add('correct');
+    selectedEnglish.classList.add('correct');
+    selectedNative.classList.remove('selected');
+    selectedEnglish.classList.remove('selected');
+    selectedNative.onclick = null;
+    selectedEnglish.onclick = null;
+    matchScore++;
+    if (matchScore === matchTotal) {
+      document.getElementById('vocab-result').textContent = '✓ All matched! Great work.';
+    }
+  } else {
+    selectedNative.classList.add('wrong');
+    selectedEnglish.classList.add('wrong');
+    setTimeout(() => {
+      selectedNative.classList.remove('wrong','selected');
+      selectedEnglish.classList.remove('wrong','selected');
+      selectedNative = null;
+      selectedEnglish = null;
+    }, 900);
+    return;
+  }
+  selectedNative = null; selectedEnglish = null;
+}
+
+// ── Knowledge quiz ────────────────────────────────────────────────
+function submitQuiz() {
+  const qs = document.querySelectorAll('.quiz-q');
+  let score = 0;
+  qs.forEach(q => {
+    const chosen = q.querySelector('input:checked');
+    const fb = q.querySelector('.q-feedback');
+    const correct = q.dataset.answer;
+    fb.textContent = '';
+    if (!chosen) { fb.textContent = '— no answer selected'; fb.className = 'q-feedback wrong'; return; }
+    if (chosen.value === correct) {
+      score++;
+      fb.textContent = '✓ Correct!';
+      fb.className = 'q-feedback correct';
+    } else {
+      fb.textContent = '✗ The answer is: ' + correct;
+      fb.className = 'q-feedback wrong';
+    }
+  });
+  document.getElementById('quiz-score').textContent =
+    'Score: ' + score + ' / ' + qs.length;
+}
+
+// ── Record & playback ─────────────────────────────────────────────
+const recStates = {};
+
+async function toggleRecord(phraseId) {
+  if (!recStates[phraseId]) recStates[phraseId] = {};
+  const state = recStates[phraseId];
+  const btn = document.getElementById('rec-' + phraseId);
+  const playBtn = document.getElementById('play-' + phraseId);
+  const status = document.getElementById('status-' + phraseId);
+
+  if (state.recording) {
+    state.recorder.stop();
+    state.recording = false;
+    btn.textContent = '🎙 Record';
+    btn.classList.remove('recording');
+    status.textContent = 'Recorded. Press play to review.';
+    return;
+  }
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+    const recorder = new MediaRecorder(stream);
+    const chunks = [];
+    recorder.ondataavailable = e => chunks.push(e.data);
+    recorder.onstop = () => {
+      const blob = new Blob(chunks, {type: 'audio/webm'});
+      state.audioURL = URL.createObjectURL(blob);
+      playBtn.classList.add('visible');
+      stream.getTracks().forEach(t => t.stop());
+    };
+    recorder.start();
+    state.recorder = recorder;
+    state.recording = true;
+    btn.textContent = '⏹ Stop';
+    btn.classList.add('recording');
+    status.textContent = 'Recording…';
+  } catch(e) {
+    status.textContent = 'Microphone not available.';
+  }
+}
+
+function playRecording(phraseId) {
+  const state = recStates[phraseId];
+  if (!state || !state.audioURL) return;
+  const audio = new Audio(state.audioURL);
+  audio.play();
+}
+
+// ── Init ──────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  showPage(0);
+  // count match pairs from DOM
+  matchTotal = document.querySelectorAll('.native-col .match-item').length;
+});
+</script>
+
+</body>
+</html>
