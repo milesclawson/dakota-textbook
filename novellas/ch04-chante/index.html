@@ -28,7 +28,43 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .panel-top{display:flex;align-items:center;margin-bottom:10px}
 .panel-top-title{font-weight:bold;font-size:1rem;color:#8B2500}
 .panel-text{font-size:.97rem;color:#2d1800;line-height:1.7}
-.native-inline{font-weight:bold;color:#8B2500;font-size:1.05em}
+/* ── Native word chip ── */
+.nw{
+  font-weight:bold;color:#8B2500;font-size:1.05em;
+  cursor:pointer;border-bottom:2px dotted #8B2500;
+  position:relative;white-space:nowrap;display:inline-block;
+}
+.nw::after{content:"🔊";font-size:.7em;margin-left:3px;opacity:.6;vertical-align:super}
+/* ── Pronunciation popup ── */
+.pron-popup{
+  display:none;position:absolute;bottom:calc(100% + 8px);left:50%;
+  transform:translateX(-50%);z-index:999;
+  background:#1a1008;color:#fff;border-radius:10px;
+  padding:12px 14px;min-width:220px;max-width:320px;
+  box-shadow:0 4px 20px rgba(0,0,0,.45);
+  font-family:Georgia,serif;
+}
+.pron-popup.open{display:block}
+.pron-popup .pw{font-size:1.15rem;font-weight:bold;color:#FFD580;margin-bottom:4px}
+.pron-popup .pp{font-size:.85rem;color:#d0c090;font-style:italic;margin-bottom:2px}
+.pron-popup .pp::before{content:"/ ";opacity:.6}
+.pron-popup .pp::after{content:" /";opacity:.6}
+.pron-popup .pg{font-size:.82rem;color:#b0a090;margin-bottom:10px}
+.pron-popup .pbtns{display:flex;gap:7px;flex-wrap:wrap}
+.pron-popup .pbtn{
+  border:none;border-radius:6px;padding:5px 10px;cursor:pointer;
+  font-size:.78rem;font-weight:bold;display:flex;align-items:center;gap:4px;
+}
+.pron-popup .pbtn-tts{background:#FF8C00;color:#fff}
+.pron-popup .pbtn-tts:hover{background:#e07800}
+.pron-popup .pbtn-dict{background:#2a6aaa;color:#fff;text-decoration:none}
+.pron-popup .pbtn-dict:hover{background:#1a5080}
+.pron-popup .pnote{font-size:.72rem;color:#908070;margin-top:8px}
+/* caret */
+.pron-popup::after{
+  content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:8px solid transparent;border-top-color:#1a1008;
+}
 .section-head{margin:36px 0 12px;padding-bottom:6px;border-bottom:2px solid #8B2500;
   font-size:1.15rem;font-weight:bold;color:#8B2500;text-transform:uppercase;letter-spacing:.5px}
 .teaching-table{width:100%;border-collapse:collapse;margin-bottom:16px;background:white;
@@ -38,10 +74,22 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .teaching-table tr:last-child td{border-bottom:none}
 .teaching-table tr:nth-child(even) td{background:#faf7f1}
 .phrase-card{background:white;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.07);
-  margin:10px 0;padding:16px 18px;display:flex;gap:16px;align-items:flex-start}
-.phrase-native{font-size:1.18rem;font-weight:bold;color:#8B2500;min-width:200px}
-.phrase-eng{color:#5a4030;font-size:.93rem;padding-top:4px}
-.phrase-pron{font-size:.82rem;color:#888;font-style:italic}
+  margin:10px 0;padding:14px 18px;display:grid;grid-template-columns:1fr auto;
+  gap:4px 16px;align-items:center}
+.phrase-native{font-size:1.18rem;font-weight:bold;color:#8B2500}
+.phrase-pron{font-size:.82rem;color:#888;font-style:italic;grid-column:1}
+.phrase-eng{color:#5a4030;font-size:.93rem;grid-row:1/3;align-self:center;text-align:right}
+.phrase-tts-btn{
+  background:#8B2500;color:white;border:none;border-radius:20px;
+  padding:5px 14px;cursor:pointer;font-size:.82rem;font-weight:bold;
+  grid-row:1/3;align-self:center;white-space:nowrap;
+}
+.phrase-tts-btn:hover{opacity:.85}
+.phrase-dict-link{
+  display:inline-block;margin-top:4px;font-size:.78rem;color:#2a6aaa;
+  text-decoration:none;grid-column:1;
+}
+.phrase-dict-link:hover{text-decoration:underline}
 .back-link{display:inline-block;margin:10px 0 24px;color:#8B2500;font-size:.9rem;
   text-decoration:none;border:1px solid #8B2500;border-radius:20px;padding:6px 18px}
 .back-link:hover{background:#8B2500;color:white}
@@ -49,10 +97,13 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .cta-box h3{font-size:1.1rem;margin-bottom:10px}
 .cta-box ul{margin-left:18px;line-height:2}
 .cta-box li{font-size:.94rem}
+.audio-note{font-size:.78rem;background:#fff8e1;border:1px solid #ffe082;border-radius:6px;
+  padding:8px 12px;margin:12px 0;color:#5a4010}
 @media(max-width:600px){
   .gn-header h1{font-size:1.35rem}
-  .phrase-card{flex-direction:column;gap:8px}
-  .phrase-native{min-width:unset}
+  .phrase-card{grid-template-columns:1fr;}
+  .phrase-eng{text-align:left;grid-row:auto}
+  .phrase-tts-btn{grid-row:auto;justify-self:start;margin-top:6px}
 }
 </style>
 
@@ -65,6 +116,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 </div>
 <div class="container">
   <a class="back-link" href="../../chapters/04-chante/">← Back to Chapter 4</a>
+  <div class="audio-note">🔊 Click any <strong>bold native word</strong> in the story panels to see its pronunciation and hear it spoken. The <em>"Hear it"</em> button uses your browser's speech synthesis (synthesized, not a native speaker). For recordings by native speakers, click "Dictionary" — it links to entries with real audio where available.</div>
   <div class="opening">
     <div class="label">Setting the Scene</div>
     <p>Wakíŋyaŋ's grandmother falls ill with a cold. He must help communicate with the visiting nurse and also care for her at home. Through worry and care, he discovers that Dakota body vocabulary runs deep — the body and the emotions are not separate worlds.</p>
@@ -77,7 +129,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">1</span>
       <span class="panel-top-title">Grandmother Is Unwell</span>
     </div>
-    <p class="panel-text">Grandmother coughs. <span class="native-inline">Čhapúŋpuŋ mayázaŋ.</span> — I am sick with a cough. <span class="native-inline">Mayázaŋ</span> is the verb "I am in pain / I am sick." Wakíŋyaŋ realizes that illness in Dakota is expressed as a verb, not a noun. She is <em>doing</em> sickness.</p>
+    <p class="panel-text">Grandmother coughs. <span class="nw">Čhapúŋpuŋ mayázaŋ.<span class="pron-popup"><div class="pw">Čhapúŋpuŋ mayázaŋ.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Čhapúŋpuŋ mayázaŋ.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Čhapúŋpuŋ mayázaŋ." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — I am sick with a cough. <span class="nw">Mayázaŋ<span class="pron-popup"><div class="pw">Mayázaŋ</div><div class="pp">mah-YAH-zhaŋ</div><div class="pg">I am in pain / sick</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Mayázaŋ')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Mayázaŋ" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> is the verb "I am in pain / I am sick." Wakíŋyaŋ realizes that illness in Dakota is expressed as a verb, not a noun. She is <em>doing</em> sickness.</p>
   </div>
 </div>
 <div class="panel">
@@ -87,7 +139,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">2</span>
       <span class="panel-top-title">Body Parts — Head to Foot</span>
     </div>
-    <p class="panel-text"><span class="native-inline">Pa</span> — head. <span class="native-inline">Išta</span> — eye. <span class="native-inline">Noge</span> — ear. <span class="native-inline">Čhaŋté</span> — heart. As he names each part, grandmother corrects his pronunciation gently. The Dakota word for vein shares its root with the word for road — the body has its own paths.</p>
+    <p class="panel-text"><span class="nw">Pa<span class="pron-popup"><div class="pw">Pa</div><div class="pp">pah</div><div class="pg">Head</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Pa')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Pa" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — head. <span class="nw">Išta<span class="pron-popup"><div class="pw">Išta</div><div class="pp">ih-SHTAH</div><div class="pg">Eye</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Išta')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Išta" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — eye. <span class="nw">Noge<span class="pron-popup"><div class="pw">Noge</div><div class="pp">noh-GEH</div><div class="pg">Ear</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Noge')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Noge" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — ear. <span class="nw">Čhaŋté<span class="pron-popup"><div class="pw">Čhaŋté</div><div class="pp">chaŋ-TAY</div><div class="pg">Heart</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Čhaŋté')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Čhaŋté" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — heart. As he names each part, grandmother corrects his pronunciation gently. The Dakota word for vein shares its root with the word for road — the body has its own paths.</p>
   </div>
 </div>
 <div class="panel">
@@ -97,7 +149,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">3</span>
       <span class="panel-top-title">The Heart Word</span>
     </div>
-    <p class="panel-text"><span class="native-inline">Čhaŋté mayázaŋ</span> — my heart aches. He says it without thinking, not about a physical pain but about worry. Grandmother looks up and says: that is correct — we say it the same way for both.</p>
+    <p class="panel-text"><span class="nw">Čhaŋté mayázaŋ<span class="pron-popup"><div class="pw">Čhaŋté mayázaŋ</div><div class="pp">chaŋ-TAY mah-YAH-zhaŋ</div><div class="pg">My heart aches</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Čhaŋté mayázaŋ')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Čhaŋté mayázaŋ" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — my heart aches. He says it without thinking, not about a physical pain but about worry. Grandmother looks up and says: that is correct — we say it the same way for both.</p>
   </div>
 </div>
 <div class="panel">
@@ -107,7 +159,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">4</span>
       <span class="panel-top-title">Kinship Terms</span>
     </div>
-    <p class="panel-text">The visiting nurse asks who Wakíŋyaŋ is. He explains in Dakota: <span class="native-inline">Uŋčí kiŋ hé miyé.</span> — That is my grandmother. He learns that kinship terms in Dakota change depending on whether you are male or female — his grandmother calls him <span class="native-inline">čhiŋkší</span>, her son's child.</p>
+    <p class="panel-text">The visiting nurse asks who Wakíŋyaŋ is. He explains in Dakota: <span class="nw">Uŋčí kiŋ hé miyé.<span class="pron-popup"><div class="pw">Uŋčí kiŋ hé miyé.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Uŋčí kiŋ hé miyé.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Uŋčí kiŋ hé miyé." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — That is my grandmother. He learns that kinship terms in Dakota change depending on whether you are male or female — his grandmother calls him <span class="nw">čhiŋkší<span class="pron-popup"><div class="pw">čhiŋkší</div><div class="pp">cheeŋk-SHEE</div><div class="pg">Son's child (grandmother's term)</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('čhiŋkší')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="čhiŋkší" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span>, her son's child.</p>
   </div>
 </div>
 <div class="panel">
@@ -117,7 +169,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">5</span>
       <span class="panel-top-title">Asking After Health</span>
     </div>
-    <p class="panel-text">A neighbor arrives: <span class="native-inline">Tókhel yaúŋ he?</span> — How are you? Grandmother answers: <span class="native-inline">Hé! Čhapúŋpuŋ mayázaŋ tka oká waúŋ.</span> — Hmm! I'm sick with a cough but I'm managing. The word <span class="native-inline">oká waúŋ</span> — I'm getting by — carries quiet dignity.</p>
+    <p class="panel-text">A neighbor arrives: <span class="nw">Tókhel yaúŋ he?<span class="pron-popup"><div class="pw">Tókhel yaúŋ he?</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Tókhel yaúŋ he?')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Tókhel yaúŋ he?" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — How are you? Grandmother answers: <span class="nw">Hé! Čhapúŋpuŋ mayázaŋ tka oká waúŋ.<span class="pron-popup"><div class="pw">Hé! Čhapúŋpuŋ mayázaŋ tka oká waúŋ.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Hé! Čhapúŋpuŋ mayázaŋ tka oká waúŋ.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Hé! Čhapúŋpuŋ mayázaŋ tka oká waúŋ." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — Hmm! I'm sick with a cough but I'm managing. The word <span class="nw">oká waúŋ<span class="pron-popup"><div class="pw">oká waúŋ</div><div class="pp">oh-KAH wah-OOŋ</div><div class="pg">I am getting by / managing</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('oká waúŋ')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="oká waúŋ" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — I'm getting by — carries quiet dignity.</p>
   </div>
 </div>
 <div class="panel">
@@ -127,7 +179,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">6</span>
       <span class="panel-top-title">Medicine and Care</span>
     </div>
-    <p class="panel-text">Wakíŋyaŋ makes soup. <span class="native-inline">Čhaŋpásapa wóžapi</span> — chokecherry soup — is grandmother's remedy. He hears the word <span class="native-inline">wóžapi</span> and realizes it's a verb-noun: a thing-you-stew. Dakota often builds nouns from cooking verbs.</p>
+    <p class="panel-text">Wakíŋyaŋ makes soup. <span class="nw">Čhaŋpásapa wóžapi<span class="pron-popup"><div class="pw">Čhaŋpásapa wóžapi</div><div class="pp">chaŋ-PAH-sah-pah WOH-zhah-pee</div><div class="pg">Chokecherry soup</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Čhaŋpásapa wóžapi')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Čhaŋpásapa wóžapi" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — chokecherry soup — is grandmother's remedy. He hears the word <span class="nw">wóžapi<span class="pron-popup"><div class="pw">wóžapi</div><div class="pp">WOH-zhah-pee</div><div class="pg">Stewed food / soup</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('wóžapi')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="wóžapi" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> and realizes it's a verb-noun: a thing-you-stew. Dakota often builds nouns from cooking verbs.</p>
   </div>
 </div>
 <div class="panel">
@@ -137,7 +189,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">7</span>
       <span class="panel-top-title">She Is Getting Better</span>
     </div>
-    <p class="panel-text">Two days later: <span class="native-inline">Waŋná aŋpétu kiŋ wašté.</span> — Now the day is good. <span class="native-inline">Zaniíčhiyapi.</span> — You have gotten well. Wakíŋyaŋ sits beside her, relief flooding his chest. <span class="native-inline">Čhaŋté wašté.</span> — Heart good. He says it as both report and prayer.</p>
+    <p class="panel-text">Two days later: <span class="nw">Waŋná aŋpétu kiŋ wašté.<span class="pron-popup"><div class="pw">Waŋná aŋpétu kiŋ wašté.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Waŋná aŋpétu kiŋ wašté.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Waŋná aŋpétu kiŋ wašté." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — Now the day is good. <span class="nw">Zaniíčhiyapi.<span class="pron-popup"><div class="pw">Zaniíčhiyapi.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Zaniíčhiyapi.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Zaniíčhiyapi." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — You have gotten well. Wakíŋyaŋ sits beside her, relief flooding his chest. <span class="nw">Čhaŋté wašté.<span class="pron-popup"><div class="pw">Čhaŋté wašté.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Čhaŋté wašté.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Čhaŋté wašté." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — Heart good. He says it as both report and prayer.</p>
   </div>
 </div>
 <div class="panel">
@@ -147,7 +199,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">8</span>
       <span class="panel-top-title">The Body Speaks</span>
     </div>
-    <p class="panel-text">Grandmother tells him: in Dakota thought, <span class="native-inline">čhaŋté</span> is the seat of all wisdom, not the brain. <span class="native-inline">Čhaŋté ičínažiŋ</span> — stand up in your heart — means to be courageous. Learning the language is learning how Dakota people locate the self.</p>
+    <p class="panel-text">Grandmother tells him: in Dakota thought, <span class="nw">čhaŋté<span class="pron-popup"><div class="pw">čhaŋté</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('čhaŋté')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="čhaŋté" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> is the seat of all wisdom, not the brain. <span class="nw">Čhaŋté ičínažiŋ<span class="pron-popup"><div class="pw">Čhaŋté ičínažiŋ</div><div class="pp">chaŋ-TAY ih-CHEE-nah-zhiŋ</div><div class="pg">Stand up in your heart / be courageous</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Čhaŋté ičínažiŋ')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Čhaŋté ičínažiŋ" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — stand up in your heart — means to be courageous. Learning the language is learning how Dakota people locate the self.</p>
   </div>
 </div>
   <div class="section-head">What This Story Teaches Us</div>
@@ -155,27 +207,126 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
     <thead><tr><th>Story Moment</th><th>What We Notice</th><th>Language Focus</th></tr></thead>
     <tbody><tr><td>Grandmother says she is ill</td><td>Sickness expressed as a verb: mayázaŋ</td><td><strong>Mayázaŋ / čhapúŋpuŋ mayázaŋ</strong></td></tr><tr><td>Wakíŋyaŋ names body parts</td><td>Pa / Išta / Noge / Čhaŋté</td><td><strong>Body vocabulary</strong></td></tr><tr><td>"Heart aches" for worry</td><td>Same expression for emotional + physical pain</td><td><strong>Čhaŋté mayázaŋ</strong></td></tr><tr><td>Kinship terms to the nurse</td><td>Kinship terms shift by speaker gender</td><td><strong>Uŋčí / čhiŋkší</strong></td></tr><tr><td>Neighbor asks after health</td><td>Oká waúŋ — I'm managing (dignified answer)</td><td><strong>Tókhel yaúŋ he?</strong></td></tr></tbody>
   </table>
-  <div class="section-head">Key Phrases — Say It Out Loud</div>
+  <div class="section-head">Key Phrases — Click to Hear</div>
   <div class="phrase-card">
-  <div><div class="phrase-native">Mayázaŋ.</div><div class="phrase-pron">mah-YAH-zhahn</div></div>
+  <div class="phrase-native">Mayázaŋ.</div>
   <div class="phrase-eng">I am in pain / I am sick.</div>
+  <div class="phrase-pron">/mah-YAH-zhahn/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Mayázaŋ.">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Mayázaŋ." href="https://www.learndakota.com/dictionary?q=May%C3%A1za%C5%8B." target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Čhapúŋpuŋ mayázaŋ.</div><div class="phrase-pron">cha-POON-poon mah-YAH-zhahn</div></div>
+  <div class="phrase-native">Čhapúŋpuŋ mayázaŋ.</div>
   <div class="phrase-eng">I have a cough.</div>
+  <div class="phrase-pron">/cha-POON-poon mah-YAH-zhahn/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Čhapúŋpuŋ mayázaŋ.">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Čhapúŋpuŋ mayázaŋ." href="https://www.learndakota.com/dictionary?q=%C4%8Chap%C3%BA%C5%8Bpu%C5%8B%20may%C3%A1za%C5%8B." target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Čhaŋté mayázaŋ.</div><div class="phrase-pron">chahn-TAY mah-YAH-zhahn</div></div>
+  <div class="phrase-native">Čhaŋté mayázaŋ.</div>
   <div class="phrase-eng">My heart aches.</div>
+  <div class="phrase-pron">/chahn-TAY mah-YAH-zhahn/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Čhaŋté mayázaŋ.">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Čhaŋté mayázaŋ." href="https://www.learndakota.com/dictionary?q=%C4%8Cha%C5%8Bt%C3%A9%20may%C3%A1za%C5%8B." target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Uŋčí</div><div class="phrase-pron">OON-chee</div></div>
+  <div class="phrase-native">Uŋčí</div>
   <div class="phrase-eng">My grandmother</div>
+  <div class="phrase-pron">/OON-chee/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Uŋčí">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Uŋčí" href="https://www.learndakota.com/dictionary?q=U%C5%8B%C4%8D%C3%AD" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Čhaŋté wašté.</div><div class="phrase-pron">chahn-TAY wash-TAY</div></div>
+  <div class="phrase-native">Čhaŋté wašté.</div>
   <div class="phrase-eng">Good heart. / I feel good.</div>
+  <div class="phrase-pron">/chahn-TAY wash-TAY/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Čhaŋté wašté.">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Čhaŋté wašté." href="https://www.learndakota.com/dictionary?q=%C4%8Cha%C5%8Bt%C3%A9%20wa%C5%A1t%C3%A9." target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div>
   <div class="cta-box">
     <h3>You Can Do This Too</h3>
     <ul><li>Learn the body parts: point to pa, išta, noge, čhaŋté, and say each aloud.</li><li>Ask a partner "Tókhel yaúŋ he?" and practice one answer.</li><li>Use mayázaŋ in a sentence about something that bothers you (real or invented).</li><li>Look up one more kinship term (father, sibling, cousin) in Dakota.</li></ul>
   </div>
 </div>
+
+<script>
+// ── Pronunciation popup ──────────────────────────────────────────────────────
+let _activePopup = null;
+
+function closeAll() {
+  if (_activePopup) { _activePopup.classList.remove('open'); _activePopup = null; }
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.nw')) closeAll();
+});
+
+document.querySelectorAll('.nw').forEach(function(el) {
+  el.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const popup = el.querySelector('.pron-popup');
+    if (!popup) return;
+    if (popup.classList.contains('open')) { closeAll(); return; }
+    closeAll();
+    popup.classList.add('open');
+    _activePopup = popup;
+    // Ensure popup stays in viewport
+    const rect = popup.getBoundingClientRect();
+    if (rect.left < 8) popup.style.left = '0'; popup.style.transform = 'none';
+    if (rect.right > window.innerWidth - 8) {
+      popup.style.left = 'auto'; popup.style.right = '0'; popup.style.transform = 'none';
+    }
+  });
+});
+
+// ── Text-to-Speech ───────────────────────────────────────────────────────────
+function speakWord(word) {
+  if (!window.speechSynthesis) { alert('Speech not supported in this browser.'); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang = 'en-US';
+  u.rate = 0.75;
+  u.pitch = 1.0;
+  // Try to find a voice; fallback to default
+  const voices = speechSynthesis.getVoices();
+  const v = voices.find(v => v.lang.startsWith('en-US')) || voices[0];
+  if (v) u.voice = v;
+  speechSynthesis.speak(u);
+}
+
+// Ensure voices are loaded
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = function() {};
+}
+
+// ── Dictionary links ─────────────────────────────────────────────────────────
+const DICT_BASE = "https://www.learndakota.com/dictionary?q=";
+const DICT_LABEL = "Learn Dakota Dictionary ↗";
+
+document.querySelectorAll('.pron-popup .pbtn-dict').forEach(function(a) {
+  const word = a.dataset.word;
+  a.href = DICT_BASE + encodeURIComponent(word);
+  a.textContent = DICT_LABEL;
+});
+
+// Phrase TTS buttons
+document.querySelectorAll('.phrase-tts-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    speakWord(btn.dataset.word);
+  });
+});
+// Phrase dict links
+document.querySelectorAll('.phrase-dict-link').forEach(function(a) {
+  a.href = DICT_BASE + encodeURIComponent(a.dataset.word);
+  a.textContent = '📖 ' + DICT_LABEL;
+});
+</script>
+
 </body>
 </html>

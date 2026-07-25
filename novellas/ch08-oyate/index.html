@@ -28,7 +28,43 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .panel-top{display:flex;align-items:center;margin-bottom:10px}
 .panel-top-title{font-weight:bold;font-size:1rem;color:#8B2500}
 .panel-text{font-size:.97rem;color:#2d1800;line-height:1.7}
-.native-inline{font-weight:bold;color:#8B2500;font-size:1.05em}
+/* ── Native word chip ── */
+.nw{
+  font-weight:bold;color:#8B2500;font-size:1.05em;
+  cursor:pointer;border-bottom:2px dotted #8B2500;
+  position:relative;white-space:nowrap;display:inline-block;
+}
+.nw::after{content:"🔊";font-size:.7em;margin-left:3px;opacity:.6;vertical-align:super}
+/* ── Pronunciation popup ── */
+.pron-popup{
+  display:none;position:absolute;bottom:calc(100% + 8px);left:50%;
+  transform:translateX(-50%);z-index:999;
+  background:#1a1008;color:#fff;border-radius:10px;
+  padding:12px 14px;min-width:220px;max-width:320px;
+  box-shadow:0 4px 20px rgba(0,0,0,.45);
+  font-family:Georgia,serif;
+}
+.pron-popup.open{display:block}
+.pron-popup .pw{font-size:1.15rem;font-weight:bold;color:#FFD580;margin-bottom:4px}
+.pron-popup .pp{font-size:.85rem;color:#d0c090;font-style:italic;margin-bottom:2px}
+.pron-popup .pp::before{content:"/ ";opacity:.6}
+.pron-popup .pp::after{content:" /";opacity:.6}
+.pron-popup .pg{font-size:.82rem;color:#b0a090;margin-bottom:10px}
+.pron-popup .pbtns{display:flex;gap:7px;flex-wrap:wrap}
+.pron-popup .pbtn{
+  border:none;border-radius:6px;padding:5px 10px;cursor:pointer;
+  font-size:.78rem;font-weight:bold;display:flex;align-items:center;gap:4px;
+}
+.pron-popup .pbtn-tts{background:#FF8C00;color:#fff}
+.pron-popup .pbtn-tts:hover{background:#e07800}
+.pron-popup .pbtn-dict{background:#2a6aaa;color:#fff;text-decoration:none}
+.pron-popup .pbtn-dict:hover{background:#1a5080}
+.pron-popup .pnote{font-size:.72rem;color:#908070;margin-top:8px}
+/* caret */
+.pron-popup::after{
+  content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:8px solid transparent;border-top-color:#1a1008;
+}
 .section-head{margin:36px 0 12px;padding-bottom:6px;border-bottom:2px solid #8B2500;
   font-size:1.15rem;font-weight:bold;color:#8B2500;text-transform:uppercase;letter-spacing:.5px}
 .teaching-table{width:100%;border-collapse:collapse;margin-bottom:16px;background:white;
@@ -38,10 +74,22 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .teaching-table tr:last-child td{border-bottom:none}
 .teaching-table tr:nth-child(even) td{background:#faf7f1}
 .phrase-card{background:white;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.07);
-  margin:10px 0;padding:16px 18px;display:flex;gap:16px;align-items:flex-start}
-.phrase-native{font-size:1.18rem;font-weight:bold;color:#8B2500;min-width:200px}
-.phrase-eng{color:#5a4030;font-size:.93rem;padding-top:4px}
-.phrase-pron{font-size:.82rem;color:#888;font-style:italic}
+  margin:10px 0;padding:14px 18px;display:grid;grid-template-columns:1fr auto;
+  gap:4px 16px;align-items:center}
+.phrase-native{font-size:1.18rem;font-weight:bold;color:#8B2500}
+.phrase-pron{font-size:.82rem;color:#888;font-style:italic;grid-column:1}
+.phrase-eng{color:#5a4030;font-size:.93rem;grid-row:1/3;align-self:center;text-align:right}
+.phrase-tts-btn{
+  background:#8B2500;color:white;border:none;border-radius:20px;
+  padding:5px 14px;cursor:pointer;font-size:.82rem;font-weight:bold;
+  grid-row:1/3;align-self:center;white-space:nowrap;
+}
+.phrase-tts-btn:hover{opacity:.85}
+.phrase-dict-link{
+  display:inline-block;margin-top:4px;font-size:.78rem;color:#2a6aaa;
+  text-decoration:none;grid-column:1;
+}
+.phrase-dict-link:hover{text-decoration:underline}
 .back-link{display:inline-block;margin:10px 0 24px;color:#8B2500;font-size:.9rem;
   text-decoration:none;border:1px solid #8B2500;border-radius:20px;padding:6px 18px}
 .back-link:hover{background:#8B2500;color:white}
@@ -49,10 +97,13 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .cta-box h3{font-size:1.1rem;margin-bottom:10px}
 .cta-box ul{margin-left:18px;line-height:2}
 .cta-box li{font-size:.94rem}
+.audio-note{font-size:.78rem;background:#fff8e1;border:1px solid #ffe082;border-radius:6px;
+  padding:8px 12px;margin:12px 0;color:#5a4010}
 @media(max-width:600px){
   .gn-header h1{font-size:1.35rem}
-  .phrase-card{flex-direction:column;gap:8px}
-  .phrase-native{min-width:unset}
+  .phrase-card{grid-template-columns:1fr;}
+  .phrase-eng{text-align:left;grid-row:auto}
+  .phrase-tts-btn{grid-row:auto;justify-self:start;margin-top:6px}
 }
 </style>
 
@@ -65,6 +116,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 </div>
 <div class="container">
   <a class="back-link" href="../../chapters/08-oyate/">← Back to Chapter 8</a>
+  <div class="audio-note">🔊 Click any <strong>bold native word</strong> in the story panels to see its pronunciation and hear it spoken. The <em>"Hear it"</em> button uses your browser's speech synthesis (synthesized, not a native speaker). For recordings by native speakers, click "Dictionary" — it links to entries with real audio where available.</div>
   <div class="opening">
     <div class="label">Setting the Scene</div>
     <p>It is Wakíŋyaŋ's last day. Before he leaves, his grandmother takes him to the place where the U.S.-Dakota War of 1862 is commemorated. She says: you cannot fully understand the language without understanding what it survived. Language is an act of sovereignty.</p>
@@ -77,7 +129,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">1</span>
       <span class="panel-top-title">The Commemoration Site</span>
     </div>
-    <p class="panel-text">They stand at a riverside monument. Grandmother is quiet for a long time. Then: <span class="native-inline">Oyáte kiŋ čhaŋtéyuza.</span> — The nation holds it in their heart. There is no word for "forgetting" in Dakota that does not also mean "choosing not to remember."</p>
+    <p class="panel-text">They stand at a riverside monument. Grandmother is quiet for a long time. Then: <span class="nw">Oyáte kiŋ čhaŋtéyuza.<span class="pron-popup"><div class="pw">Oyáte kiŋ čhaŋtéyuza.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Oyáte kiŋ čhaŋtéyuza.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Oyáte kiŋ čhaŋtéyuza." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — The nation holds it in their heart. There is no word for "forgetting" in Dakota that does not also mean "choosing not to remember."</p>
   </div>
 </div>
 <div class="panel">
@@ -87,7 +139,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">2</span>
       <span class="panel-top-title">The Dakota War of 1862</span>
     </div>
-    <p class="panel-text">Grandmother explains: in 1862, Dakota people were starving — annuity payments had been withheld. The war that followed led to mass exile. <span class="native-inline">Oyáte kiŋ makóčhe étaŋhaŋ ayúštaŋpiŋ.</span> — The people were made to leave the land.</p>
+    <p class="panel-text">Grandmother explains: in 1862, Dakota people were starving — annuity payments had been withheld. The war that followed led to mass exile. <span class="nw">Oyáte kiŋ makóčhe étaŋhaŋ ayúštaŋpiŋ.<span class="pron-popup"><div class="pw">Oyáte kiŋ makóčhe étaŋhaŋ ayúštaŋpiŋ.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Oyáte kiŋ makóčhe étaŋhaŋ ayúštaŋpiŋ.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Oyáte kiŋ makóčhe étaŋhaŋ ayúštaŋpiŋ." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — The people were made to leave the land.</p>
   </div>
 </div>
 <div class="panel">
@@ -97,7 +149,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">3</span>
       <span class="panel-top-title">What Was Lost</span>
     </div>
-    <p class="panel-text">After the war, speaking Dakota was forbidden in the boarding schools. Children were punished for saying <span class="native-inline">háu</span> or <span class="native-inline">uŋčí</span>. Grandmother was one of those children. <span class="native-inline">Tókhetu kiŋ hé.</span> — That is how it was.</p>
+    <p class="panel-text">After the war, speaking Dakota was forbidden in the boarding schools. Children were punished for saying <span class="nw">háu<span class="pron-popup"><div class="pw">háu</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('háu')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="háu" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> or <span class="nw">uŋčí<span class="pron-popup"><div class="pw">uŋčí</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('uŋčí')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="uŋčí" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span>. Grandmother was one of those children. <span class="nw">Tókhetu kiŋ hé.<span class="pron-popup"><div class="pw">Tókhetu kiŋ hé.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Tókhetu kiŋ hé.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Tókhetu kiŋ hé." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — That is how it was.</p>
   </div>
 </div>
 <div class="panel">
@@ -107,7 +159,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">4</span>
       <span class="panel-top-title">What Survived</span>
     </div>
-    <p class="panel-text">But the language survived — in kitchens, in church songs, in whispered conversations, in the mouths of elders who refused. <span class="native-inline">Wóyakapi kiŋ tȟókheyaŋ uŋhípi.</span> — Stories brought us through. The words were hidden in plain sight.</p>
+    <p class="panel-text">But the language survived — in kitchens, in church songs, in whispered conversations, in the mouths of elders who refused. <span class="nw">Wóyakapi kiŋ tȟókheyaŋ uŋhípi.<span class="pron-popup"><div class="pw">Wóyakapi kiŋ tȟókheyaŋ uŋhípi.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Wóyakapi kiŋ tȟókheyaŋ uŋhípi.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Wóyakapi kiŋ tȟókheyaŋ uŋhípi." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — Stories brought us through. The words were hidden in plain sight.</p>
   </div>
 </div>
 <div class="panel">
@@ -117,7 +169,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">5</span>
       <span class="panel-top-title">Language as Sovereignty</span>
     </div>
-    <p class="panel-text"><span class="native-inline">Oyáte</span> means nation, people. But it also means: we who are alive together. A nation is not a line on a map — it is a group of people living in relationship, with shared language and shared responsibility.</p>
+    <p class="panel-text"><span class="nw">Oyáte<span class="pron-popup"><div class="pw">Oyáte</div><div class="pp">oh-YAH-teh</div><div class="pg">Nation / People</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Oyáte')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Oyáte" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> means nation, people. But it also means: we who are alive together. A nation is not a line on a map — it is a group of people living in relationship, with shared language and shared responsibility.</p>
   </div>
 </div>
 <div class="panel">
@@ -137,7 +189,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">7</span>
       <span class="panel-top-title">Wakíŋyaŋ's Commitment</span>
     </div>
-    <p class="panel-text">At the bus, Wakíŋyaŋ turns to his grandmother. <span class="native-inline">Dakȟótiyapi wóuŋšpe kte.</span> — I will keep learning Dakota. She says: every time you speak it, you carry the oyáte with you. The language does not need to stay here to live.</p>
+    <p class="panel-text">At the bus, Wakíŋyaŋ turns to his grandmother. <span class="nw">Dakȟótiyapi wóuŋšpe kte.<span class="pron-popup"><div class="pw">Dakȟótiyapi wóuŋšpe kte.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Dakȟótiyapi wóuŋšpe kte.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Dakȟótiyapi wóuŋšpe kte." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — I will keep learning Dakota. She says: every time you speak it, you carry the oyáte with you. The language does not need to stay here to live.</p>
   </div>
 </div>
 <div class="panel">
@@ -147,7 +199,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">8</span>
       <span class="panel-top-title">Every Word Is an Act</span>
     </div>
-    <p class="panel-text"><span class="native-inline">Mitákuye oyásʼiŋ.</span> — All my relations. This was the beginning and it is also the end. The language connects Wakíŋyaŋ to every ancestor who spoke it and every future speaker who will. Language sovereignty begins with the next word you say.</p>
+    <p class="panel-text"><span class="nw">Mitákuye oyásʼiŋ.<span class="pron-popup"><div class="pw">Mitákuye oyásʼiŋ.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Mitákuye oyásʼiŋ.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Mitákuye oyásʼiŋ." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — All my relations. This was the beginning and it is also the end. The language connects Wakíŋyaŋ to every ancestor who spoke it and every future speaker who will. Language sovereignty begins with the next word you say.</p>
   </div>
 </div>
   <div class="section-head">What This Story Teaches Us</div>
@@ -155,27 +207,126 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
     <thead><tr><th>Story Moment</th><th>What We Notice</th><th>Language Focus</th></tr></thead>
     <tbody><tr><td>Commemoration site visit</td><td>Oyáte = nation/people in living relationship</td><td><strong>Oyáte</strong></td></tr><tr><td>1862 War context</td><td>Forced exile from makóčhe (land)</td><td><strong>Makóčhe étaŋhaŋ ayúštaŋpiŋ</strong></td></tr><tr><td>Boarding school era explained</td><td>Language suppression — even "háu" was punished</td><td><strong>Historical context</strong></td></tr><tr><td>Survival through stories</td><td>Wóyakapi (stories) preserved the language</td><td><strong>Wóyakapi kiŋ tȟókheyaŋ uŋhípi</strong></td></tr><tr><td>Wakíŋyaŋ commits to learning</td><td>-kte future: I will keep learning</td><td><strong>Wóuŋšpe kte</strong></td></tr></tbody>
   </table>
-  <div class="section-head">Key Phrases — Say It Out Loud</div>
+  <div class="section-head">Key Phrases — Click to Hear</div>
   <div class="phrase-card">
-  <div><div class="phrase-native">Oyáte</div><div class="phrase-pron">oh-YAH-teh</div></div>
+  <div class="phrase-native">Oyáte</div>
   <div class="phrase-eng">Nation / People — those alive together</div>
+  <div class="phrase-pron">/oh-YAH-teh/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Oyáte">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Oyáte" href="https://www.learndakota.com/dictionary?q=Oy%C3%A1te" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Makóčhe</div><div class="phrase-pron">mah-KOH-cheh</div></div>
+  <div class="phrase-native">Makóčhe</div>
   <div class="phrase-eng">Land / Territory</div>
+  <div class="phrase-pron">/mah-KOH-cheh/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Makóčhe">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Makóčhe" href="https://www.learndakota.com/dictionary?q=Mak%C3%B3%C4%8Dhe" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Wóyakapi</div><div class="phrase-pron">woh-YAH-kah-pee</div></div>
+  <div class="phrase-native">Wóyakapi</div>
   <div class="phrase-eng">Stories (plural)</div>
+  <div class="phrase-pron">/woh-YAH-kah-pee/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Wóyakapi">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Wóyakapi" href="https://www.learndakota.com/dictionary?q=W%C3%B3yakapi" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Wóuŋšpe kte.</div><div class="phrase-pron">woh-OON-shpeh kteh</div></div>
+  <div class="phrase-native">Wóuŋšpe kte.</div>
   <div class="phrase-eng">I will keep learning.</div>
+  <div class="phrase-pron">/woh-OON-shpeh kteh/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Wóuŋšpe kte.">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Wóuŋšpe kte." href="https://www.learndakota.com/dictionary?q=W%C3%B3u%C5%8B%C5%A1pe%20kte." target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Mitákuye oyásʼiŋ</div><div class="phrase-pron">mee-TAH-koo-yeh oh-YAH-s'een</div></div>
+  <div class="phrase-native">Mitákuye oyásʼiŋ</div>
   <div class="phrase-eng">All my relations</div>
+  <div class="phrase-pron">/mee-TAH-koo-yeh oh-YAH-s'een/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Mitákuye oyásʼiŋ">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Mitákuye oyásʼiŋ" href="https://www.learndakota.com/dictionary?q=Mit%C3%A1kuye%20oy%C3%A1s%CA%BCi%C5%8B" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div>
   <div class="cta-box">
     <h3>You Can Do This Too</h3>
     <ul><li>Write one paragraph about why language matters to a community.</li><li>Look up the 1862 U.S.-Dakota War — what happened to the Dakota people after?</li><li>Say "Wóuŋšpe kte" — I will keep learning — as a commitment for this semester.</li><li>Share one Dakota word with someone outside this class and explain what it means.</li></ul>
   </div>
 </div>
+
+<script>
+// ── Pronunciation popup ──────────────────────────────────────────────────────
+let _activePopup = null;
+
+function closeAll() {
+  if (_activePopup) { _activePopup.classList.remove('open'); _activePopup = null; }
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.nw')) closeAll();
+});
+
+document.querySelectorAll('.nw').forEach(function(el) {
+  el.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const popup = el.querySelector('.pron-popup');
+    if (!popup) return;
+    if (popup.classList.contains('open')) { closeAll(); return; }
+    closeAll();
+    popup.classList.add('open');
+    _activePopup = popup;
+    // Ensure popup stays in viewport
+    const rect = popup.getBoundingClientRect();
+    if (rect.left < 8) popup.style.left = '0'; popup.style.transform = 'none';
+    if (rect.right > window.innerWidth - 8) {
+      popup.style.left = 'auto'; popup.style.right = '0'; popup.style.transform = 'none';
+    }
+  });
+});
+
+// ── Text-to-Speech ───────────────────────────────────────────────────────────
+function speakWord(word) {
+  if (!window.speechSynthesis) { alert('Speech not supported in this browser.'); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang = 'en-US';
+  u.rate = 0.75;
+  u.pitch = 1.0;
+  // Try to find a voice; fallback to default
+  const voices = speechSynthesis.getVoices();
+  const v = voices.find(v => v.lang.startsWith('en-US')) || voices[0];
+  if (v) u.voice = v;
+  speechSynthesis.speak(u);
+}
+
+// Ensure voices are loaded
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = function() {};
+}
+
+// ── Dictionary links ─────────────────────────────────────────────────────────
+const DICT_BASE = "https://www.learndakota.com/dictionary?q=";
+const DICT_LABEL = "Learn Dakota Dictionary ↗";
+
+document.querySelectorAll('.pron-popup .pbtn-dict').forEach(function(a) {
+  const word = a.dataset.word;
+  a.href = DICT_BASE + encodeURIComponent(word);
+  a.textContent = DICT_LABEL;
+});
+
+// Phrase TTS buttons
+document.querySelectorAll('.phrase-tts-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    speakWord(btn.dataset.word);
+  });
+});
+// Phrase dict links
+document.querySelectorAll('.phrase-dict-link').forEach(function(a) {
+  a.href = DICT_BASE + encodeURIComponent(a.dataset.word);
+  a.textContent = '📖 ' + DICT_LABEL;
+});
+</script>
+
 </body>
 </html>

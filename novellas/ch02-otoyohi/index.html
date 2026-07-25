@@ -28,7 +28,43 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .panel-top{display:flex;align-items:center;margin-bottom:10px}
 .panel-top-title{font-weight:bold;font-size:1rem;color:#8B2500}
 .panel-text{font-size:.97rem;color:#2d1800;line-height:1.7}
-.native-inline{font-weight:bold;color:#8B2500;font-size:1.05em}
+/* ── Native word chip ── */
+.nw{
+  font-weight:bold;color:#8B2500;font-size:1.05em;
+  cursor:pointer;border-bottom:2px dotted #8B2500;
+  position:relative;white-space:nowrap;display:inline-block;
+}
+.nw::after{content:"🔊";font-size:.7em;margin-left:3px;opacity:.6;vertical-align:super}
+/* ── Pronunciation popup ── */
+.pron-popup{
+  display:none;position:absolute;bottom:calc(100% + 8px);left:50%;
+  transform:translateX(-50%);z-index:999;
+  background:#1a1008;color:#fff;border-radius:10px;
+  padding:12px 14px;min-width:220px;max-width:320px;
+  box-shadow:0 4px 20px rgba(0,0,0,.45);
+  font-family:Georgia,serif;
+}
+.pron-popup.open{display:block}
+.pron-popup .pw{font-size:1.15rem;font-weight:bold;color:#FFD580;margin-bottom:4px}
+.pron-popup .pp{font-size:.85rem;color:#d0c090;font-style:italic;margin-bottom:2px}
+.pron-popup .pp::before{content:"/ ";opacity:.6}
+.pron-popup .pp::after{content:" /";opacity:.6}
+.pron-popup .pg{font-size:.82rem;color:#b0a090;margin-bottom:10px}
+.pron-popup .pbtns{display:flex;gap:7px;flex-wrap:wrap}
+.pron-popup .pbtn{
+  border:none;border-radius:6px;padding:5px 10px;cursor:pointer;
+  font-size:.78rem;font-weight:bold;display:flex;align-items:center;gap:4px;
+}
+.pron-popup .pbtn-tts{background:#FF8C00;color:#fff}
+.pron-popup .pbtn-tts:hover{background:#e07800}
+.pron-popup .pbtn-dict{background:#2a6aaa;color:#fff;text-decoration:none}
+.pron-popup .pbtn-dict:hover{background:#1a5080}
+.pron-popup .pnote{font-size:.72rem;color:#908070;margin-top:8px}
+/* caret */
+.pron-popup::after{
+  content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:8px solid transparent;border-top-color:#1a1008;
+}
 .section-head{margin:36px 0 12px;padding-bottom:6px;border-bottom:2px solid #8B2500;
   font-size:1.15rem;font-weight:bold;color:#8B2500;text-transform:uppercase;letter-spacing:.5px}
 .teaching-table{width:100%;border-collapse:collapse;margin-bottom:16px;background:white;
@@ -38,10 +74,22 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .teaching-table tr:last-child td{border-bottom:none}
 .teaching-table tr:nth-child(even) td{background:#faf7f1}
 .phrase-card{background:white;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.07);
-  margin:10px 0;padding:16px 18px;display:flex;gap:16px;align-items:flex-start}
-.phrase-native{font-size:1.18rem;font-weight:bold;color:#8B2500;min-width:200px}
-.phrase-eng{color:#5a4030;font-size:.93rem;padding-top:4px}
-.phrase-pron{font-size:.82rem;color:#888;font-style:italic}
+  margin:10px 0;padding:14px 18px;display:grid;grid-template-columns:1fr auto;
+  gap:4px 16px;align-items:center}
+.phrase-native{font-size:1.18rem;font-weight:bold;color:#8B2500}
+.phrase-pron{font-size:.82rem;color:#888;font-style:italic;grid-column:1}
+.phrase-eng{color:#5a4030;font-size:.93rem;grid-row:1/3;align-self:center;text-align:right}
+.phrase-tts-btn{
+  background:#8B2500;color:white;border:none;border-radius:20px;
+  padding:5px 14px;cursor:pointer;font-size:.82rem;font-weight:bold;
+  grid-row:1/3;align-self:center;white-space:nowrap;
+}
+.phrase-tts-btn:hover{opacity:.85}
+.phrase-dict-link{
+  display:inline-block;margin-top:4px;font-size:.78rem;color:#2a6aaa;
+  text-decoration:none;grid-column:1;
+}
+.phrase-dict-link:hover{text-decoration:underline}
 .back-link{display:inline-block;margin:10px 0 24px;color:#8B2500;font-size:.9rem;
   text-decoration:none;border:1px solid #8B2500;border-radius:20px;padding:6px 18px}
 .back-link:hover{background:#8B2500;color:white}
@@ -49,10 +97,13 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .cta-box h3{font-size:1.1rem;margin-bottom:10px}
 .cta-box ul{margin-left:18px;line-height:2}
 .cta-box li{font-size:.94rem}
+.audio-note{font-size:.78rem;background:#fff8e1;border:1px solid #ffe082;border-radius:6px;
+  padding:8px 12px;margin:12px 0;color:#5a4010}
 @media(max-width:600px){
   .gn-header h1{font-size:1.35rem}
-  .phrase-card{flex-direction:column;gap:8px}
-  .phrase-native{min-width:unset}
+  .phrase-card{grid-template-columns:1fr;}
+  .phrase-eng{text-align:left;grid-row:auto}
+  .phrase-tts-btn{grid-row:auto;justify-self:start;margin-top:6px}
 }
 </style>
 
@@ -65,6 +116,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 </div>
 <div class="container">
   <a class="back-link" href="../../chapters/02-otoyohi/">← Back to Chapter 2</a>
+  <div class="audio-note">🔊 Click any <strong>bold native word</strong> in the story panels to see its pronunciation and hear it spoken. The <em>"Hear it"</em> button uses your browser's speech synthesis (synthesized, not a native speaker). For recordings by native speakers, click "Dictionary" — it links to entries with real audio where available.</div>
   <div class="opening">
     <div class="label">Setting the Scene</div>
     <p>The family is preparing for a community giveaway — <em>wópila</em>, a feast of gratitude. Wakíŋyaŋ is put to work counting supplies and sorting cloth by color. He quickly learns that in Dakota, colors are not just adjectives — they are <em>stative verbs</em>. A thing doesn't <em>have</em> a color; it <em>is</em> that color.</p>
@@ -77,7 +129,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">1</span>
       <span class="panel-top-title">Counting the Supplies</span>
     </div>
-    <p class="panel-text">Aunt hands Wakíŋyaŋ a list: <span class="native-inline">waŋží, núŋpa, yámni, tópa, záptaŋ</span> — one, two, three, four, five. He counts blankets, then tins of dried meat. The numbers feel rhythmic, almost like a song.</p>
+    <p class="panel-text">Aunt hands Wakíŋyaŋ a list: <span class="nw">waŋží, núŋpa, yámni, tópa, záptaŋ<span class="pron-popup"><div class="pw">waŋží, núŋpa, yámni, tópa, záptaŋ</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('waŋží, núŋpa, yámni, tópa, záptaŋ')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="waŋží, núŋpa, yámni, tópa, záptaŋ" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — one, two, three, four, five. He counts blankets, then tins of dried meat. The numbers feel rhythmic, almost like a song.</p>
   </div>
 </div>
 <div class="panel">
@@ -87,7 +139,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">2</span>
       <span class="panel-top-title">Colors Are Actions</span>
     </div>
-    <p class="panel-text">He picks up a red cloth. His cousin corrects him: don't say "the red cloth," say <span class="native-inline">šá</span> — it is red. <span class="native-inline">Tó</span> means it is blue. <span class="native-inline">Zí</span> means it is yellow. In Dakota, color lives in the verb, not the noun.</p>
+    <p class="panel-text">He picks up a red cloth. His cousin corrects him: don't say "the red cloth," say <span class="nw">šá<span class="pron-popup"><div class="pw">šá</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('šá')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="šá" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — it is red. <span class="nw">Tó<span class="pron-popup"><div class="pw">Tó</div><div class="pp">toh</div><div class="pg">It is blue</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Tó')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Tó" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> means it is blue. <span class="nw">Zí<span class="pron-popup"><div class="pw">Zí</div><div class="pp">zee</div><div class="pg">It is yellow</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Zí')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Zí" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> means it is yellow. In Dakota, color lives in the verb, not the noun.</p>
   </div>
 </div>
 <div class="panel">
@@ -97,7 +149,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">3</span>
       <span class="panel-top-title">Six Through Ten</span>
     </div>
-    <p class="panel-text">That evening grandmother drills him on the higher numbers: <span class="native-inline">šákpe, šakówiŋ, šaglóğaŋ, napčíyuŋka, wikčémna</span> — six through ten. <span class="native-inline">Wikčémna</span> means ten, but its root is "knuckle-full" — an old counting method using hands.</p>
+    <p class="panel-text">That evening grandmother drills him on the higher numbers: <span class="nw">šákpe, šakówiŋ, šaglóğaŋ, napčíyuŋka, wikčémna<span class="pron-popup"><div class="pw">šákpe, šakówiŋ, šaglóğaŋ, napčíyuŋka, wikčémna</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('šákpe, šakówiŋ, šaglóğaŋ, napčíyuŋka, wikčémna')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="šákpe, šakówiŋ, šaglóğaŋ, napčíyuŋka, wikčémna" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — six through ten. <span class="nw">Wikčémna<span class="pron-popup"><div class="pw">Wikčémna</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Wikčémna')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Wikčémna" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> means ten, but its root is "knuckle-full" — an old counting method using hands.</p>
   </div>
 </div>
 <div class="panel">
@@ -107,7 +159,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">4</span>
       <span class="panel-top-title">The Wópila Table</span>
     </div>
-    <p class="panel-text">The giveaway table is covered with gifts. Wakíŋyaŋ counts aloud as he places them: <span class="native-inline">Núŋpa, yámni, tópa…</span> Two, three, four. The elders nod. Speaking numbers out loud is part of doing them right.</p>
+    <p class="panel-text">The giveaway table is covered with gifts. Wakíŋyaŋ counts aloud as he places them: <span class="nw">Núŋpa, yámni, tópa…<span class="pron-popup"><div class="pw">Núŋpa, yámni, tópa…</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Núŋpa, yámni, tópa…')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Núŋpa, yámni, tópa…" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> Two, three, four. The elders nod. Speaking numbers out loud is part of doing them right.</p>
   </div>
 </div>
 <div class="panel">
@@ -117,7 +169,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">5</span>
       <span class="panel-top-title">How Many? How Much?</span>
     </div>
-    <p class="panel-text">His aunt asks: <span class="native-inline">Tóna he?</span> — How many? He answers: <span class="native-inline">Wikčémna tópa</span> — forty (four tens). He is starting to see how Dakota builds large numbers from small ones — tens multiplied, then added.</p>
+    <p class="panel-text">His aunt asks: <span class="nw">Tóna he?<span class="pron-popup"><div class="pw">Tóna he?</div><div class="pp">TOH-nah heh</div><div class="pg">How many?</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Tóna he?')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Tóna he?" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — How many? He answers: <span class="nw">Wikčémna tópa<span class="pron-popup"><div class="pw">Wikčémna tópa</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Wikčémna tópa')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Wikčémna tópa" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — forty (four tens). He is starting to see how Dakota builds large numbers from small ones — tens multiplied, then added.</p>
   </div>
 </div>
 <div class="panel">
@@ -127,7 +179,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">6</span>
       <span class="panel-top-title">Describing the Sky</span>
     </div>
-    <p class="panel-text">The sunset turns the clouds orange and purple. <span class="native-inline">Gí</span> — it is brown/orange. <span class="native-inline">Sáŋ</span> — it is whitish-grey. Wakíŋyaŋ looks at the sky and narrates it in Dakota, one color-verb at a time.</p>
+    <p class="panel-text">The sunset turns the clouds orange and purple. <span class="nw">Gí<span class="pron-popup"><div class="pw">Gí</div><div class="pp">gee</div><div class="pg">It is brown/orange</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Gí')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Gí" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — it is brown/orange. <span class="nw">Sáŋ<span class="pron-popup"><div class="pw">Sáŋ</div><div class="pp">sahŋ</div><div class="pg">It is whitish-grey</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Sáŋ')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Sáŋ" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — it is whitish-grey. Wakíŋyaŋ looks at the sky and narrates it in Dakota, one color-verb at a time.</p>
   </div>
 </div>
 <div class="panel">
@@ -137,7 +189,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">7</span>
       <span class="panel-top-title">The Gift Count</span>
     </div>
-    <p class="panel-text">At the ceremony, an elder announces: <span class="native-inline">Wikčémna šákpe na tópa</span> — sixty-four gifts — have been given today. The crowd murmurs approval. Generosity is counted not hoarded.</p>
+    <p class="panel-text">At the ceremony, an elder announces: <span class="nw">Wikčémna šákpe na tópa<span class="pron-popup"><div class="pw">Wikčémna šákpe na tópa</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Wikčémna šákpe na tópa')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Wikčémna šákpe na tópa" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — sixty-four gifts — have been given today. The crowd murmurs approval. Generosity is counted not hoarded.</p>
   </div>
 </div>
 <div class="panel">
@@ -147,7 +199,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">8</span>
       <span class="panel-top-title">Numbers in the Land</span>
     </div>
-    <p class="panel-text">Grandmother explains: the Dakota number system grew from the body and the land — knuckles, fingers, winters. When you say <span class="native-inline">wikčémna</span>, you are saying something about how Dakota people understood the world.</p>
+    <p class="panel-text">Grandmother explains: the Dakota number system grew from the body and the land — knuckles, fingers, winters. When you say <span class="nw">wikčémna<span class="pron-popup"><div class="pw">wikčémna</div><div class="pp">wik-CHEHM-nah</div><div class="pg">Ten</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('wikčémna')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="wikčémna" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span>, you are saying something about how Dakota people understood the world.</p>
   </div>
 </div>
   <div class="section-head">What This Story Teaches Us</div>
@@ -155,27 +207,126 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
     <thead><tr><th>Story Moment</th><th>What We Notice</th><th>Language Focus</th></tr></thead>
     <tbody><tr><td>Counting blankets</td><td>waŋží–wikčémna (1–10) learned in sequence</td><td><strong>waŋží núŋpa yámni tópa záptaŋ</strong></td></tr><tr><td>Red cloth corrected</td><td>Colors are stative verbs, not adjectives</td><td><strong>Šá / tó / zí / sáŋ / gí</strong></td></tr><tr><td>"How many?" question</td><td>Tóna he? asks for a count</td><td><strong>Tóna he? / Wikčémna ___</strong></td></tr><tr><td>Grandmother drills 6-10</td><td>Higher numbers use compounding</td><td><strong>Šákpe šakówiŋ šaglóğaŋ napčíyuŋka wikčémna</strong></td></tr><tr><td>Elder announces gift count</td><td>Tens + ones = larger numbers</td><td><strong>Wikčémna šákpe na tópa = 64</strong></td></tr></tbody>
   </table>
-  <div class="section-head">Key Phrases — Say It Out Loud</div>
+  <div class="section-head">Key Phrases — Click to Hear</div>
   <div class="phrase-card">
-  <div><div class="phrase-native">Waŋží / Núŋpa / Yámni</div><div class="phrase-pron">wahn-ZHEE / NOON-pah / YAH-mnee</div></div>
+  <div class="phrase-native">Waŋží / Núŋpa / Yámni</div>
   <div class="phrase-eng">One / Two / Three</div>
+  <div class="phrase-pron">/wahn-ZHEE / NOON-pah / YAH-mnee/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Waŋží / Núŋpa / Yámni">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Waŋží / Núŋpa / Yámni" href="https://www.learndakota.com/dictionary?q=Wa%C5%8B%C5%BE%C3%AD%20/%20N%C3%BA%C5%8Bpa%20/%20Y%C3%A1mni" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Tópa / Záptaŋ / Šákpe</div><div class="phrase-pron">TOH-pah / ZAHP-tahn / SHAK-peh</div></div>
+  <div class="phrase-native">Tópa / Záptaŋ / Šákpe</div>
   <div class="phrase-eng">Four / Five / Six</div>
+  <div class="phrase-pron">/TOH-pah / ZAHP-tahn / SHAK-peh/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Tópa / Záptaŋ / Šákpe">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Tópa / Záptaŋ / Šákpe" href="https://www.learndakota.com/dictionary?q=T%C3%B3pa%20/%20Z%C3%A1pta%C5%8B%20/%20%C5%A0%C3%A1kpe" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Wikčémna</div><div class="phrase-pron">wik-CHEH-mnah</div></div>
+  <div class="phrase-native">Wikčémna</div>
   <div class="phrase-eng">Ten</div>
+  <div class="phrase-pron">/wik-CHEH-mnah/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Wikčémna">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Wikčémna" href="https://www.learndakota.com/dictionary?q=Wik%C4%8D%C3%A9mna" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Šá / Tó / Zí</div><div class="phrase-pron">shah / toh / zee</div></div>
+  <div class="phrase-native">Šá / Tó / Zí</div>
   <div class="phrase-eng">It is red / blue / yellow</div>
+  <div class="phrase-pron">/shah / toh / zee/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Šá / Tó / Zí">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Šá / Tó / Zí" href="https://www.learndakota.com/dictionary?q=%C5%A0%C3%A1%20/%20T%C3%B3%20/%20Z%C3%AD" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Tóna he?</div><div class="phrase-pron">TOH-nah heh</div></div>
+  <div class="phrase-native">Tóna he?</div>
   <div class="phrase-eng">How many?</div>
+  <div class="phrase-pron">/TOH-nah heh/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Tóna he?">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Tóna he?" href="https://www.learndakota.com/dictionary?q=T%C3%B3na%20he%3F" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div>
   <div class="cta-box">
     <h3>You Can Do This Too</h3>
     <ul><li>Count ten objects around you in Dakota — out loud.</li><li>Look at three things in the room. Use color-stative verbs: "Šá," "Tó," "Sáŋ."</li><li>Ask a classmate "Tóna he?" about something countable.</li><li>Write out 11, 15, 20, and 64 in Dakota words.</li></ul>
   </div>
 </div>
+
+<script>
+// ── Pronunciation popup ──────────────────────────────────────────────────────
+let _activePopup = null;
+
+function closeAll() {
+  if (_activePopup) { _activePopup.classList.remove('open'); _activePopup = null; }
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.nw')) closeAll();
+});
+
+document.querySelectorAll('.nw').forEach(function(el) {
+  el.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const popup = el.querySelector('.pron-popup');
+    if (!popup) return;
+    if (popup.classList.contains('open')) { closeAll(); return; }
+    closeAll();
+    popup.classList.add('open');
+    _activePopup = popup;
+    // Ensure popup stays in viewport
+    const rect = popup.getBoundingClientRect();
+    if (rect.left < 8) popup.style.left = '0'; popup.style.transform = 'none';
+    if (rect.right > window.innerWidth - 8) {
+      popup.style.left = 'auto'; popup.style.right = '0'; popup.style.transform = 'none';
+    }
+  });
+});
+
+// ── Text-to-Speech ───────────────────────────────────────────────────────────
+function speakWord(word) {
+  if (!window.speechSynthesis) { alert('Speech not supported in this browser.'); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang = 'en-US';
+  u.rate = 0.75;
+  u.pitch = 1.0;
+  // Try to find a voice; fallback to default
+  const voices = speechSynthesis.getVoices();
+  const v = voices.find(v => v.lang.startsWith('en-US')) || voices[0];
+  if (v) u.voice = v;
+  speechSynthesis.speak(u);
+}
+
+// Ensure voices are loaded
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = function() {};
+}
+
+// ── Dictionary links ─────────────────────────────────────────────────────────
+const DICT_BASE = "https://www.learndakota.com/dictionary?q=";
+const DICT_LABEL = "Learn Dakota Dictionary ↗";
+
+document.querySelectorAll('.pron-popup .pbtn-dict').forEach(function(a) {
+  const word = a.dataset.word;
+  a.href = DICT_BASE + encodeURIComponent(word);
+  a.textContent = DICT_LABEL;
+});
+
+// Phrase TTS buttons
+document.querySelectorAll('.phrase-tts-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    speakWord(btn.dataset.word);
+  });
+});
+// Phrase dict links
+document.querySelectorAll('.phrase-dict-link').forEach(function(a) {
+  a.href = DICT_BASE + encodeURIComponent(a.dataset.word);
+  a.textContent = '📖 ' + DICT_LABEL;
+});
+</script>
+
 </body>
 </html>

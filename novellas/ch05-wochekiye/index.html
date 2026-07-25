@@ -28,7 +28,43 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .panel-top{display:flex;align-items:center;margin-bottom:10px}
 .panel-top-title{font-weight:bold;font-size:1rem;color:#8B2500}
 .panel-text{font-size:.97rem;color:#2d1800;line-height:1.7}
-.native-inline{font-weight:bold;color:#8B2500;font-size:1.05em}
+/* ── Native word chip ── */
+.nw{
+  font-weight:bold;color:#8B2500;font-size:1.05em;
+  cursor:pointer;border-bottom:2px dotted #8B2500;
+  position:relative;white-space:nowrap;display:inline-block;
+}
+.nw::after{content:"🔊";font-size:.7em;margin-left:3px;opacity:.6;vertical-align:super}
+/* ── Pronunciation popup ── */
+.pron-popup{
+  display:none;position:absolute;bottom:calc(100% + 8px);left:50%;
+  transform:translateX(-50%);z-index:999;
+  background:#1a1008;color:#fff;border-radius:10px;
+  padding:12px 14px;min-width:220px;max-width:320px;
+  box-shadow:0 4px 20px rgba(0,0,0,.45);
+  font-family:Georgia,serif;
+}
+.pron-popup.open{display:block}
+.pron-popup .pw{font-size:1.15rem;font-weight:bold;color:#FFD580;margin-bottom:4px}
+.pron-popup .pp{font-size:.85rem;color:#d0c090;font-style:italic;margin-bottom:2px}
+.pron-popup .pp::before{content:"/ ";opacity:.6}
+.pron-popup .pp::after{content:" /";opacity:.6}
+.pron-popup .pg{font-size:.82rem;color:#b0a090;margin-bottom:10px}
+.pron-popup .pbtns{display:flex;gap:7px;flex-wrap:wrap}
+.pron-popup .pbtn{
+  border:none;border-radius:6px;padding:5px 10px;cursor:pointer;
+  font-size:.78rem;font-weight:bold;display:flex;align-items:center;gap:4px;
+}
+.pron-popup .pbtn-tts{background:#FF8C00;color:#fff}
+.pron-popup .pbtn-tts:hover{background:#e07800}
+.pron-popup .pbtn-dict{background:#2a6aaa;color:#fff;text-decoration:none}
+.pron-popup .pbtn-dict:hover{background:#1a5080}
+.pron-popup .pnote{font-size:.72rem;color:#908070;margin-top:8px}
+/* caret */
+.pron-popup::after{
+  content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:8px solid transparent;border-top-color:#1a1008;
+}
 .section-head{margin:36px 0 12px;padding-bottom:6px;border-bottom:2px solid #8B2500;
   font-size:1.15rem;font-weight:bold;color:#8B2500;text-transform:uppercase;letter-spacing:.5px}
 .teaching-table{width:100%;border-collapse:collapse;margin-bottom:16px;background:white;
@@ -38,10 +74,22 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .teaching-table tr:last-child td{border-bottom:none}
 .teaching-table tr:nth-child(even) td{background:#faf7f1}
 .phrase-card{background:white;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.07);
-  margin:10px 0;padding:16px 18px;display:flex;gap:16px;align-items:flex-start}
-.phrase-native{font-size:1.18rem;font-weight:bold;color:#8B2500;min-width:200px}
-.phrase-eng{color:#5a4030;font-size:.93rem;padding-top:4px}
-.phrase-pron{font-size:.82rem;color:#888;font-style:italic}
+  margin:10px 0;padding:14px 18px;display:grid;grid-template-columns:1fr auto;
+  gap:4px 16px;align-items:center}
+.phrase-native{font-size:1.18rem;font-weight:bold;color:#8B2500}
+.phrase-pron{font-size:.82rem;color:#888;font-style:italic;grid-column:1}
+.phrase-eng{color:#5a4030;font-size:.93rem;grid-row:1/3;align-self:center;text-align:right}
+.phrase-tts-btn{
+  background:#8B2500;color:white;border:none;border-radius:20px;
+  padding:5px 14px;cursor:pointer;font-size:.82rem;font-weight:bold;
+  grid-row:1/3;align-self:center;white-space:nowrap;
+}
+.phrase-tts-btn:hover{opacity:.85}
+.phrase-dict-link{
+  display:inline-block;margin-top:4px;font-size:.78rem;color:#2a6aaa;
+  text-decoration:none;grid-column:1;
+}
+.phrase-dict-link:hover{text-decoration:underline}
 .back-link{display:inline-block;margin:10px 0 24px;color:#8B2500;font-size:.9rem;
   text-decoration:none;border:1px solid #8B2500;border-radius:20px;padding:6px 18px}
 .back-link:hover{background:#8B2500;color:white}
@@ -49,10 +97,13 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .cta-box h3{font-size:1.1rem;margin-bottom:10px}
 .cta-box ul{margin-left:18px;line-height:2}
 .cta-box li{font-size:.94rem}
+.audio-note{font-size:.78rem;background:#fff8e1;border:1px solid #ffe082;border-radius:6px;
+  padding:8px 12px;margin:12px 0;color:#5a4010}
 @media(max-width:600px){
   .gn-header h1{font-size:1.35rem}
-  .phrase-card{flex-direction:column;gap:8px}
-  .phrase-native{min-width:unset}
+  .phrase-card{grid-template-columns:1fr;}
+  .phrase-eng{text-align:left;grid-row:auto}
+  .phrase-tts-btn{grid-row:auto;justify-self:start;margin-top:6px}
 }
 </style>
 
@@ -65,6 +116,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 </div>
 <div class="container">
   <a class="back-link" href="../../chapters/05-wochekiye/">← Back to Chapter 5</a>
+  <div class="audio-note">🔊 Click any <strong>bold native word</strong> in the story panels to see its pronunciation and hear it spoken. The <em>"Hear it"</em> button uses your browser's speech synthesis (synthesized, not a native speaker). For recordings by native speakers, click "Dictionary" — it links to entries with real audio where available.</div>
   <div class="opening">
     <div class="label">Setting the Scene</div>
     <p>Summer arrives. The tiyóšpaye gathers for a ceremony honoring those who have passed. Wakíŋyaŋ is asked to help prepare the prayer space. He learns that the most important Dakota phrases are not everyday words — they are expressions of relationship, gratitude, and the sacred.</p>
@@ -77,7 +129,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">1</span>
       <span class="panel-top-title">The Circle Forms</span>
     </div>
-    <p class="panel-text">Elders begin to form a circle as the fire is lit. Someone begins a low song. Wakíŋyaŋ sits at the edge and listens. He catches one phrase repeated again and again: <span class="native-inline">Mitákuye oyásʼiŋ</span> — all my relations.</p>
+    <p class="panel-text">Elders begin to form a circle as the fire is lit. Someone begins a low song. Wakíŋyaŋ sits at the edge and listens. He catches one phrase repeated again and again: <span class="nw">Mitákuye oyásʼiŋ<span class="pron-popup"><div class="pw">Mitákuye oyásʼiŋ</div><div class="pp">mee-TAH-koo-yeh oh-YAH-s'eeŋ</div><div class="pg">All my relations</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Mitákuye oyásʼiŋ')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Mitákuye oyásʼiŋ" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — all my relations.</p>
   </div>
 </div>
 <div class="panel">
@@ -87,7 +139,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">2</span>
       <span class="panel-top-title">What "All My Relations" Means</span>
     </div>
-    <p class="panel-text"><span class="native-inline">Mitákuye oyásʼiŋ</span> does not mean family alone. It means every being — people, animals, plants, sky, water. When you say it, you are saying: I know that I am not alone and never have been.</p>
+    <p class="panel-text"><span class="nw">Mitákuye oyásʼiŋ<span class="pron-popup"><div class="pw">Mitákuye oyásʼiŋ</div><div class="pp">mee-TAH-koo-yeh oh-YAH-s'eeŋ</div><div class="pg">All my relations</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Mitákuye oyásʼiŋ')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Mitákuye oyásʼiŋ" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> does not mean family alone. It means every being — people, animals, plants, sky, water. When you say it, you are saying: I know that I am not alone and never have been.</p>
   </div>
 </div>
 <div class="panel">
@@ -97,7 +149,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">3</span>
       <span class="panel-top-title">The Four Virtues</span>
     </div>
-    <p class="panel-text">Grandmother names the four Dakota virtues: <span class="native-inline">wóohola</span> — respect; <span class="native-inline">wóčhantognaka</span> — generosity; <span class="native-inline">wówaúŋšila</span> — compassion; <span class="native-inline">wóksape</span> — wisdom. She says: these are not rules. They are a direction for living.</p>
+    <p class="panel-text">Grandmother names the four Dakota virtues: <span class="nw">wóohola<span class="pron-popup"><div class="pw">wóohola</div><div class="pp">woh-OH-hoh-lah</div><div class="pg">Respect</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('wóohola')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="wóohola" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — respect; <span class="nw">wóčhantognaka<span class="pron-popup"><div class="pw">wóčhantognaka</div><div class="pp">woh-chaŋ-TOG-nah-kah</div><div class="pg">Generosity</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('wóčhantognaka')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="wóčhantognaka" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — generosity; <span class="nw">wówaúŋšila<span class="pron-popup"><div class="pw">wówaúŋšila</div><div class="pp">woh-wah-OOŋ-shee-lah</div><div class="pg">Compassion</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('wówaúŋšila')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="wówaúŋšila" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — compassion; <span class="nw">wóksape<span class="pron-popup"><div class="pw">wóksape</div><div class="pp">woh-KSAH-peh</div><div class="pg">Wisdom</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('wóksape')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="wóksape" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — wisdom. She says: these are not rules. They are a direction for living.</p>
   </div>
 </div>
 <div class="panel">
@@ -107,7 +159,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">4</span>
       <span class="panel-top-title">Prayer and Language</span>
     </div>
-    <p class="panel-text">The ceremony begins with words Wakíŋyaŋ does not fully understand, but he understands the tone — careful, slow, grateful. His uncle tells him: prayer in Dakota was never asking for things. <span class="native-inline">Wóčhekiye</span> — prayer — means "to speak in relationship with."</p>
+    <p class="panel-text">The ceremony begins with words Wakíŋyaŋ does not fully understand, but he understands the tone — careful, slow, grateful. His uncle tells him: prayer in Dakota was never asking for things. <span class="nw">Wóčhekiye<span class="pron-popup"><div class="pw">Wóčhekiye</div><div class="pp">woh-CHEH-kee-yeh</div><div class="pg">Prayer / speaking in relationship</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Wóčhekiye')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Wóčhekiye" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — prayer — means "to speak in relationship with."</p>
   </div>
 </div>
 <div class="panel">
@@ -117,7 +169,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">5</span>
       <span class="panel-top-title">Wakȟáŋ Tȟáŋka</span>
     </div>
-    <p class="panel-text"><span class="native-inline">Wakȟáŋ Tȟáŋka</span> — Great Mystery, or Great Spirit. <span class="native-inline">Wakȟáŋ</span> means sacred, mysterious, powerful. <span class="native-inline">Tȟáŋka</span> means great or large. Wakíŋyaŋ writes it down. It is not a proper noun in the Western sense — it describes a quality of all things.</p>
+    <p class="panel-text"><span class="nw">Wakȟáŋ Tȟáŋka<span class="pron-popup"><div class="pw">Wakȟáŋ Tȟáŋka</div><div class="pp">wah-KHAŊ THAŊ-kah</div><div class="pg">Great Mystery / Great Spirit</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Wakȟáŋ Tȟáŋka')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Wakȟáŋ Tȟáŋka" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — Great Mystery, or Great Spirit. <span class="nw">Wakȟáŋ<span class="pron-popup"><div class="pw">Wakȟáŋ</div><div class="pp">wah-KHAŊ</div><div class="pg">Sacred / mysterious / powerful</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Wakȟáŋ')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Wakȟáŋ" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> means sacred, mysterious, powerful. <span class="nw">Tȟáŋka<span class="pron-popup"><div class="pw">Tȟáŋka</div><div class="pp">THAŊ-kah</div><div class="pg">Great / large</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Tȟáŋka')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Tȟáŋka" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> means great or large. Wakíŋyaŋ writes it down. It is not a proper noun in the Western sense — it describes a quality of all things.</p>
   </div>
 </div>
 <div class="panel">
@@ -127,7 +179,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">6</span>
       <span class="panel-top-title">Speaking with Care</span>
     </div>
-    <p class="panel-text">After the ceremony, grandmother explains: some words should only be said at the right time, in the right place. <span class="native-inline">Čhaŋtéčhiyuza</span> — hold a ceremony / hold it in your heart. Language is not decoration; it has power.</p>
+    <p class="panel-text">After the ceremony, grandmother explains: some words should only be said at the right time, in the right place. <span class="nw">Čhaŋtéčhiyuza<span class="pron-popup"><div class="pw">Čhaŋtéčhiyuza</div><div class="pp">chaŋ-TAY-chee-yoo-zah</div><div class="pg">Hold a ceremony / hold it in your heart</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Čhaŋtéčhiyuza')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Čhaŋtéčhiyuza" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — hold a ceremony / hold it in your heart. Language is not decoration; it has power.</p>
   </div>
 </div>
 <div class="panel">
@@ -137,7 +189,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">7</span>
       <span class="panel-top-title">Giving Thanks</span>
     </div>
-    <p class="panel-text">The wópila feast begins. Wakíŋyaŋ says to each elder: <span class="native-inline">Pidámayaye.</span> — Thank you. An elder responds: <span class="native-inline">Léčhaŋl ečhúŋhpi kiŋ waštéčhila.</span> — I love what we do here. The phrase carries three verbs at once.</p>
+    <p class="panel-text">The wópila feast begins. Wakíŋyaŋ says to each elder: <span class="nw">Pidámayaye.<span class="pron-popup"><div class="pw">Pidámayaye.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Pidámayaye.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Pidámayaye." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — Thank you. An elder responds: <span class="nw">Léčhaŋl ečhúŋhpi kiŋ waštéčhila.<span class="pron-popup"><div class="pw">Léčhaŋl ečhúŋhpi kiŋ waštéčhila.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Léčhaŋl ečhúŋhpi kiŋ waštéčhila.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Léčhaŋl ečhúŋhpi kiŋ waštéčhila." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — I love what we do here. The phrase carries three verbs at once.</p>
   </div>
 </div>
 <div class="panel">
@@ -147,7 +199,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">8</span>
       <span class="panel-top-title">Carrying the Words</span>
     </div>
-    <p class="panel-text">That night Wakíŋyaŋ sits and holds the phrase <span class="native-inline">Mitákuye oyásʼiŋ</span> in his mind. It does not feel like a foreign word anymore. It feels like a door. Every language has words that are also whole philosophies.</p>
+    <p class="panel-text">That night Wakíŋyaŋ sits and holds the phrase <span class="nw">Mitákuye oyásʼiŋ<span class="pron-popup"><div class="pw">Mitákuye oyásʼiŋ</div><div class="pp">mee-TAH-koo-yeh oh-YAH-s'eeŋ</div><div class="pg">All my relations</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Mitákuye oyásʼiŋ')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Mitákuye oyásʼiŋ" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> in his mind. It does not feel like a foreign word anymore. It feels like a door. Every language has words that are also whole philosophies.</p>
   </div>
 </div>
   <div class="section-head">What This Story Teaches Us</div>
@@ -155,27 +207,126 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
     <thead><tr><th>Story Moment</th><th>What We Notice</th><th>Language Focus</th></tr></thead>
     <tbody><tr><td>Circle forms for ceremony</td><td>Mitákuye oyásʼiŋ = all relations (people, nature, sky)</td><td><strong>Mitákuye oyásʼiŋ</strong></td></tr><tr><td>Grandmother names four virtues</td><td>Wóohola / wóčhantognaka / wówaúŋšila / wóksape</td><td><strong>Four virtues vocabulary</strong></td></tr><tr><td>Uncle explains prayer meaning</td><td>Wóčhekiye = speaking in relationship, not asking</td><td><strong>Wóčhekiye</strong></td></tr><tr><td>Wakȟáŋ Tȟáŋka explored</td><td>Wakȟáŋ = sacred/mysterious; Tȟáŋka = great</td><td><strong>Wakȟáŋ Tȟáŋka</strong></td></tr><tr><td>Feast and thanks</td><td>Pidámayaye = thank you (formal/full form)</td><td><strong>Pidámayaye</strong></td></tr></tbody>
   </table>
-  <div class="section-head">Key Phrases — Say It Out Loud</div>
+  <div class="section-head">Key Phrases — Click to Hear</div>
   <div class="phrase-card">
-  <div><div class="phrase-native">Mitákuye oyásʼiŋ</div><div class="phrase-pron">mee-TAH-koo-yeh oh-YAH-s'een</div></div>
+  <div class="phrase-native">Mitákuye oyásʼiŋ</div>
   <div class="phrase-eng">All my relations</div>
+  <div class="phrase-pron">/mee-TAH-koo-yeh oh-YAH-s'een/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Mitákuye oyásʼiŋ">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Mitákuye oyásʼiŋ" href="https://www.learndakota.com/dictionary?q=Mit%C3%A1kuye%20oy%C3%A1s%CA%BCi%C5%8B" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Wóohola</div><div class="phrase-pron">woh-OH-hoh-lah</div></div>
+  <div class="phrase-native">Wóohola</div>
   <div class="phrase-eng">Respect</div>
+  <div class="phrase-pron">/woh-OH-hoh-lah/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Wóohola">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Wóohola" href="https://www.learndakota.com/dictionary?q=W%C3%B3ohola" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Wóčhantognaka</div><div class="phrase-pron">woh-chahn-TOG-nah-kah</div></div>
+  <div class="phrase-native">Wóčhantognaka</div>
   <div class="phrase-eng">Generosity</div>
+  <div class="phrase-pron">/woh-chahn-TOG-nah-kah/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Wóčhantognaka">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Wóčhantognaka" href="https://www.learndakota.com/dictionary?q=W%C3%B3%C4%8Dhantognaka" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Wakȟáŋ Tȟáŋka</div><div class="phrase-pron">wah-KHAHN THAHN-kah</div></div>
+  <div class="phrase-native">Wakȟáŋ Tȟáŋka</div>
   <div class="phrase-eng">Great Mystery / Great Spirit</div>
+  <div class="phrase-pron">/wah-KHAHN THAHN-kah/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Wakȟáŋ Tȟáŋka">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Wakȟáŋ Tȟáŋka" href="https://www.learndakota.com/dictionary?q=Wak%C8%9F%C3%A1%C5%8B%20T%C8%9F%C3%A1%C5%8Bka" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Pidámayaye</div><div class="phrase-pron">pee-DAH-mah-yah-yeh</div></div>
+  <div class="phrase-native">Pidámayaye</div>
   <div class="phrase-eng">Thank you</div>
+  <div class="phrase-pron">/pee-DAH-mah-yah-yeh/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Pidámayaye">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Pidámayaye" href="https://www.learndakota.com/dictionary?q=Pid%C3%A1mayaye" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div>
   <div class="cta-box">
     <h3>You Can Do This Too</h3>
     <ul><li>Say "Mitákuye oyásʼiŋ" and list three non-human relations it includes.</li><li>Choose one virtue word and write a sentence about seeing it in action this week.</li><li>Practice saying "Pidámayaye" at least three times today in real situations.</li><li>Ask an elder or family member about a word for gratitude in their own tradition.</li></ul>
   </div>
 </div>
+
+<script>
+// ── Pronunciation popup ──────────────────────────────────────────────────────
+let _activePopup = null;
+
+function closeAll() {
+  if (_activePopup) { _activePopup.classList.remove('open'); _activePopup = null; }
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.nw')) closeAll();
+});
+
+document.querySelectorAll('.nw').forEach(function(el) {
+  el.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const popup = el.querySelector('.pron-popup');
+    if (!popup) return;
+    if (popup.classList.contains('open')) { closeAll(); return; }
+    closeAll();
+    popup.classList.add('open');
+    _activePopup = popup;
+    // Ensure popup stays in viewport
+    const rect = popup.getBoundingClientRect();
+    if (rect.left < 8) popup.style.left = '0'; popup.style.transform = 'none';
+    if (rect.right > window.innerWidth - 8) {
+      popup.style.left = 'auto'; popup.style.right = '0'; popup.style.transform = 'none';
+    }
+  });
+});
+
+// ── Text-to-Speech ───────────────────────────────────────────────────────────
+function speakWord(word) {
+  if (!window.speechSynthesis) { alert('Speech not supported in this browser.'); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang = 'en-US';
+  u.rate = 0.75;
+  u.pitch = 1.0;
+  // Try to find a voice; fallback to default
+  const voices = speechSynthesis.getVoices();
+  const v = voices.find(v => v.lang.startsWith('en-US')) || voices[0];
+  if (v) u.voice = v;
+  speechSynthesis.speak(u);
+}
+
+// Ensure voices are loaded
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = function() {};
+}
+
+// ── Dictionary links ─────────────────────────────────────────────────────────
+const DICT_BASE = "https://www.learndakota.com/dictionary?q=";
+const DICT_LABEL = "Learn Dakota Dictionary ↗";
+
+document.querySelectorAll('.pron-popup .pbtn-dict').forEach(function(a) {
+  const word = a.dataset.word;
+  a.href = DICT_BASE + encodeURIComponent(word);
+  a.textContent = DICT_LABEL;
+});
+
+// Phrase TTS buttons
+document.querySelectorAll('.phrase-tts-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    speakWord(btn.dataset.word);
+  });
+});
+// Phrase dict links
+document.querySelectorAll('.phrase-dict-link').forEach(function(a) {
+  a.href = DICT_BASE + encodeURIComponent(a.dataset.word);
+  a.textContent = '📖 ' + DICT_LABEL;
+});
+</script>
+
 </body>
 </html>

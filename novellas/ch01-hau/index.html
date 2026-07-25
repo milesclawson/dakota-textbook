@@ -28,7 +28,43 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .panel-top{display:flex;align-items:center;margin-bottom:10px}
 .panel-top-title{font-weight:bold;font-size:1rem;color:#8B2500}
 .panel-text{font-size:.97rem;color:#2d1800;line-height:1.7}
-.native-inline{font-weight:bold;color:#8B2500;font-size:1.05em}
+/* ── Native word chip ── */
+.nw{
+  font-weight:bold;color:#8B2500;font-size:1.05em;
+  cursor:pointer;border-bottom:2px dotted #8B2500;
+  position:relative;white-space:nowrap;display:inline-block;
+}
+.nw::after{content:"🔊";font-size:.7em;margin-left:3px;opacity:.6;vertical-align:super}
+/* ── Pronunciation popup ── */
+.pron-popup{
+  display:none;position:absolute;bottom:calc(100% + 8px);left:50%;
+  transform:translateX(-50%);z-index:999;
+  background:#1a1008;color:#fff;border-radius:10px;
+  padding:12px 14px;min-width:220px;max-width:320px;
+  box-shadow:0 4px 20px rgba(0,0,0,.45);
+  font-family:Georgia,serif;
+}
+.pron-popup.open{display:block}
+.pron-popup .pw{font-size:1.15rem;font-weight:bold;color:#FFD580;margin-bottom:4px}
+.pron-popup .pp{font-size:.85rem;color:#d0c090;font-style:italic;margin-bottom:2px}
+.pron-popup .pp::before{content:"/ ";opacity:.6}
+.pron-popup .pp::after{content:" /";opacity:.6}
+.pron-popup .pg{font-size:.82rem;color:#b0a090;margin-bottom:10px}
+.pron-popup .pbtns{display:flex;gap:7px;flex-wrap:wrap}
+.pron-popup .pbtn{
+  border:none;border-radius:6px;padding:5px 10px;cursor:pointer;
+  font-size:.78rem;font-weight:bold;display:flex;align-items:center;gap:4px;
+}
+.pron-popup .pbtn-tts{background:#FF8C00;color:#fff}
+.pron-popup .pbtn-tts:hover{background:#e07800}
+.pron-popup .pbtn-dict{background:#2a6aaa;color:#fff;text-decoration:none}
+.pron-popup .pbtn-dict:hover{background:#1a5080}
+.pron-popup .pnote{font-size:.72rem;color:#908070;margin-top:8px}
+/* caret */
+.pron-popup::after{
+  content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:8px solid transparent;border-top-color:#1a1008;
+}
 .section-head{margin:36px 0 12px;padding-bottom:6px;border-bottom:2px solid #8B2500;
   font-size:1.15rem;font-weight:bold;color:#8B2500;text-transform:uppercase;letter-spacing:.5px}
 .teaching-table{width:100%;border-collapse:collapse;margin-bottom:16px;background:white;
@@ -38,10 +74,22 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .teaching-table tr:last-child td{border-bottom:none}
 .teaching-table tr:nth-child(even) td{background:#faf7f1}
 .phrase-card{background:white;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.07);
-  margin:10px 0;padding:16px 18px;display:flex;gap:16px;align-items:flex-start}
-.phrase-native{font-size:1.18rem;font-weight:bold;color:#8B2500;min-width:200px}
-.phrase-eng{color:#5a4030;font-size:.93rem;padding-top:4px}
-.phrase-pron{font-size:.82rem;color:#888;font-style:italic}
+  margin:10px 0;padding:14px 18px;display:grid;grid-template-columns:1fr auto;
+  gap:4px 16px;align-items:center}
+.phrase-native{font-size:1.18rem;font-weight:bold;color:#8B2500}
+.phrase-pron{font-size:.82rem;color:#888;font-style:italic;grid-column:1}
+.phrase-eng{color:#5a4030;font-size:.93rem;grid-row:1/3;align-self:center;text-align:right}
+.phrase-tts-btn{
+  background:#8B2500;color:white;border:none;border-radius:20px;
+  padding:5px 14px;cursor:pointer;font-size:.82rem;font-weight:bold;
+  grid-row:1/3;align-self:center;white-space:nowrap;
+}
+.phrase-tts-btn:hover{opacity:.85}
+.phrase-dict-link{
+  display:inline-block;margin-top:4px;font-size:.78rem;color:#2a6aaa;
+  text-decoration:none;grid-column:1;
+}
+.phrase-dict-link:hover{text-decoration:underline}
 .back-link{display:inline-block;margin:10px 0 24px;color:#8B2500;font-size:.9rem;
   text-decoration:none;border:1px solid #8B2500;border-radius:20px;padding:6px 18px}
 .back-link:hover{background:#8B2500;color:white}
@@ -49,10 +97,13 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .cta-box h3{font-size:1.1rem;margin-bottom:10px}
 .cta-box ul{margin-left:18px;line-height:2}
 .cta-box li{font-size:.94rem}
+.audio-note{font-size:.78rem;background:#fff8e1;border:1px solid #ffe082;border-radius:6px;
+  padding:8px 12px;margin:12px 0;color:#5a4010}
 @media(max-width:600px){
   .gn-header h1{font-size:1.35rem}
-  .phrase-card{flex-direction:column;gap:8px}
-  .phrase-native{min-width:unset}
+  .phrase-card{grid-template-columns:1fr;}
+  .phrase-eng{text-align:left;grid-row:auto}
+  .phrase-tts-btn{grid-row:auto;justify-self:start;margin-top:6px}
 }
 </style>
 
@@ -65,6 +116,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 </div>
 <div class="container">
   <a class="back-link" href="../../chapters/01-hau/">← Back to Chapter 1</a>
+  <div class="audio-note">🔊 Click any <strong>bold native word</strong> in the story panels to see its pronunciation and hear it spoken. The <em>"Hear it"</em> button uses your browser's speech synthesis (synthesized, not a native speaker). For recordings by native speakers, click "Dictionary" — it links to entries with real audio where available.</div>
   <div class="opening">
     <div class="label">Setting the Scene</div>
     <p>Wakíŋyaŋ has not visited his grandmother's tiyóšpaye — his extended family — for many years. Today he steps off the bus onto the flat Dakota prairie. The smell of sage and woodsmoke is the same as he remembered. He breathes it in and thinks: <em>I want to speak like they speak here.</em> His first challenge: how to say hello the right way.</p>
@@ -77,7 +129,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">1</span>
       <span class="panel-top-title">Arriving on the Prairie</span>
     </div>
-    <p class="panel-text">Wakíŋyaŋ steps off the bus into dry prairie air. A tipi village stands in the distance. His grandmother taught him that greetings carry respect — you don't just say <span class="native-inline">Háu</span>. You say it with your whole self.</p>
+    <p class="panel-text">Wakíŋyaŋ steps off the bus into dry prairie air. A tipi village stands in the distance. His grandmother taught him that greetings carry respect — you don't just say <span class="nw">Háu<span class="pron-popup"><div class="pw">Háu</div><div class="pp">hah</div><div class="pg">Hello (male)</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Háu')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Háu" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span>. You say it with your whole self.</p>
   </div>
 </div>
 <div class="panel">
@@ -87,7 +139,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">2</span>
       <span class="panel-top-title">The First Greeting</span>
     </div>
-    <p class="panel-text">His uncle walks forward. <span class="native-inline">Háu, kola!</span> — Hello, friend! Wakíŋyaŋ freezes. He knows <span class="native-inline">háu</span> is the greeting men use. He has heard women say <span class="native-inline">haŋ</span>. He exhales and answers: <span class="native-inline">Háu.</span>.</p>
+    <p class="panel-text">His uncle walks forward. <span class="nw">Háu, kola!<span class="pron-popup"><div class="pw">Háu, kola!</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Háu, kola!')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Háu, kola!" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — Hello, friend! Wakíŋyaŋ freezes. He knows <span class="nw">háu<span class="pron-popup"><div class="pw">háu</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('háu')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="háu" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> is the greeting men use. He has heard women say <span class="nw">haŋ<span class="pron-popup"><div class="pw">haŋ</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('haŋ')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="haŋ" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span>. He exhales and answers: <span class="nw">Háu.<span class="pron-popup"><div class="pw">Háu.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Háu.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Háu." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span>.</p>
   </div>
 </div>
 <div class="panel">
@@ -97,7 +149,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">3</span>
       <span class="panel-top-title">What Is Your Name?</span>
     </div>
-    <p class="panel-text">His uncle smiles and says <span class="native-inline">Táku eničíyapi he?</span> — What is your name? Wakíŋyaŋ answers: <span class="native-inline">Wakíŋyaŋ emáčhiyapi.</span> — I am called Wakíŋyaŋ. The word <span class="native-inline">emáčhiyapi</span> means "they call me." Names are given, not just chosen.</p>
+    <p class="panel-text">His uncle smiles and says <span class="nw">Táku eničíyapi he?<span class="pron-popup"><div class="pw">Táku eničíyapi he?</div><div class="pp">TAH-koo eh-nee-CHEE-yah-pee heh</div><div class="pg">What is your name?</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Táku eničíyapi he?')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Táku eničíyapi he?" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — What is your name? Wakíŋyaŋ answers: <span class="nw">Wakíŋyaŋ emáčhiyapi.<span class="pron-popup"><div class="pw">Wakíŋyaŋ emáčhiyapi.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Wakíŋyaŋ emáčhiyapi.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Wakíŋyaŋ emáčhiyapi." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — I am called Wakíŋyaŋ. The word <span class="nw">emáčhiyapi<span class="pron-popup"><div class="pw">emáčhiyapi</div><div class="pp">eh-MAH-chee-yah-pee</div><div class="pg">I am called (they call me)</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('emáčhiyapi')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="emáčhiyapi" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> means "they call me." Names are given, not just chosen.</p>
   </div>
 </div>
 <div class="panel">
@@ -107,7 +159,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">4</span>
       <span class="panel-top-title">The Clan Introduction</span>
     </div>
-    <p class="panel-text">The family gathers. Each person offers their clan and home: <span class="native-inline">Bdewákhaŋtuŋwaŋ hemáčha</span> — I am of the Mdewakanton band. Wakíŋyaŋ learns that in Dakota, saying where you are from is as important as your name.</p>
+    <p class="panel-text">The family gathers. Each person offers their clan and home: <span class="nw">Bdewákhaŋtuŋwaŋ hemáčha<span class="pron-popup"><div class="pw">Bdewákhaŋtuŋwaŋ hemáčha</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Bdewákhaŋtuŋwaŋ hemáčha')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Bdewákhaŋtuŋwaŋ hemáčha" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — I am of the Mdewakanton band. Wakíŋyaŋ learns that in Dakota, saying where you are from is as important as your name.</p>
   </div>
 </div>
 <div class="panel">
@@ -117,7 +169,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">5</span>
       <span class="panel-top-title">Grandmother's Welcome</span>
     </div>
-    <p class="panel-text">That night, grandmother says <span class="native-inline">Tókheya Dakȟótiyapi wóuŋšpe kta.</span> — First we will learn Dakota. She explains that <span class="native-inline">Dakȟóta</span> means "ally" or "friend." The language itself is a greeting to the world.</p>
+    <p class="panel-text">That night, grandmother says <span class="nw">Tókheya Dakȟótiyapi wóuŋšpe kta.<span class="pron-popup"><div class="pw">Tókheya Dakȟótiyapi wóuŋšpe kta.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Tókheya Dakȟótiyapi wóuŋšpe kta.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Tókheya Dakȟótiyapi wóuŋšpe kta." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — First we will learn Dakota. She explains that <span class="nw">Dakȟóta<span class="pron-popup"><div class="pw">Dakȟóta</div><div class="pp">dah-KHO-tah</div><div class="pg">Ally / friend</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Dakȟóta')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Dakȟóta" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> means "ally" or "friend." The language itself is a greeting to the world.</p>
   </div>
 </div>
 <div class="panel">
@@ -127,7 +179,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">6</span>
       <span class="panel-top-title">Practicing Farewells</span>
     </div>
-    <p class="panel-text">Before sleep, his cousin tests him: <span class="native-inline">Tókša aké wačhíŋyaŋkiŋ kte.</span> — See you again later. Wakíŋyaŋ repeats it three times until it feels real. <span class="native-inline">Tókša aké.</span> See you again.</p>
+    <p class="panel-text">Before sleep, his cousin tests him: <span class="nw">Tókša aké wačhíŋyaŋkiŋ kte.<span class="pron-popup"><div class="pw">Tókša aké wačhíŋyaŋkiŋ kte.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Tókša aké wačhíŋyaŋkiŋ kte.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Tókša aké wačhíŋyaŋkiŋ kte." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — See you again later. Wakíŋyaŋ repeats it three times until it feels real. <span class="nw">Tókša aké.<span class="pron-popup"><div class="pw">Tókša aké.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Tókša aké.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Tókša aké." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> See you again.</p>
   </div>
 </div>
 <div class="panel">
@@ -137,7 +189,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">7</span>
       <span class="panel-top-title">A Full Circle</span>
     </div>
-    <p class="panel-text">At sunset Wakíŋyaŋ sits alone on the prairie. He whispers all the words he learned today — <span class="native-inline">háu</span>, <span class="native-inline">táku eničíyapi he?</span>, <span class="native-inline">tókša aké</span>. Each word is a thread connecting him to something larger.</p>
+    <p class="panel-text">At sunset Wakíŋyaŋ sits alone on the prairie. He whispers all the words he learned today — <span class="nw">háu<span class="pron-popup"><div class="pw">háu</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('háu')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="háu" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span>, <span class="nw">táku eničíyapi he?<span class="pron-popup"><div class="pw">táku eničíyapi he?</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('táku eničíyapi he?')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="táku eničíyapi he?" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span>, <span class="nw">tókša aké<span class="pron-popup"><div class="pw">tókša aké</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('tókša aké')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="tókša aké" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span>. Each word is a thread connecting him to something larger.</p>
   </div>
 </div>
 <div class="panel">
@@ -147,7 +199,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">8</span>
       <span class="panel-top-title">The Language Lives Here</span>
     </div>
-    <p class="panel-text">Grandmother says: the language survived because people kept saying it. Every <span class="native-inline">háu</span> you speak, every <span class="native-inline">pidámayaye</span> — thank you — you keep it alive. The next morning, Wakíŋyaŋ greets the sunrise in Dakota.</p>
+    <p class="panel-text">Grandmother says: the language survived because people kept saying it. Every <span class="nw">háu<span class="pron-popup"><div class="pw">háu</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('háu')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="háu" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> you speak, every <span class="nw">pidámayaye<span class="pron-popup"><div class="pw">pidámayaye</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('pidámayaye')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="pidámayaye" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — thank you — you keep it alive. The next morning, Wakíŋyaŋ greets the sunrise in Dakota.</p>
   </div>
 </div>
   <div class="section-head">What This Story Teaches Us</div>
@@ -155,27 +207,126 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
     <thead><tr><th>Story Moment</th><th>What We Notice</th><th>Language Focus</th></tr></thead>
     <tbody><tr><td>Wakíŋyaŋ hears gendered greetings</td><td>Men say Háu; women say Haŋ</td><td><strong>Háu / Haŋ</strong></td></tr><tr><td>Uncle asks his name</td><td>Name question uses emáčhiyapi (I am called)</td><td><strong>Táku eničíyapi he?</strong></td></tr><tr><td>Family names their band</td><td>Identity includes band/tiyóšpaye</td><td><strong>Bdewákhaŋtuŋwaŋ hemáčha</strong></td></tr><tr><td>Grandmother introduces the language</td><td>Dakȟóta means "friend/ally"</td><td><strong>Dakȟótiyapi</strong></td></tr><tr><td>Cousin teaches a farewell</td><td>Future marker kte added for "will"</td><td><strong>Tókša aké wačhíŋyaŋkiŋ kte</strong></td></tr></tbody>
   </table>
-  <div class="section-head">Key Phrases — Say It Out Loud</div>
+  <div class="section-head">Key Phrases — Click to Hear</div>
   <div class="phrase-card">
-  <div><div class="phrase-native">Háu / Haŋ</div><div class="phrase-pron">hah / hah</div></div>
+  <div class="phrase-native">Háu / Haŋ</div>
   <div class="phrase-eng">Hello (m / f)</div>
+  <div class="phrase-pron">/hah / hah/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Háu / Haŋ">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Háu / Haŋ" href="https://www.learndakota.com/dictionary?q=H%C3%A1u%20/%20Ha%C5%8B" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Táku eničíyapi he?</div><div class="phrase-pron">TAH-koo eh-nee-CHEE-yah-pee heh</div></div>
+  <div class="phrase-native">Táku eničíyapi he?</div>
   <div class="phrase-eng">What is your name?</div>
+  <div class="phrase-pron">/TAH-koo eh-nee-CHEE-yah-pee heh/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Táku eničíyapi he?">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Táku eničíyapi he?" href="https://www.learndakota.com/dictionary?q=T%C3%A1ku%20eni%C4%8D%C3%ADyapi%20he%3F" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">___ emáčhiyapi.</div><div class="phrase-pron">eh-MAH-chee-yah-pee</div></div>
+  <div class="phrase-native">___ emáčhiyapi.</div>
   <div class="phrase-eng">I am called ___.</div>
+  <div class="phrase-pron">/eh-MAH-chee-yah-pee/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="___ emáčhiyapi.">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="___ emáčhiyapi." href="https://www.learndakota.com/dictionary?q=___%20em%C3%A1%C4%8Dhiyapi." target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Tókša aké.</div><div class="phrase-pron">TOKE-sha ah-KAY</div></div>
+  <div class="phrase-native">Tókša aké.</div>
   <div class="phrase-eng">See you again.</div>
+  <div class="phrase-pron">/TOKE-sha ah-KAY/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Tókša aké.">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Tókša aké." href="https://www.learndakota.com/dictionary?q=T%C3%B3k%C5%A1a%20ak%C3%A9." target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Pidámayaye.</div><div class="phrase-pron">pee-DAH-mah-yah-yeh</div></div>
+  <div class="phrase-native">Pidámayaye.</div>
   <div class="phrase-eng">Thank you.</div>
+  <div class="phrase-pron">/pee-DAH-mah-yah-yeh/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Pidámayaye.">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Pidámayaye." href="https://www.learndakota.com/dictionary?q=Pid%C3%A1mayaye." target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div>
   <div class="cta-box">
     <h3>You Can Do This Too</h3>
     <ul><li>Introduce yourself in Dakota to a classmate today.</li><li>Ask one person "Táku eničíyapi he?" and use their answer.</li><li>Practice the gendered greeting — ask a family member which one fits them.</li><li>Write your name in the pattern: ___ emáčhiyapi.</li></ul>
   </div>
 </div>
+
+<script>
+// ── Pronunciation popup ──────────────────────────────────────────────────────
+let _activePopup = null;
+
+function closeAll() {
+  if (_activePopup) { _activePopup.classList.remove('open'); _activePopup = null; }
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.nw')) closeAll();
+});
+
+document.querySelectorAll('.nw').forEach(function(el) {
+  el.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const popup = el.querySelector('.pron-popup');
+    if (!popup) return;
+    if (popup.classList.contains('open')) { closeAll(); return; }
+    closeAll();
+    popup.classList.add('open');
+    _activePopup = popup;
+    // Ensure popup stays in viewport
+    const rect = popup.getBoundingClientRect();
+    if (rect.left < 8) popup.style.left = '0'; popup.style.transform = 'none';
+    if (rect.right > window.innerWidth - 8) {
+      popup.style.left = 'auto'; popup.style.right = '0'; popup.style.transform = 'none';
+    }
+  });
+});
+
+// ── Text-to-Speech ───────────────────────────────────────────────────────────
+function speakWord(word) {
+  if (!window.speechSynthesis) { alert('Speech not supported in this browser.'); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang = 'en-US';
+  u.rate = 0.75;
+  u.pitch = 1.0;
+  // Try to find a voice; fallback to default
+  const voices = speechSynthesis.getVoices();
+  const v = voices.find(v => v.lang.startsWith('en-US')) || voices[0];
+  if (v) u.voice = v;
+  speechSynthesis.speak(u);
+}
+
+// Ensure voices are loaded
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = function() {};
+}
+
+// ── Dictionary links ─────────────────────────────────────────────────────────
+const DICT_BASE = "https://www.learndakota.com/dictionary?q=";
+const DICT_LABEL = "Learn Dakota Dictionary ↗";
+
+document.querySelectorAll('.pron-popup .pbtn-dict').forEach(function(a) {
+  const word = a.dataset.word;
+  a.href = DICT_BASE + encodeURIComponent(word);
+  a.textContent = DICT_LABEL;
+});
+
+// Phrase TTS buttons
+document.querySelectorAll('.phrase-tts-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    speakWord(btn.dataset.word);
+  });
+});
+// Phrase dict links
+document.querySelectorAll('.phrase-dict-link').forEach(function(a) {
+  a.href = DICT_BASE + encodeURIComponent(a.dataset.word);
+  a.textContent = '📖 ' + DICT_LABEL;
+});
+</script>
+
 </body>
 </html>

@@ -28,7 +28,43 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .panel-top{display:flex;align-items:center;margin-bottom:10px}
 .panel-top-title{font-weight:bold;font-size:1rem;color:#8B2500}
 .panel-text{font-size:.97rem;color:#2d1800;line-height:1.7}
-.native-inline{font-weight:bold;color:#8B2500;font-size:1.05em}
+/* ── Native word chip ── */
+.nw{
+  font-weight:bold;color:#8B2500;font-size:1.05em;
+  cursor:pointer;border-bottom:2px dotted #8B2500;
+  position:relative;white-space:nowrap;display:inline-block;
+}
+.nw::after{content:"🔊";font-size:.7em;margin-left:3px;opacity:.6;vertical-align:super}
+/* ── Pronunciation popup ── */
+.pron-popup{
+  display:none;position:absolute;bottom:calc(100% + 8px);left:50%;
+  transform:translateX(-50%);z-index:999;
+  background:#1a1008;color:#fff;border-radius:10px;
+  padding:12px 14px;min-width:220px;max-width:320px;
+  box-shadow:0 4px 20px rgba(0,0,0,.45);
+  font-family:Georgia,serif;
+}
+.pron-popup.open{display:block}
+.pron-popup .pw{font-size:1.15rem;font-weight:bold;color:#FFD580;margin-bottom:4px}
+.pron-popup .pp{font-size:.85rem;color:#d0c090;font-style:italic;margin-bottom:2px}
+.pron-popup .pp::before{content:"/ ";opacity:.6}
+.pron-popup .pp::after{content:" /";opacity:.6}
+.pron-popup .pg{font-size:.82rem;color:#b0a090;margin-bottom:10px}
+.pron-popup .pbtns{display:flex;gap:7px;flex-wrap:wrap}
+.pron-popup .pbtn{
+  border:none;border-radius:6px;padding:5px 10px;cursor:pointer;
+  font-size:.78rem;font-weight:bold;display:flex;align-items:center;gap:4px;
+}
+.pron-popup .pbtn-tts{background:#FF8C00;color:#fff}
+.pron-popup .pbtn-tts:hover{background:#e07800}
+.pron-popup .pbtn-dict{background:#2a6aaa;color:#fff;text-decoration:none}
+.pron-popup .pbtn-dict:hover{background:#1a5080}
+.pron-popup .pnote{font-size:.72rem;color:#908070;margin-top:8px}
+/* caret */
+.pron-popup::after{
+  content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:8px solid transparent;border-top-color:#1a1008;
+}
 .section-head{margin:36px 0 12px;padding-bottom:6px;border-bottom:2px solid #8B2500;
   font-size:1.15rem;font-weight:bold;color:#8B2500;text-transform:uppercase;letter-spacing:.5px}
 .teaching-table{width:100%;border-collapse:collapse;margin-bottom:16px;background:white;
@@ -38,10 +74,22 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .teaching-table tr:last-child td{border-bottom:none}
 .teaching-table tr:nth-child(even) td{background:#faf7f1}
 .phrase-card{background:white;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.07);
-  margin:10px 0;padding:16px 18px;display:flex;gap:16px;align-items:flex-start}
-.phrase-native{font-size:1.18rem;font-weight:bold;color:#8B2500;min-width:200px}
-.phrase-eng{color:#5a4030;font-size:.93rem;padding-top:4px}
-.phrase-pron{font-size:.82rem;color:#888;font-style:italic}
+  margin:10px 0;padding:14px 18px;display:grid;grid-template-columns:1fr auto;
+  gap:4px 16px;align-items:center}
+.phrase-native{font-size:1.18rem;font-weight:bold;color:#8B2500}
+.phrase-pron{font-size:.82rem;color:#888;font-style:italic;grid-column:1}
+.phrase-eng{color:#5a4030;font-size:.93rem;grid-row:1/3;align-self:center;text-align:right}
+.phrase-tts-btn{
+  background:#8B2500;color:white;border:none;border-radius:20px;
+  padding:5px 14px;cursor:pointer;font-size:.82rem;font-weight:bold;
+  grid-row:1/3;align-self:center;white-space:nowrap;
+}
+.phrase-tts-btn:hover{opacity:.85}
+.phrase-dict-link{
+  display:inline-block;margin-top:4px;font-size:.78rem;color:#2a6aaa;
+  text-decoration:none;grid-column:1;
+}
+.phrase-dict-link:hover{text-decoration:underline}
 .back-link{display:inline-block;margin:10px 0 24px;color:#8B2500;font-size:.9rem;
   text-decoration:none;border:1px solid #8B2500;border-radius:20px;padding:6px 18px}
 .back-link:hover{background:#8B2500;color:white}
@@ -49,10 +97,13 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .cta-box h3{font-size:1.1rem;margin-bottom:10px}
 .cta-box ul{margin-left:18px;line-height:2}
 .cta-box li{font-size:.94rem}
+.audio-note{font-size:.78rem;background:#fff8e1;border:1px solid #ffe082;border-radius:6px;
+  padding:8px 12px;margin:12px 0;color:#5a4010}
 @media(max-width:600px){
   .gn-header h1{font-size:1.35rem}
-  .phrase-card{flex-direction:column;gap:8px}
-  .phrase-native{min-width:unset}
+  .phrase-card{grid-template-columns:1fr;}
+  .phrase-eng{text-align:left;grid-row:auto}
+  .phrase-tts-btn{grid-row:auto;justify-self:start;margin-top:6px}
 }
 </style>
 
@@ -65,6 +116,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 </div>
 <div class="container">
   <a class="back-link" href="../../chapters/07-woyake/">← Back to Chapter 7</a>
+  <div class="audio-note">🔊 Click any <strong>bold native word</strong> in the story panels to see its pronunciation and hear it spoken. The <em>"Hear it"</em> button uses your browser's speech synthesis (synthesized, not a native speaker). For recordings by native speakers, click "Dictionary" — it links to entries with real audio where available.</div>
   <div class="opening">
     <div class="label">Setting the Scene</div>
     <p>Fall arrives. The nights grow long enough for story time — in the Dakota tradition, some stories can only be told after the first frost. Grandmother prepares to tell a story about Iktomi, the trickster spider. Wakíŋyaŋ listens for a word he has been waiting to learn: <em>eyápi</em> — they say, so it is said.</p>
@@ -77,7 +129,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">1</span>
       <span class="panel-top-title">The Frost Arrives</span>
     </div>
-    <p class="panel-text">The first hard frost coats the grass at dawn. Grandmother looks out and says: <span class="native-inline">Čhaŋwápe kasná wi.</span> — the Moon of Falling Leaves. She adds: <span class="native-inline">Wóoyake úŋčhipiŋ kte.</span> — We will tell stories now. The frost is the signal.</p>
+    <p class="panel-text">The first hard frost coats the grass at dawn. Grandmother looks out and says: <span class="nw">Čhaŋwápe kasná wi.<span class="pron-popup"><div class="pw">Čhaŋwápe kasná wi.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Čhaŋwápe kasná wi.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Čhaŋwápe kasná wi." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — the Moon of Falling Leaves. She adds: <span class="nw">Wóoyake úŋčhipiŋ kte.<span class="pron-popup"><div class="pw">Wóoyake úŋčhipiŋ kte.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Wóoyake úŋčhipiŋ kte.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Wóoyake úŋčhipiŋ kte." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — We will tell stories now. The frost is the signal.</p>
   </div>
 </div>
 <div class="panel">
@@ -87,7 +139,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">2</span>
       <span class="panel-top-title">Who Is Iktomi?</span>
     </div>
-    <p class="panel-text"><span class="native-inline">Iktomi — uŋkčéla heyápi eyápi.</span> — Iktomi — they say he is a spider, so the story goes. The word <span class="native-inline">eyápi</span> signals that this story was passed down — grandmother did not witness it herself. It marks the story as received knowledge.</p>
+    <p class="panel-text"><span class="nw">Iktomi — uŋkčéla heyápi eyápi.<span class="pron-popup"><div class="pw">Iktomi — uŋkčéla heyápi eyápi.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Iktomi — uŋkčéla heyápi eyápi.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Iktomi — uŋkčéla heyápi eyápi." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — Iktomi — they say he is a spider, so the story goes. The word <span class="nw">eyápi<span class="pron-popup"><div class="pw">eyápi</div><div class="pp">eh-YAH-pee</div><div class="pg">"They say" — evidential marker</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('eyápi')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="eyápi" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> signals that this story was passed down — grandmother did not witness it herself. It marks the story as received knowledge.</p>
   </div>
 </div>
 <div class="panel">
@@ -97,7 +149,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">3</span>
       <span class="panel-top-title">Iktomi's Scheme</span>
     </div>
-    <p class="panel-text">Grandmother narrates: Iktomi wanted to trick the geese into landing by saying there would be a feast. <span class="native-inline">Eyápi: "Wóta wačhíŋpiŋ he?"</span> — They say: he asked, "Do you want to eat?" Iktomi always wants something.</p>
+    <p class="panel-text">Grandmother narrates: Iktomi wanted to trick the geese into landing by saying there would be a feast. <span class="nw">Eyápi: "Wóta wačhíŋpiŋ he?"<span class="pron-popup"><div class="pw">Eyápi: "Wóta wačhíŋpiŋ he?"</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Eyápi: "Wóta wačhíŋpiŋ he?"')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Eyápi: "Wóta wačhíŋpiŋ he?"" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — They say: he asked, "Do you want to eat?" Iktomi always wants something.</p>
   </div>
 </div>
 <div class="panel">
@@ -107,7 +159,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">4</span>
       <span class="panel-top-title">The Geese Are Fooled</span>
     </div>
-    <p class="panel-text">The geese land. But there is no feast. <span class="native-inline">Iktomi oíyokpaze ehán kiŋhán aŋpáo.</span> — Iktomi disappeared when it got dark and dawn came. The geese learned: always ask who benefits from the invitation.</p>
+    <p class="panel-text">The geese land. But there is no feast. <span class="nw">Iktomi oíyokpaze ehán kiŋhán aŋpáo.<span class="pron-popup"><div class="pw">Iktomi oíyokpaze ehán kiŋhán aŋpáo.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Iktomi oíyokpaze ehán kiŋhán aŋpáo.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Iktomi oíyokpaze ehán kiŋhán aŋpáo." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — Iktomi disappeared when it got dark and dawn came. The geese learned: always ask who benefits from the invitation.</p>
   </div>
 </div>
 <div class="panel">
@@ -117,7 +169,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">5</span>
       <span class="panel-top-title">What Tricksters Teach</span>
     </div>
-    <p class="panel-text">Grandmother pauses the story: Iktomi's tricks are not just jokes. Each one teaches something — about greed, trust, perception. <span class="native-inline">Iktomi wičhóuŋšpe uŋkičhipiŋ.</span> — Iktomi teaches us things. The trickster is a teacher.</p>
+    <p class="panel-text">Grandmother pauses the story: Iktomi's tricks are not just jokes. Each one teaches something — about greed, trust, perception. <span class="nw">Iktomi wičhóuŋšpe uŋkičhipiŋ.<span class="pron-popup"><div class="pw">Iktomi wičhóuŋšpe uŋkičhipiŋ.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Iktomi wičhóuŋšpe uŋkičhipiŋ.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Iktomi wičhóuŋšpe uŋkičhipiŋ." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — Iktomi teaches us things. The trickster is a teacher.</p>
   </div>
 </div>
 <div class="panel">
@@ -127,7 +179,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">6</span>
       <span class="panel-top-title">The Evidential Marker</span>
     </div>
-    <p class="panel-text"><span class="native-inline">Eyápi</span> is one of the most important words in oral tradition. It means "they say" — it marks something as reported, not personally witnessed. In Dakota, speakers track the source of their knowledge. This is not hedging; it is integrity.</p>
+    <p class="panel-text"><span class="nw">Eyápi<span class="pron-popup"><div class="pw">Eyápi</div><div class="pp">eh-YAH-pee</div><div class="pg">"They say" — evidential marker</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Eyápi')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Eyápi" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> is one of the most important words in oral tradition. It means "they say" — it marks something as reported, not personally witnessed. In Dakota, speakers track the source of their knowledge. This is not hedging; it is integrity.</p>
   </div>
 </div>
 <div class="panel">
@@ -137,7 +189,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">7</span>
       <span class="panel-top-title">Passing the Story On</span>
     </div>
-    <p class="panel-text">At the end, grandmother asks Wakíŋyaŋ to retell part of the story. He begins: <span class="native-inline">Iktomi — uŋkčéla eyápi.</span> — Iktomi — they say he was a spider. His grandmother smiles. He used the evidential correctly. The story passed through him.</p>
+    <p class="panel-text">At the end, grandmother asks Wakíŋyaŋ to retell part of the story. He begins: <span class="nw">Iktomi — uŋkčéla eyápi.<span class="pron-popup"><div class="pw">Iktomi — uŋkčéla eyápi.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Iktomi — uŋkčéla eyápi.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Iktomi — uŋkčéla eyápi." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — Iktomi — they say he was a spider. His grandmother smiles. He used the evidential correctly. The story passed through him.</p>
   </div>
 </div>
 <div class="panel">
@@ -147,7 +199,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">8</span>
       <span class="panel-top-title">Stories Keep the Language</span>
     </div>
-    <p class="panel-text">Stories were not just entertainment — they were curriculum, law, and spiritual practice. When Dakota people were forbidden from speaking their language, stories were the hardest thing to silence. <span class="native-inline">Wóoyake</span> — story — is also how the language remembers itself.</p>
+    <p class="panel-text">Stories were not just entertainment — they were curriculum, law, and spiritual practice. When Dakota people were forbidden from speaking their language, stories were the hardest thing to silence. <span class="nw">Wóoyake<span class="pron-popup"><div class="pw">Wóoyake</div><div class="pp">woh-OH-yah-keh</div><div class="pg">Story / oral tradition</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Wóoyake')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Wóoyake" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — story — is also how the language remembers itself.</p>
   </div>
 </div>
   <div class="section-head">What This Story Teaches Us</div>
@@ -155,27 +207,126 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
     <thead><tr><th>Story Moment</th><th>What We Notice</th><th>Language Focus</th></tr></thead>
     <tbody><tr><td>Frost signals story season</td><td>Some stories told only after first frost (seasonal protocol)</td><td><strong>Čhaŋwápe kasná wi</strong></td></tr><tr><td>Eyápi introduced</td><td>Evidential marker — "they say / so it is said"</td><td><strong>Eyápi</strong></td></tr><tr><td>Iktomi's trick analyzed</td><td>Trickster figure teaches through failure</td><td><strong>Iktomi oíyokpaze</strong></td></tr><tr><td>Grandmother explains evidentials</td><td>Dakota tracks source of knowledge in grammar</td><td><strong>Eyápi = reported speech marker</strong></td></tr><tr><td>Wakíŋyaŋ retells the story</td><td>Using eyápi correctly = honoring oral tradition</td><td><strong>Wóoyake</strong></td></tr></tbody>
   </table>
-  <div class="section-head">Key Phrases — Say It Out Loud</div>
+  <div class="section-head">Key Phrases — Click to Hear</div>
   <div class="phrase-card">
-  <div><div class="phrase-native">Eyápi</div><div class="phrase-pron">eh-YAH-pee</div></div>
+  <div class="phrase-native">Eyápi</div>
   <div class="phrase-eng">"They say" / "So it is said" (evidential)</div>
+  <div class="phrase-pron">/eh-YAH-pee/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Eyápi">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Eyápi" href="https://www.learndakota.com/dictionary?q=Ey%C3%A1pi" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Wóoyake</div><div class="phrase-pron">woh-OH-yah-keh</div></div>
+  <div class="phrase-native">Wóoyake</div>
   <div class="phrase-eng">Story / oral tradition</div>
+  <div class="phrase-pron">/woh-OH-yah-keh/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Wóoyake">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Wóoyake" href="https://www.learndakota.com/dictionary?q=W%C3%B3oyake" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Iktomi</div><div class="phrase-pron">ik-TOH-mee</div></div>
+  <div class="phrase-native">Iktomi</div>
   <div class="phrase-eng">Spider trickster figure</div>
+  <div class="phrase-pron">/ik-TOH-mee/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Iktomi">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Iktomi" href="https://www.learndakota.com/dictionary?q=Iktomi" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Čhaŋwápe kasná wi</div><div class="phrase-pron">chahn-WAH-peh kahs-NAH wee</div></div>
+  <div class="phrase-native">Čhaŋwápe kasná wi</div>
   <div class="phrase-eng">Moon of Falling Leaves (October)</div>
+  <div class="phrase-pron">/chahn-WAH-peh kahs-NAH wee/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Čhaŋwápe kasná wi">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Čhaŋwápe kasná wi" href="https://www.learndakota.com/dictionary?q=%C4%8Cha%C5%8Bw%C3%A1pe%20kasn%C3%A1%20wi" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Wóuŋšpe uŋkičhipiŋ</div><div class="phrase-pron">woh-OON-shpeh oon-KEE-chee-peen</div></div>
+  <div class="phrase-native">Wóuŋšpe uŋkičhipiŋ</div>
   <div class="phrase-eng">Teaches us things</div>
+  <div class="phrase-pron">/woh-OON-shpeh oon-KEE-chee-peen/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Wóuŋšpe uŋkičhipiŋ">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Wóuŋšpe uŋkičhipiŋ" href="https://www.learndakota.com/dictionary?q=W%C3%B3u%C5%8B%C5%A1pe%20u%C5%8Bki%C4%8Dhipi%C5%8B" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div>
   <div class="cta-box">
     <h3>You Can Do This Too</h3>
     <ul><li>Use eyápi in a sentence about something you heard but didn't witness.</li><li>Tell a very short Iktomi story (even 3 sentences) to a partner.</li><li>Look up one other evidential language (like Quechua) — how do they mark it?</li><li>Write a Dakota sentence beginning with "Eyápi:" and complete it creatively.</li></ul>
   </div>
 </div>
+
+<script>
+// ── Pronunciation popup ──────────────────────────────────────────────────────
+let _activePopup = null;
+
+function closeAll() {
+  if (_activePopup) { _activePopup.classList.remove('open'); _activePopup = null; }
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.nw')) closeAll();
+});
+
+document.querySelectorAll('.nw').forEach(function(el) {
+  el.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const popup = el.querySelector('.pron-popup');
+    if (!popup) return;
+    if (popup.classList.contains('open')) { closeAll(); return; }
+    closeAll();
+    popup.classList.add('open');
+    _activePopup = popup;
+    // Ensure popup stays in viewport
+    const rect = popup.getBoundingClientRect();
+    if (rect.left < 8) popup.style.left = '0'; popup.style.transform = 'none';
+    if (rect.right > window.innerWidth - 8) {
+      popup.style.left = 'auto'; popup.style.right = '0'; popup.style.transform = 'none';
+    }
+  });
+});
+
+// ── Text-to-Speech ───────────────────────────────────────────────────────────
+function speakWord(word) {
+  if (!window.speechSynthesis) { alert('Speech not supported in this browser.'); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang = 'en-US';
+  u.rate = 0.75;
+  u.pitch = 1.0;
+  // Try to find a voice; fallback to default
+  const voices = speechSynthesis.getVoices();
+  const v = voices.find(v => v.lang.startsWith('en-US')) || voices[0];
+  if (v) u.voice = v;
+  speechSynthesis.speak(u);
+}
+
+// Ensure voices are loaded
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = function() {};
+}
+
+// ── Dictionary links ─────────────────────────────────────────────────────────
+const DICT_BASE = "https://www.learndakota.com/dictionary?q=";
+const DICT_LABEL = "Learn Dakota Dictionary ↗";
+
+document.querySelectorAll('.pron-popup .pbtn-dict').forEach(function(a) {
+  const word = a.dataset.word;
+  a.href = DICT_BASE + encodeURIComponent(word);
+  a.textContent = DICT_LABEL;
+});
+
+// Phrase TTS buttons
+document.querySelectorAll('.phrase-tts-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    speakWord(btn.dataset.word);
+  });
+});
+// Phrase dict links
+document.querySelectorAll('.phrase-dict-link').forEach(function(a) {
+  a.href = DICT_BASE + encodeURIComponent(a.dataset.word);
+  a.textContent = '📖 ' + DICT_LABEL;
+});
+</script>
+
 </body>
 </html>

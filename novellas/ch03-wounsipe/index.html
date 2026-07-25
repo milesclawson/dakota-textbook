@@ -28,7 +28,43 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .panel-top{display:flex;align-items:center;margin-bottom:10px}
 .panel-top-title{font-weight:bold;font-size:1rem;color:#8B2500}
 .panel-text{font-size:.97rem;color:#2d1800;line-height:1.7}
-.native-inline{font-weight:bold;color:#8B2500;font-size:1.05em}
+/* ── Native word chip ── */
+.nw{
+  font-weight:bold;color:#8B2500;font-size:1.05em;
+  cursor:pointer;border-bottom:2px dotted #8B2500;
+  position:relative;white-space:nowrap;display:inline-block;
+}
+.nw::after{content:"🔊";font-size:.7em;margin-left:3px;opacity:.6;vertical-align:super}
+/* ── Pronunciation popup ── */
+.pron-popup{
+  display:none;position:absolute;bottom:calc(100% + 8px);left:50%;
+  transform:translateX(-50%);z-index:999;
+  background:#1a1008;color:#fff;border-radius:10px;
+  padding:12px 14px;min-width:220px;max-width:320px;
+  box-shadow:0 4px 20px rgba(0,0,0,.45);
+  font-family:Georgia,serif;
+}
+.pron-popup.open{display:block}
+.pron-popup .pw{font-size:1.15rem;font-weight:bold;color:#FFD580;margin-bottom:4px}
+.pron-popup .pp{font-size:.85rem;color:#d0c090;font-style:italic;margin-bottom:2px}
+.pron-popup .pp::before{content:"/ ";opacity:.6}
+.pron-popup .pp::after{content:" /";opacity:.6}
+.pron-popup .pg{font-size:.82rem;color:#b0a090;margin-bottom:10px}
+.pron-popup .pbtns{display:flex;gap:7px;flex-wrap:wrap}
+.pron-popup .pbtn{
+  border:none;border-radius:6px;padding:5px 10px;cursor:pointer;
+  font-size:.78rem;font-weight:bold;display:flex;align-items:center;gap:4px;
+}
+.pron-popup .pbtn-tts{background:#FF8C00;color:#fff}
+.pron-popup .pbtn-tts:hover{background:#e07800}
+.pron-popup .pbtn-dict{background:#2a6aaa;color:#fff;text-decoration:none}
+.pron-popup .pbtn-dict:hover{background:#1a5080}
+.pron-popup .pnote{font-size:.72rem;color:#908070;margin-top:8px}
+/* caret */
+.pron-popup::after{
+  content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:8px solid transparent;border-top-color:#1a1008;
+}
 .section-head{margin:36px 0 12px;padding-bottom:6px;border-bottom:2px solid #8B2500;
   font-size:1.15rem;font-weight:bold;color:#8B2500;text-transform:uppercase;letter-spacing:.5px}
 .teaching-table{width:100%;border-collapse:collapse;margin-bottom:16px;background:white;
@@ -38,10 +74,22 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .teaching-table tr:last-child td{border-bottom:none}
 .teaching-table tr:nth-child(even) td{background:#faf7f1}
 .phrase-card{background:white;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.07);
-  margin:10px 0;padding:16px 18px;display:flex;gap:16px;align-items:flex-start}
-.phrase-native{font-size:1.18rem;font-weight:bold;color:#8B2500;min-width:200px}
-.phrase-eng{color:#5a4030;font-size:.93rem;padding-top:4px}
-.phrase-pron{font-size:.82rem;color:#888;font-style:italic}
+  margin:10px 0;padding:14px 18px;display:grid;grid-template-columns:1fr auto;
+  gap:4px 16px;align-items:center}
+.phrase-native{font-size:1.18rem;font-weight:bold;color:#8B2500}
+.phrase-pron{font-size:.82rem;color:#888;font-style:italic;grid-column:1}
+.phrase-eng{color:#5a4030;font-size:.93rem;grid-row:1/3;align-self:center;text-align:right}
+.phrase-tts-btn{
+  background:#8B2500;color:white;border:none;border-radius:20px;
+  padding:5px 14px;cursor:pointer;font-size:.82rem;font-weight:bold;
+  grid-row:1/3;align-self:center;white-space:nowrap;
+}
+.phrase-tts-btn:hover{opacity:.85}
+.phrase-dict-link{
+  display:inline-block;margin-top:4px;font-size:.78rem;color:#2a6aaa;
+  text-decoration:none;grid-column:1;
+}
+.phrase-dict-link:hover{text-decoration:underline}
 .back-link{display:inline-block;margin:10px 0 24px;color:#8B2500;font-size:.9rem;
   text-decoration:none;border:1px solid #8B2500;border-radius:20px;padding:6px 18px}
 .back-link:hover{background:#8B2500;color:white}
@@ -49,10 +97,13 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 .cta-box h3{font-size:1.1rem;margin-bottom:10px}
 .cta-box ul{margin-left:18px;line-height:2}
 .cta-box li{font-size:.94rem}
+.audio-note{font-size:.78rem;background:#fff8e1;border:1px solid #ffe082;border-radius:6px;
+  padding:8px 12px;margin:12px 0;color:#5a4010}
 @media(max-width:600px){
   .gn-header h1{font-size:1.35rem}
-  .phrase-card{flex-direction:column;gap:8px}
-  .phrase-native{min-width:unset}
+  .phrase-card{grid-template-columns:1fr;}
+  .phrase-eng{text-align:left;grid-row:auto}
+  .phrase-tts-btn{grid-row:auto;justify-self:start;margin-top:6px}
 }
 </style>
 
@@ -65,6 +116,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
 </div>
 <div class="container">
   <a class="back-link" href="../../chapters/03-wounsipe/">← Back to Chapter 3</a>
+  <div class="audio-note">🔊 Click any <strong>bold native word</strong> in the story panels to see its pronunciation and hear it spoken. The <em>"Hear it"</em> button uses your browser's speech synthesis (synthesized, not a native speaker). For recordings by native speakers, click "Dictionary" — it links to entries with real audio where available.</div>
   <div class="opening">
     <div class="label">Setting the Scene</div>
     <p>A week in, Wakíŋyaŋ begins to notice the grammar beneath the language. Dakota sentences flip English order: the verb almost always comes last. He wakes up early and decides to narrate his whole morning in Dakota — even if he gets it wrong.</p>
@@ -77,7 +129,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">1</span>
       <span class="panel-top-title">Sunrise Narration</span>
     </div>
-    <p class="panel-text">As the sun rises Wakíŋyaŋ tries: <span class="native-inline">Haŋpókšaŋ kiŋ ibdúsota.</span> — I ate the food. Then he corrects himself — <span class="native-inline">wóyute</span> is food, <span class="native-inline">wótapi</span> is the act of eating. He is learning to separate nouns from verbs.</p>
+    <p class="panel-text">As the sun rises Wakíŋyaŋ tries: <span class="nw">Haŋpókšaŋ kiŋ ibdúsota.<span class="pron-popup"><div class="pw">Haŋpókšaŋ kiŋ ibdúsota.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Haŋpókšaŋ kiŋ ibdúsota.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Haŋpókšaŋ kiŋ ibdúsota." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — I ate the food. Then he corrects himself — <span class="nw">wóyute<span class="pron-popup"><div class="pw">wóyute</div><div class="pp">WOH-yoo-teh</div><div class="pg">Food</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('wóyute')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="wóyute" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> is food, <span class="nw">wótapi<span class="pron-popup"><div class="pw">wótapi</div><div class="pp">WOH-tah-pee</div><div class="pg">The act of eating</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('wótapi')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="wótapi" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> is the act of eating. He is learning to separate nouns from verbs.</p>
   </div>
 </div>
 <div class="panel">
@@ -87,7 +139,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">2</span>
       <span class="panel-top-title">SOV — Subject, Object, Verb</span>
     </div>
-    <p class="panel-text">His cousin draws it in the dirt: S-O-V. Subject first, then object, then verb — the opposite of English. <span class="native-inline">Wakíŋyaŋ wóyute yúta.</span> — Wakíŋyaŋ food eats. It feels backwards until it doesn't.</p>
+    <p class="panel-text">His cousin draws it in the dirt: S-O-V. Subject first, then object, then verb — the opposite of English. <span class="nw">Wakíŋyaŋ wóyute yúta.<span class="pron-popup"><div class="pw">Wakíŋyaŋ wóyute yúta.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Wakíŋyaŋ wóyute yúta.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Wakíŋyaŋ wóyute yúta." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — Wakíŋyaŋ food eats. It feels backwards until it doesn't.</p>
   </div>
 </div>
 <div class="panel">
@@ -97,7 +149,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">3</span>
       <span class="panel-top-title">Talking About Yesterday</span>
     </div>
-    <p class="panel-text">Grandmother asks: <span class="native-inline">Hehéčhena tókhel yaúŋ he?</span> — How were you doing? He wants to say "I went to the river." <span class="native-inline">Wakpá kiŋ ektá mde.</span> — River to I-went. No past tense marker needed — context and adverbs carry time in Dakota.</p>
+    <p class="panel-text">Grandmother asks: <span class="nw">Hehéčhena tókhel yaúŋ he?<span class="pron-popup"><div class="pw">Hehéčhena tókhel yaúŋ he?</div><div class="pp">heh-HAY-cheh-nah TOH-khel yah-OON heh</div><div class="pg">How were you doing?</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Hehéčhena tókhel yaúŋ he?')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Hehéčhena tókhel yaúŋ he?" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — How were you doing? He wants to say "I went to the river." <span class="nw">Wakpá kiŋ ektá mde.<span class="pron-popup"><div class="pw">Wakpá kiŋ ektá mde.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Wakpá kiŋ ektá mde.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Wakpá kiŋ ektá mde." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — River to I-went. No past tense marker needed — context and adverbs carry time in Dakota.</p>
   </div>
 </div>
 <div class="panel">
@@ -107,7 +159,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">4</span>
       <span class="panel-top-title">Planning Tomorrow</span>
     </div>
-    <p class="panel-text">His uncle points to the field: <span class="native-inline">Čhaŋpá kiŋ kaksáŋ kte.</span> — The wood will be cut. The suffix <span class="native-inline">-kte</span> marks the future. Wakíŋyaŋ tests it: <span class="native-inline">Wakpá kiŋ ektá mde kte.</span> — I will go to the river. His uncle nods.</p>
+    <p class="panel-text">His uncle points to the field: <span class="nw">Čhaŋpá kiŋ kaksáŋ kte.<span class="pron-popup"><div class="pw">Čhaŋpá kiŋ kaksáŋ kte.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Čhaŋpá kiŋ kaksáŋ kte.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Čhaŋpá kiŋ kaksáŋ kte." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — The wood will be cut. The suffix <span class="nw">-kte<span class="pron-popup"><div class="pw">-kte</div><div class="pp">kteh</div><div class="pg">Future tense suffix</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('-kte')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="-kte" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> marks the future. Wakíŋyaŋ tests it: <span class="nw">Wakpá kiŋ ektá mde kte.<span class="pron-popup"><div class="pw">Wakpá kiŋ ektá mde kte.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Wakpá kiŋ ektá mde kte.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Wakpá kiŋ ektá mde kte." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — I will go to the river. His uncle nods.</p>
   </div>
 </div>
 <div class="panel">
@@ -117,7 +169,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">5</span>
       <span class="panel-top-title">Saying No</span>
     </div>
-    <p class="panel-text">Someone offers him sugar. He practices declining: <span class="native-inline">Šni</span> is the negation suffix. <span class="native-inline">Yúte šni</span> — not eating. <span class="native-inline">Mde šni</span> — not going. He realizes Dakota negation is a suffix, attached to the verb, not a separate word like "not."</p>
+    <p class="panel-text">Someone offers him sugar. He practices declining: <span class="nw">Šni<span class="pron-popup"><div class="pw">Šni</div><div class="pp">shnee</div><div class="pg">Negation suffix</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Šni')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Šni" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> is the negation suffix. <span class="nw">Yúte šni<span class="pron-popup"><div class="pw">Yúte šni</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Yúte šni')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Yúte šni" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — not eating. <span class="nw">Mde šni<span class="pron-popup"><div class="pw">Mde šni</div><div class="pp">mdeh shnee</div><div class="pg">I am not going</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Mde šni')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Mde šni" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — not going. He realizes Dakota negation is a suffix, attached to the verb, not a separate word like "not."</p>
   </div>
 </div>
 <div class="panel">
@@ -127,7 +179,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">6</span>
       <span class="panel-top-title">The Daily Verb List</span>
     </div>
-    <p class="panel-text">He writes the day's verbs in a small notebook: <span class="native-inline">yúta</span> (eat), <span class="native-inline">istíŋba</span> (sleep), <span class="native-inline">ománi</span> (walk/travel), <span class="native-inline">wačhíŋyaŋka</span> (see/visit). Every word he learns is a new action he can name.</p>
+    <p class="panel-text">He writes the day's verbs in a small notebook: <span class="nw">yúta<span class="pron-popup"><div class="pw">yúta</div><div class="pp">YOO-tah</div><div class="pg">To eat</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('yúta')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="yúta" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> (eat), <span class="nw">istíŋba<span class="pron-popup"><div class="pw">istíŋba</div><div class="pp">ih-STEENG-bah</div><div class="pg">To sleep</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('istíŋba')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="istíŋba" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> (sleep), <span class="nw">ománi<span class="pron-popup"><div class="pw">ománi</div><div class="pp">oh-MAH-nee</div><div class="pg">To walk / travel</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('ománi')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="ománi" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> (walk/travel), <span class="nw">wačhíŋyaŋka<span class="pron-popup"><div class="pw">wačhíŋyaŋka</div><div class="pp">wah-CHEEN-yaŋ-kah</div><div class="pg">To see / visit</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('wačhíŋyaŋka')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="wačhíŋyaŋka" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> (see/visit). Every word he learns is a new action he can name.</p>
   </div>
 </div>
 <div class="panel">
@@ -137,7 +189,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">7</span>
       <span class="panel-top-title">Conversational Full Circle</span>
     </div>
-    <p class="panel-text">At dinner, an elder asks him questions. He answers without translating first — <span class="native-inline">Wóyute waštéwalaka.</span> — I like food. The table laughs warmly. <span class="native-inline">Waštéwalaka</span> — I find it good. He found the Dakota word for "like."</p>
+    <p class="panel-text">At dinner, an elder asks him questions. He answers without translating first — <span class="nw">Wóyute waštéwalaka.<span class="pron-popup"><div class="pw">Wóyute waštéwalaka.</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Wóyute waštéwalaka.')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Wóyute waštéwalaka." href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — I like food. The table laughs warmly. <span class="nw">Waštéwalaka<span class="pron-popup"><div class="pw">Waštéwalaka</div><div class="pp">wash-TAY-wah-lah-kah</div><div class="pg">I like it / I find it good</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Waštéwalaka')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Waštéwalaka" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — I find it good. He found the Dakota word for "like."</p>
   </div>
 </div>
 <div class="panel">
@@ -147,7 +199,7 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
       <span class="panel-num">8</span>
       <span class="panel-top-title">A Language of Action</span>
     </div>
-    <p class="panel-text">Grandmother says: Dakota is a language of verbs. Even "to be" is less important than what you do. <span class="native-inline">Wóuŋšpe</span> — we learn together. The word for learning contains the word for "us." That is not an accident.</p>
+    <p class="panel-text">Grandmother says: Dakota is a language of verbs. Even "to be" is less important than what you do. <span class="nw">Wóuŋšpe<span class="pron-popup"><div class="pw">Wóuŋšpe</div><div class="pp">WOH-ooŋ-shpeh</div><div class="pg">Learning / teaching</div><div class="pbtns"><button class="pbtn pbtn-tts" onclick="speakWord('Wóuŋšpe')">🔊 Hear it</button><a class="pbtn pbtn-dict" data-word="Wóuŋšpe" href="#" target="_blank" rel="noopener">📖 Dictionary</a></div><div class="pnote">🔊 = synthesized speech · Dictionary = recorded native speaker</div></span></span> — we learn together. The word for learning contains the word for "us." That is not an accident.</p>
   </div>
 </div>
   <div class="section-head">What This Story Teaches Us</div>
@@ -155,27 +207,126 @@ body{font-family:'Georgia',serif;background:#f8f5ef;color:#1a1008;line-height:1.
     <thead><tr><th>Story Moment</th><th>What We Notice</th><th>Language Focus</th></tr></thead>
     <tbody><tr><td>Sunrise narration attempt</td><td>Nouns vs. verbs distinguished</td><td><strong>Wóyute (food) / yúta (eat)</strong></td></tr><tr><td>Cousin draws SOV in dirt</td><td>Dakota word order: Subject-Object-Verb</td><td><strong>SOV pattern</strong></td></tr><tr><td>Grandmother asks about yesterday</td><td>Context + adverbs mark past, no tense suffix</td><td><strong>Hehéčhena tókhel yaúŋ he?</strong></td></tr><tr><td>Uncle plans field work</td><td>-kte suffix marks future tense</td><td><strong>Mde kte — I will go</strong></td></tr><tr><td>Declining sugar offer</td><td>-šni suffix negates the verb</td><td><strong>Yúte šni / Mde šni</strong></td></tr></tbody>
   </table>
-  <div class="section-head">Key Phrases — Say It Out Loud</div>
+  <div class="section-head">Key Phrases — Click to Hear</div>
   <div class="phrase-card">
-  <div><div class="phrase-native">___ yúta.</div><div class="phrase-pron">___ YOO-tah</div></div>
+  <div class="phrase-native">___ yúta.</div>
   <div class="phrase-eng">I eat ___. (SOV pattern)</div>
+  <div class="phrase-pron">/___ YOO-tah/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="___ yúta.">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="___ yúta." href="https://www.learndakota.com/dictionary?q=___%20y%C3%BAta." target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Mde kte.</div><div class="phrase-pron">mdeh kteh</div></div>
+  <div class="phrase-native">Mde kte.</div>
   <div class="phrase-eng">I will go.</div>
+  <div class="phrase-pron">/mdeh kteh/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Mde kte.">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Mde kte." href="https://www.learndakota.com/dictionary?q=Mde%20kte." target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Mde šni.</div><div class="phrase-pron">mdeh shnee</div></div>
+  <div class="phrase-native">Mde šni.</div>
   <div class="phrase-eng">I am not going.</div>
+  <div class="phrase-pron">/mdeh shnee/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Mde šni.">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Mde šni." href="https://www.learndakota.com/dictionary?q=Mde%20%C5%A1ni." target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Waštéwalaka.</div><div class="phrase-pron">wash-TAY-wah-lah-kah</div></div>
+  <div class="phrase-native">Waštéwalaka.</div>
   <div class="phrase-eng">I like it / I find it good.</div>
+  <div class="phrase-pron">/wash-TAY-wah-lah-kah/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Waštéwalaka.">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Waštéwalaka." href="https://www.learndakota.com/dictionary?q=Wa%C5%A1t%C3%A9walaka." target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div><div class="phrase-card">
-  <div><div class="phrase-native">Tókhel yaúŋ he?</div><div class="phrase-pron">TOH-khel yah-OON heh</div></div>
+  <div class="phrase-native">Tókhel yaúŋ he?</div>
   <div class="phrase-eng">How are you doing?</div>
+  <div class="phrase-pron">/TOH-khel yah-OON heh/</div>
+  <div>
+    <button class="phrase-tts-btn" data-word="Tókhel yaúŋ he?">🔊 Hear it</button>
+  </div>
+  <a class="phrase-dict-link" data-word="Tókhel yaúŋ he?" href="https://www.learndakota.com/dictionary?q=T%C3%B3khel%20ya%C3%BA%C5%8B%20he%3F" target="_blank" rel="noopener">📖 Learn Dakota Dictionary ↗</a>
 </div>
   <div class="cta-box">
     <h3>You Can Do This Too</h3>
     <ul><li>Write one sentence about your morning in SOV order.</li><li>Take a sentence you know in English and flip it to SOV — does it sound different?</li><li>Practice: say something you will do tomorrow using -kte.</li><li>Negate three verbs from your vocabulary list using -šni.</li></ul>
   </div>
 </div>
+
+<script>
+// ── Pronunciation popup ──────────────────────────────────────────────────────
+let _activePopup = null;
+
+function closeAll() {
+  if (_activePopup) { _activePopup.classList.remove('open'); _activePopup = null; }
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.nw')) closeAll();
+});
+
+document.querySelectorAll('.nw').forEach(function(el) {
+  el.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const popup = el.querySelector('.pron-popup');
+    if (!popup) return;
+    if (popup.classList.contains('open')) { closeAll(); return; }
+    closeAll();
+    popup.classList.add('open');
+    _activePopup = popup;
+    // Ensure popup stays in viewport
+    const rect = popup.getBoundingClientRect();
+    if (rect.left < 8) popup.style.left = '0'; popup.style.transform = 'none';
+    if (rect.right > window.innerWidth - 8) {
+      popup.style.left = 'auto'; popup.style.right = '0'; popup.style.transform = 'none';
+    }
+  });
+});
+
+// ── Text-to-Speech ───────────────────────────────────────────────────────────
+function speakWord(word) {
+  if (!window.speechSynthesis) { alert('Speech not supported in this browser.'); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang = 'en-US';
+  u.rate = 0.75;
+  u.pitch = 1.0;
+  // Try to find a voice; fallback to default
+  const voices = speechSynthesis.getVoices();
+  const v = voices.find(v => v.lang.startsWith('en-US')) || voices[0];
+  if (v) u.voice = v;
+  speechSynthesis.speak(u);
+}
+
+// Ensure voices are loaded
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = function() {};
+}
+
+// ── Dictionary links ─────────────────────────────────────────────────────────
+const DICT_BASE = "https://www.learndakota.com/dictionary?q=";
+const DICT_LABEL = "Learn Dakota Dictionary ↗";
+
+document.querySelectorAll('.pron-popup .pbtn-dict').forEach(function(a) {
+  const word = a.dataset.word;
+  a.href = DICT_BASE + encodeURIComponent(word);
+  a.textContent = DICT_LABEL;
+});
+
+// Phrase TTS buttons
+document.querySelectorAll('.phrase-tts-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    speakWord(btn.dataset.word);
+  });
+});
+// Phrase dict links
+document.querySelectorAll('.phrase-dict-link').forEach(function(a) {
+  a.href = DICT_BASE + encodeURIComponent(a.dataset.word);
+  a.textContent = '📖 ' + DICT_LABEL;
+});
+</script>
+
 </body>
 </html>
